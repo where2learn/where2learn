@@ -45,7 +45,7 @@ const getTag = (value = null, level = 1, modules = []) => {
     modules,
   };
 };
-const NUM_TO_CREATE = 2;
+const NUM_TO_CREATE = 10;
 const tag_values = [...Array(NUM_TO_CREATE).keys()].map((i) => `tag${i}`);
 const usernames = [...Array(NUM_TO_CREATE).keys()].map((i) => `user${i}`);
 const module_names = [...Array(NUM_TO_CREATE * 3).keys()].map(
@@ -148,4 +148,5 @@ const tag_length = tag_values.length;
     }
     await batch.commit();
   })();
+  console.log("Finished");
 })();
