@@ -22,20 +22,32 @@ const getUser = (username) => {
   };
 };
 
-const getModule = (
-  title,
-  author,
-  children = [],
-  media_type = ["image", "code"]
-) => {
+const getModule = (title, author, media_type = ["image", "code"]) => {
   return {
     title,
     author,
-    createdAt: firestore.Timestamp.now(),
-    updatedAt: firestore.Timestamp.now(),
+    created_at: firestore.Timestamp.now(),
+    updated_at: firestore.Timestamp.now(),
     type: Math.random() > 0.2 ? "regular" : "roadmap",
     media_type,
-    children,
+    roadmap:
+      Math.random() > 0.5
+        ? {
+            1: {
+              2: ["3", "4"],
+              5: [],
+            },
+            6: [],
+            7: {
+              8: {
+                9: [],
+                10: {
+                  11: ["12", "13"],
+                },
+              },
+            },
+          }
+        : null,
     content: "module content",
     num_star: 0,
     tags: [],
