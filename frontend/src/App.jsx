@@ -9,6 +9,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import UpdateProfile from "./pages/UpdateProfile";
 import EditorDevPage from "./components/EditorDevPage";
 import NavDrawer from "./components/NavDrawer";
+import { SnackbarProvider, useSnackbar } from "notistack";
+
 import {
   createMuiTheme,
   makeStyles,
@@ -23,6 +25,18 @@ const App = () => {
     () =>
       createMuiTheme({
         palette: {
+          primary: {
+            light: "#1976d2",
+            main: "#1976d2",
+            dark: "#000000",
+            contrastText: "#fff",
+          },
+          secondary: {
+            light: "#90a4ae",
+            main: "#90a4ae",
+            dark: "#ba000d",
+            contrastText: "#000",
+          },
           // type: "dark",
           type: prefersDarkMode ? "dark" : "light",
         },
@@ -40,20 +54,25 @@ const App = () => {
 
   return (
     <Router>
-      <AuthProvider>
-        <ThemeProvider theme={theme}>
-          <Paper className={classes.root} square>
-            <Switch>
-              <PrivateRoute exact path='/' component={Dashboard} />
-              <PrivateRoute path='/update-profile' component={UpdateProfile} />
-              <Route path='/signup' component={Signup} />
-              <Route path='/login' component={Login} />
-              <Route path='/forgot-password' component={ForgotPassword} />
-              <Route path='/editor' component={EditorDevPage} />
-            </Switch>
-          </Paper>
-        </ThemeProvider>
-      </AuthProvider>
+      <SnackbarProvider maxSnack={10}>
+        <AuthProvider>
+          <ThemeProvider theme={theme}>
+            <Paper className={classes.root} square>
+              <Switch>
+                <PrivateRoute exact path='/' component={Dashboard} />
+                <PrivateRoute
+                  path='/update-profile'
+                  component={UpdateProfile}
+                />
+                <Route path='/signup' component={Signup} />
+                <Route path='/login' component={Login} />
+                <Route path='/forgot-password' component={ForgotPassword} />
+                <Route path='/editor' component={EditorDevPage} />
+              </Switch>
+            </Paper>
+          </ThemeProvider>
+        </AuthProvider>
+      </SnackbarProvider>
     </Router>
   );
 };

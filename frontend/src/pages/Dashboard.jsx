@@ -30,7 +30,7 @@ const Dashboard = () => {
   const history = useHistory();
   const classes = useStyles();
 
-  async function handleLogout() {
+  const handleLogout = async () => {
     setError("");
 
     try {
@@ -39,7 +39,7 @@ const Dashboard = () => {
     } catch {
       setError("Failed to log out");
     }
-  }
+  };
 
   return (
     <NavDrawer>

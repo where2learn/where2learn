@@ -10,6 +10,7 @@ import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import NavDrawer from "../components/NavDrawer";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -26,24 +27,21 @@ const useStyles = makeStyles((theme) => ({
 const ForgotPassword = () => {
   const emailRef = useRef();
   const { resetPassword } = useAuth();
-  const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     try {
       setMessage("");
-      setError("");
       setLoading(true);
       await resetPassword(emailRef.current.value);
       setMessage("Check your inbox for further instructions");
     } catch {
-      setError("Failed to reset password");
+      enqueueSnackbar("Failed to reset password", { variant: "error" });
     }
-
     setLoading(false);
   }
 
@@ -60,7 +58,6 @@ const ForgotPassword = () => {
           <Card className={classes.card}>
             <CardContent>
               <h2 className='text-center mb-4'>Password Reset</h2>
-              {error && <Alert severity='error'>{error}</Alert>}
               {message && <Alert severity='success'>{message}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <TextField

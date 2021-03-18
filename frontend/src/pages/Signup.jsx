@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container, Box, TextField } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import NavDrawer from "../components/NavDrawer";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -26,27 +27,26 @@ const Signup = () => {
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
   const { signup } = useAuth();
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Passwords do not match");
+      enqueueSnackbar("Passwords do not match", { variant: "error" });
     }
 
     try {
-      setError("");
       setLoading(true);
       await signup(emailRef.current.value, passwordRef.current.value);
+      enqueueSnackbar("Account Created", { variant: "success" });
       history.push("/");
     } catch {
-      setError("Failed to create an account");
+      enqueueSnackbar("Failed to create an account", { variant: "error" });
     }
-
     setLoading(false);
   }
 
@@ -70,7 +70,6 @@ const Signup = () => {
                 >
                   Sign Up
                 </Typography>
-                {error && <Alert severity='error'>{error}</Alert>}
                 <div>
                   <TextField
                     fullWidth

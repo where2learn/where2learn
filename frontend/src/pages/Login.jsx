@@ -9,8 +9,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Box, TextField } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import NavDrawer from "../components/NavDrawer";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -25,9 +25,9 @@ const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const { login } = useAuth();
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   const classes = useStyles();
 
@@ -35,14 +35,13 @@ const Login = () => {
     e.preventDefault();
     console.log(e.target);
     try {
-      setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
+      enqueueSnackbar("Logged In", { variant: "success" });
       history.push("/");
     } catch {
-      setError("Failed to log in");
+      enqueueSnackbar("Failed to log in", { variant: "error" });
     }
-
     setLoading(false);
   }
 
@@ -60,14 +59,12 @@ const Login = () => {
             <Form onSubmit={handleSubmit}>
               <CardContent>
                 <Typography
-                  variant='h4'
+                  variant='h3'
                   component='h3'
                   style={{ textAlign: "center" }}
                 >
                   Login
                 </Typography>
-
-                {error && <Alert severity='error'>{error}</Alert>}
                 <div>
                   <TextField
                     fullWidth

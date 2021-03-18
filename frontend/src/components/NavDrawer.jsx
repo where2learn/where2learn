@@ -15,8 +15,16 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import SettingsIcon from "@material-ui/icons/Settings";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import BookIcon from "@material-ui/icons/Book";
+import HomeIcon from "@material-ui/icons/Home";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { useSnackbar } from "notistack";
 
 const drawerWidth = 240;
 
@@ -71,10 +79,10 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
+    // ...theme.mixins.toolbar,
   },
   content: {
     flexGrow: 1,
@@ -85,7 +93,10 @@ const useStyles = makeStyles((theme) => ({
 const NavDrawer = (props) => {
   const classes = useStyles();
   const theme = useTheme();
+  const history = useHistory();
   const [open, setOpen] = React.useState(false);
+  const { currentUser, logout } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -93,6 +104,16 @@ const NavDrawer = (props) => {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      enqueueSnackbar("Logged Out", { variant: "success" });
+      history.push("/login");
+    } catch {
+      enqueueSnackbar("Couldn't Log Out", { variant: "error" });
+    }
   };
 
   return (
@@ -104,7 +125,7 @@ const NavDrawer = (props) => {
           [classes.appBarShift]: open,
         })}
       >
-        <Toolbar>
+        <Toolbar variant='dense'>
           <IconButton
             color='inherit'
             aria-label='open drawer'
@@ -116,9 +137,14 @@ const NavDrawer = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant='h6' noWrap>
-            Where2Learn
-          </Typography>
+          {!open && (
+            <>
+              <BookIcon style={{ marginRight: 5 }} />
+              <Typography variant='h6' noWrap>
+                Where2Learn
+              </Typography>
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -134,7 +160,12 @@ const NavDrawer = (props) => {
           }),
         }}
       >
-        <div className={classes.toolbar}>
+        {/* <div className={classes.toolbar}> */}
+        <Toolbar variant='dense' className={classes.toolbar}>
+          <BookIcon />
+          <Typography variant='h6' noWrap>
+            Where2Learn
+          </Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
@@ -142,28 +173,68 @@ const NavDrawer = (props) => {
               <ChevronLeftIcon />
             )}
           </IconButton>
-        </div>
+        </Toolbar>
+        {/* </div> */}
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button key='dashboard'>
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary='Dashboard' />
+          </ListItem>
+          <ListItem button key='home'>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary='Home' />
+          </ListItem>
         </List>
         <Divider />
         <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {currentUser ? (
+            <>
+              <ListItem onClick={handleLogout} button key='logout'>
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>
+                <ListItemText primary='Logout' />
+              </ListItem>
+              <ListItem
+                onClick={() => history.push("/update-profile")}
+                button
+                key='setting'
+              >
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary='Setting' />
+              </ListItem>
+            </>
+          ) : (
+            <>
+              <ListItem
+                onClick={() => history.push("/login")}
+                button
+                key='login'
+              >
+                <ListItemIcon>
+                  <AccountCircleIcon />
+                </ListItemIcon>
+                <ListItemText primary='Sign In' />
+              </ListItem>
+              <ListItem
+                onClick={() => history.push("/signup")}
+                button
+                key='signup'
+              >
+                <ListItemIcon>
+                  <PersonAddIcon />
+                </ListItemIcon>
+                <ListItemText primary='Sign Up' />
+              </ListItem>
+            </>
+          )}
         </List>
       </Drawer>
       <main className={classes.content}>
