@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -102,13 +102,11 @@ const NavDrawer = (props) => {
   const { currentUser, logout } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    enqueueSnackbar("Theme Switched to " + (darkTheme ? "dark" : "light"), {
+      variant: "info",
+    });
+  }, [darkTheme]);
 
   const toggleDrawer = () => {
     setOpen(!open);
