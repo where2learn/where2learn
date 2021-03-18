@@ -9,6 +9,7 @@ import { Container, Box, TextField } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import NavDrawer from "../components/NavDrawer";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -47,53 +48,54 @@ const ForgotPassword = () => {
   }
 
   return (
-    <Container maxWidth='sm'>
-      <Box
-        display='flex'
-        justifyContent='center'
-        alignItems='center'
-        p={1}
-        height='100vh'
-        bgcolor='background.default'
-      >
-        <Card className={classes.card}>
-          <CardContent>
-            <h2 className='text-center mb-4'>Password Reset</h2>
-            {error && <Alert severity='error'>{error}</Alert>}
-            {message && <Alert severity='success'>{message}</Alert>}
-            <Form onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                inputRef={emailRef}
-                margin='normal'
-                label='Email'
-                type='email'
-                required
-              />
-              <br />
-              <br />
-              <Button
-                disabled={loading}
-                color='primary'
-                variant='contained'
-                fullWidth
-                type='submit'
-              >
-                Reset Password
-              </Button>
-            </Form>
-            <div className='w-100 text-center mt-3'>
-              <Link to='/login'>Login</Link>
-            </div>
-          </CardContent>
-          <CardActions>
-            <div className='w-100 text-center mt-2'>
-              Need an account? <Link to='/signup'>Sign Up</Link>
-            </div>
-          </CardActions>
-        </Card>
-      </Box>
-    </Container>
+    <NavDrawer>
+      <Container maxWidth='sm'>
+        <Box
+          display='flex'
+          justifyContent='center'
+          mt={"30%"}
+          maxHeight='100vh'
+          bgcolor='background.default'
+        >
+          <Card className={classes.card}>
+            <CardContent>
+              <h2 className='text-center mb-4'>Password Reset</h2>
+              {error && <Alert severity='error'>{error}</Alert>}
+              {message && <Alert severity='success'>{message}</Alert>}
+              <Form onSubmit={handleSubmit}>
+                <TextField
+                  fullWidth
+                  inputRef={emailRef}
+                  margin='normal'
+                  label='Email'
+                  type='email'
+                  required
+                />
+                <br />
+                <br />
+                <Button
+                  disabled={loading}
+                  color='primary'
+                  variant='contained'
+                  fullWidth
+                  type='submit'
+                >
+                  Reset Password
+                </Button>
+              </Form>
+              <div className='w-100 text-center mt-3'>
+                <Link to='/login'>Login</Link>
+              </div>
+            </CardContent>
+            <CardActions>
+              <div className='w-100 text-center mt-2'>
+                Need an account? <Link to='/signup'>Sign Up</Link>
+              </div>
+            </CardActions>
+          </Card>
+        </Box>
+      </Container>
+    </NavDrawer>
   );
 };
 

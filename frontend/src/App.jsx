@@ -8,6 +8,7 @@ import PrivateRoute from "./pages/PrivateRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import UpdateProfile from "./pages/UpdateProfile";
 import EditorDevPage from "./components/EditorDevPage";
+import NavDrawer from "./components/NavDrawer";
 import {
   createMuiTheme,
   makeStyles,

@@ -10,6 +10,7 @@ import { Container, Box, TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import NavDrawer from "../components/NavDrawer";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -63,74 +64,76 @@ const UpdateProfile = () => {
   }
 
   return (
-    <Container maxWidth='sm'>
-      <Box
-        display='flex'
-        justifyContent='center'
-        alignItems='center'
-        p={1}
-        height='100vh'
-        bgcolor='background.default'
-      >
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography
-              variant='h4'
-              component='h3'
-              style={{ textAlign: "center" }}
-            >
-              Update Profile
-            </Typography>
-            {error && <Alert severity='error'>{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
-              <div>
-                <TextField
-                  fullWidth
-                  inputRef={emailRef}
-                  margin='normal'
-                  label='Email'
-                  type='email'
-                />
-              </div>
-              <div>
-                <TextField
-                  fullWidth
-                  margin='normal'
-                  inputRef={passwordRef}
-                  label='Password'
-                  placeholder='Leave blank to keep the same'
-                  type='password'
-                />
-              </div>
-
-              <div>
-                <TextField
-                  fullWidth
-                  margin='normal'
-                  inputRef={passwordConfirmRef}
-                  label='Password Confirmation'
-                  placeholder='Leave blank to keep the same'
-                  type='password'
-                />
-              </div>
-              <br />
-              <Button
-                disabled={loading}
-                type='submit'
-                color='primary'
-                variant='contained'
-                fullWidth
+    <NavDrawer>
+      <Container maxWidth='sm'>
+        <Box
+          display='flex'
+          justifyContent='center'
+          mt={"25%"}
+          alignItems='center'
+          maxHeight='100vh'
+          bgcolor='background.default'
+        >
+          <Card className={classes.card}>
+            <CardContent>
+              <Typography
+                variant='h4'
+                component='h3'
+                style={{ textAlign: "center" }}
               >
-                Update
-              </Button>
-            </Form>
-          </CardContent>
-          <CardActions classes={{ root: classes.cardaction }}>
-            <Link to='/'>Cancel</Link>
-          </CardActions>
-        </Card>
-      </Box>
-    </Container>
+                Update Profile
+              </Typography>
+              {error && <Alert severity='error'>{error}</Alert>}
+              <Form onSubmit={handleSubmit}>
+                <div>
+                  <TextField
+                    fullWidth
+                    inputRef={emailRef}
+                    margin='normal'
+                    label='Email'
+                    type='email'
+                  />
+                </div>
+                <div>
+                  <TextField
+                    fullWidth
+                    margin='normal'
+                    inputRef={passwordRef}
+                    label='Password'
+                    placeholder='Leave blank to keep the same'
+                    type='password'
+                  />
+                </div>
+
+                <div>
+                  <TextField
+                    fullWidth
+                    margin='normal'
+                    inputRef={passwordConfirmRef}
+                    label='Password Confirmation'
+                    placeholder='Leave blank to keep the same'
+                    type='password'
+                  />
+                </div>
+                <br />
+                <Button
+                  disabled={loading}
+                  type='submit'
+                  color='primary'
+                  variant='contained'
+                  fullWidth
+                >
+                  Update
+                </Button>
+              </Form>
+            </CardContent>
+            <CardActions classes={{ root: classes.cardaction }}>
+              <Link to='/'>Cancel</Link>
+            </CardActions>
+          </Card>
+        </Box>
+      </Container>
+    </NavDrawer>
   );
 };
 export default UpdateProfile;

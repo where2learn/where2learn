@@ -10,6 +10,7 @@ import { Container, Box, TextField } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
+import NavDrawer from "../components/NavDrawer";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -41,60 +42,61 @@ const Dashboard = () => {
   }
 
   return (
-    <Container maxWidth='sm'>
-      <Box
-        display='flex'
-        justifyContent='center'
-        alignItems='center'
-        p={1}
-        height='100vh'
-        bgcolor='background.default'
-      >
-        <Card className={classes.card} color='secondary'>
-          <CardContent>
-            <Typography
-              variant='h4'
-              component='h3'
-              style={{ marginBottom: "1em", textAlign: "center" }}
-            >
-              Profile
-            </Typography>
-            {error && <Alert severity='error'>{error}</Alert>}
-            <Typography align='center'>
-              <strong>Email:</strong> {currentUser.email}
-            </Typography>
-            <br />
-            <Button
-              fullWidth
-              color='primary'
-              variant='contained'
-              onClick={() => {
-                history.push("/update-profile");
-              }}
-            >
-              Update Profile
-            </Button>
-          </CardContent>
-          <CardActions classes={{ root: classes.cardaction }}>
-            <Box
-              display='flex'
-              justifyContent='center'
-              m={1}
-              p={1}
-              bgcolor='background.paper'
-            >
-              <Button
-                color='secondary'
-                variant='contained'
-                onClick={handleLogout}
+    <NavDrawer>
+      <Container maxWidth='sm'>
+        <Box
+          display='flex'
+          justifyContent='center'
+          mt={"25%"}
+          maxHeight='100vh'
+          bgcolor='background.default'
+        >
+          <Card className={classes.card} color='secondary'>
+            <CardContent>
+              <Typography
+                variant='h4'
+                component='h3'
+                style={{ marginBottom: "1em", textAlign: "center" }}
               >
-                Log Out
+                Profile
+              </Typography>
+              {error && <Alert severity='error'>{error}</Alert>}
+              <Typography align='center'>
+                <strong>Email:</strong> {currentUser.email}
+              </Typography>
+              <br />
+              <Button
+                fullWidth
+                color='primary'
+                variant='contained'
+                onClick={() => {
+                  history.push("/update-profile");
+                }}
+              >
+                Update Profile
               </Button>
-            </Box>
-          </CardActions>
-        </Card>
-      </Box>
-    </Container>
+            </CardContent>
+            <CardActions classes={{ root: classes.cardaction }}>
+              <Box
+                display='flex'
+                justifyContent='center'
+                m={1}
+                p={1}
+                bgcolor='background.paper'
+              >
+                <Button
+                  color='secondary'
+                  variant='contained'
+                  onClick={handleLogout}
+                >
+                  Log Out
+                </Button>
+              </Box>
+            </CardActions>
+          </Card>
+        </Box>
+      </Container>
+    </NavDrawer>
   );
 };
 export default Dashboard;

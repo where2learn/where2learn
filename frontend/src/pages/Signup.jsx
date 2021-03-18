@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Box, TextField } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
+import NavDrawer from "../components/NavDrawer";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -50,14 +51,13 @@ const Signup = () => {
   }
 
   return (
-    <>
+    <NavDrawer>
       <Container>
         <Box
           display='flex'
           justifyContent='center'
-          alignItems='center'
-          p={1}
-          height='100vh'
+          mt={"15%"}
+          maxHeight='100vh'
           bgcolor='background.default'
         >
           <Card className={classes.card} color='secondary'>
@@ -118,7 +118,7 @@ const Signup = () => {
           </Card>
         </Box>
       </Container>
-    </>
+    </NavDrawer>
   );
 };
 export default Signup;
