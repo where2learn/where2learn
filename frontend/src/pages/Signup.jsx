@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     minWidth: 400,
     backgroundColor: theme.palette.background.paper,
-    transform: "translate(0%,-50%)",
+    transform: "translate(0%,-10%)",
     padding: "1em 2em 1em 2em",
   },
 }));
@@ -65,12 +65,11 @@ const Signup = () => {
               <CardContent>
                 <Typography
                   variant='h3'
-                  component='h2'
-                  style={{ marginBottom: "1em", textAlign: "center" }}
+                  component='h3'
+                  style={{ textAlign: "center" }}
                 >
                   Sign Up
                 </Typography>
-
                 {error && <Alert severity='error'>{error}</Alert>}
                 <div>
                   <TextField
@@ -99,7 +98,14 @@ const Signup = () => {
                     type='password'
                   />
                 </div>
-                <Button fullWidth type='submit' disabled={loading}>
+                <br />
+                <Button
+                  fullWidth
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  disabled={loading}
+                >
                   Sign Up
                 </Button>
               </CardContent>
