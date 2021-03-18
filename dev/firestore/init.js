@@ -34,15 +34,18 @@ const getModule = (title, author, media_type = ["image", "code"]) => {
       Math.random() > 0.5
         ? {
             1: {
-              2: ["3", "4"],
-              5: [],
+              2: { 3: null, 4: null },
+              5: null,
             },
-            6: [],
+            6: null,
             7: {
               8: {
-                9: [],
+                9: null,
                 10: {
-                  11: ["12", "13"],
+                  11: {
+                    12: null,
+                    13: null,
+                  },
                 },
               },
             },
