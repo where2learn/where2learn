@@ -22,6 +22,9 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import BookIcon from "@material-ui/icons/Book";
 import HomeIcon from "@material-ui/icons/Home";
+import Brightness5Icon from "@material-ui/icons/Brightness5";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Brightness2Icon from "@material-ui/icons/Brightness2";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useSnackbar } from "notistack";
@@ -71,9 +74,9 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
-    width: theme.spacing(7) + 1,
+    width: theme.spacing(3) + 1,
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(7) + 1,
     },
   },
   toolbar: {
@@ -95,6 +98,7 @@ const NavDrawer = (props) => {
   const theme = useTheme();
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
+  const [darkTheme, setDarkTheme] = React.useState(false);
   const { currentUser, logout } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -104,6 +108,10 @@ const NavDrawer = (props) => {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
   const handleLogout = async () => {
@@ -119,36 +127,8 @@ const NavDrawer = (props) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position='fixed'
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar variant='dense'>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            onClick={handleDrawerOpen}
-            edge='start'
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          {!open && (
-            <>
-              <BookIcon style={{ marginRight: 5 }} />
-              <Typography variant='h6' noWrap>
-                Where2Learn
-              </Typography>
-            </>
-          )}
-        </Toolbar>
-      </AppBar>
       <Drawer
-        variant='permanent'
+        variant="permanent"
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open,
@@ -160,55 +140,51 @@ const NavDrawer = (props) => {
           }),
         }}
       >
-        {/* <div className={classes.toolbar}> */}
-        <Toolbar variant='dense' className={classes.toolbar}>
-          <BookIcon />
-          <Typography variant='h6' noWrap>
-            Where2Learn
-          </Typography>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </Toolbar>
-        {/* </div> */}
         <Divider />
         <List>
-          <ListItem button key='dashboard'>
+          <ListItem button key="dashboard">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
-            <ListItemText primary='Dashboard' />
+            <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem button key='home'>
+          <ListItem button key="home">
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary='Home' />
+            <ListItemText primary="Home" />
           </ListItem>
         </List>
         <Divider />
         <List>
+          <ListItem
+            onClick={() => setDarkTheme(!darkTheme)}
+            button
+            key="toggle-theme"
+          >
+            <ListItemIcon>
+              {darkTheme ? <Brightness2Icon /> : <Brightness7Icon />}
+            </ListItemIcon>
+            <ListItemText primary="Toggle Theme" />
+          </ListItem>
+
           {currentUser ? (
             <>
-              <ListItem onClick={handleLogout} button key='logout'>
+              <ListItem onClick={handleLogout} button key="logout">
                 <ListItemIcon>
                   <ExitToAppIcon />
                 </ListItemIcon>
-                <ListItemText primary='Logout' />
+                <ListItemText primary="Logout" />
               </ListItem>
               <ListItem
                 onClick={() => history.push("/update-profile")}
                 button
-                key='setting'
+                key="setting"
               >
                 <ListItemIcon>
                   <SettingsIcon />
                 </ListItemIcon>
-                <ListItemText primary='Setting' />
+                <ListItemText primary="Setting" />
               </ListItem>
             </>
           ) : (
@@ -216,25 +192,40 @@ const NavDrawer = (props) => {
               <ListItem
                 onClick={() => history.push("/login")}
                 button
-                key='login'
+                key="login"
               >
                 <ListItemIcon>
                   <AccountCircleIcon />
                 </ListItemIcon>
-                <ListItemText primary='Sign In' />
+                <ListItemText primary="Sign In" />
               </ListItem>
               <ListItem
                 onClick={() => history.push("/signup")}
                 button
-                key='signup'
+                key="signup"
               >
                 <ListItemIcon>
                   <PersonAddIcon />
                 </ListItemIcon>
-                <ListItemText primary='Sign Up' />
+                <ListItemText primary="Sign Up" />
               </ListItem>
             </>
           )}
+        </List>
+        <Divider />
+        <List>
+          <ListItem
+            button
+            key="toggle-drawer"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer}
+            edge="start"
+          >
+            <ListItemIcon>
+              {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </ListItemIcon>
+          </ListItem>
         </List>
       </Drawer>
       <main className={classes.content}>
