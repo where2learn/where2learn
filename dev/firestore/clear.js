@@ -48,6 +48,8 @@ const deleteCollectionWrapper = async (collectionPath) => {
 (async () => {
   await deleteCollectionWrapper("users");
   await deleteCollectionWrapper("tags");
+  await deleteCollectionWrapper("stars");
   await deleteCollectionWrapper("modules");
   console.log("Finished");
+  process.exit(0);
 })();
