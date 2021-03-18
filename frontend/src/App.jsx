@@ -1,13 +1,13 @@
 import React from "react";
-import Signup from "./Signup";
-import { AuthProvider } from "../contexts/AuthContext";
+import Signup from "./pages/Signup";
+import { AuthProvider } from "./contexts/AuthContext";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import Login from "./Login";
-import PrivateRoute from "./PrivateRoute";
-import ForgotPassword from "./ForgotPassword";
-import UpdateProfile from "./UpdateProfile";
-import EditorDevPage from "./EditorDevPage";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import PrivateRoute from "./pages/PrivateRoute";
+import ForgotPassword from "./pages/ForgotPassword";
+import UpdateProfile from "./pages/UpdateProfile";
+import EditorDevPage from "./components/EditorDevPage";
 import {
   createMuiTheme,
   makeStyles,
