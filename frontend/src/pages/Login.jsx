@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     minWidth: 400,
     backgroundColor: theme.palette.background.paper,
-    transform: "translate(0%,-50%)",
+    transform: "translate(0%,-10%)",
     padding: "1em 2em 1em 2em",
   },
 }));
@@ -60,9 +60,9 @@ const Login = () => {
             <Form onSubmit={handleSubmit}>
               <CardContent>
                 <Typography
-                  variant='h3'
-                  component='h2'
-                  style={{ marginBottom: "1em", textAlign: "center" }}
+                  variant='h4'
+                  component='h3'
+                  style={{ textAlign: "center" }}
                 >
                   Login
                 </Typography>
@@ -86,7 +86,14 @@ const Login = () => {
                     type='password'
                   />
                 </div>
-                <Button fullWidth type='submit' disabled={loading}>
+                <br />
+                <Button
+                  fullWidth
+                  type='submit'
+                  color='primary'
+                  variant='contained'
+                  disabled={loading}
+                >
                   Login
                 </Button>
               </CardContent>

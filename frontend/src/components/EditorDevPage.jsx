@@ -5,7 +5,7 @@ import { Container } from "@material-ui/core";
 const EditorDevPage = () => {
   const [content, setContent] = useState("");
   return (
-    <Container size='sm'>
+    <Container maxWidth='md'>
       <Editor updateContent={setContent} width='100%' height={500} />
     </Container>
   );
