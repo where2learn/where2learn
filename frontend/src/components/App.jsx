@@ -1,7 +1,5 @@
 import React from "react";
 import Signup from "./Signup";
-// import { Container } from "react-bootstrap";
-import Container from "@material-ui/core/Container";
 import { AuthProvider } from "../contexts/AuthContext";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
@@ -9,7 +7,7 @@ import Login from "./Login";
 import PrivateRoute from "./PrivateRoute";
 import ForgotPassword from "./ForgotPassword";
 import UpdateProfile from "./UpdateProfile";
-import ModuleEditor from "./ModuleEditor";
+import EditorDevPage from "./EditorDevPage";
 import {
   createMuiTheme,
   makeStyles,
@@ -17,21 +15,15 @@ import {
 } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-// const theme = createMuiTheme({
-//   palette: {
-//     type: "dark",
-//   },
-// });
 
 const App = () => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
   const theme = React.useMemo(
     () =>
       createMuiTheme({
         palette: {
-          type: "dark",
-          // type: prefersDarkMode ? "dark" : "light",
+          // type: "dark",
+          type: prefersDarkMode ? "dark" : "light",
         },
       }),
     [prefersDarkMode]
@@ -56,7 +48,7 @@ const App = () => {
               <Route path='/signup' component={Signup} />
               <Route path='/login' component={Login} />
               <Route path='/forgot-password' component={ForgotPassword} />
-              <Route path='/editor' component={ModuleEditor} />
+              <Route path='/editor' component={EditorDevPage} />
             </Switch>
           </Paper>
         </ThemeProvider>
