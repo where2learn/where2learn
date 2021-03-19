@@ -9,16 +9,25 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Box, TextField } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import NavDrawer from "../components/NavDrawer";
 import { useSnackbar } from "notistack";
 
+const getCardMinWidth = () => {
+  const windowInnerWidth = window.innerWidth;
+  if (windowInnerWidth < 800) {
+    return "100%";
+  } else if (windowInnerWidth < 1200) {
+    return "50%";
+  } else {
+    return "40%";
+  }
+};
+
 const useStyles = makeStyles((theme) => ({
   card: {
-    minWidth: 400,
+    minWidth: getCardMinWidth(),
     backgroundColor: theme.palette.background.paper,
-    transform: "translate(0%,-10%)",
-    padding: "1em 2em 1em 2em",
+    padding: "1em 2em 2em 2em",
   },
 }));
 
@@ -56,8 +65,7 @@ const Signup = () => {
         <Box
           display='flex'
           justifyContent='center'
-          mt={"15%"}
-          maxHeight='100vh'
+          mt={10}
           bgcolor='background.default'
         >
           <Card className={classes.card} color='secondary'>

@@ -1,23 +1,34 @@
 import React, { useState } from "react";
 // import { Card, Button, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
-import { Container, Box, TextField } from "@material-ui/core";
+import { Container, Box } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
+// import NavDrawer from "../components/CustomNavDrawer";
 import NavDrawer from "../components/NavDrawer";
+
+const getCardMinWidth = () => {
+  const windowInnerWidth = window.innerWidth;
+  if (windowInnerWidth < 800) {
+    return "100%";
+  } else if (windowInnerWidth < 1200) {
+    return "50%";
+  } else {
+    return "40%";
+  }
+};
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    minWidth: 400,
+    minWidth: getCardMinWidth(),
     backgroundColor: theme.palette.background.paper,
-    transform: "translate(0%,-10%)",
-    padding: "1em 2em 1em 2em",
+    padding: "1em 2em 2em 2em",
   },
   cardaction: {
     justifyContent: "center",
@@ -47,7 +58,7 @@ const Dashboard = () => {
         <Box
           display='flex'
           justifyContent='center'
-          mt={"25%"}
+          pt={"25%"}
           maxHeight='100vh'
           bgcolor='background.default'
         >
