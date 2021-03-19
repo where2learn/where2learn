@@ -1,0 +1,13 @@
+.custom-nav-drawer-wrapper {
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+  .custom-nav-drawer {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    transition: width 600ms ease;
+    overflow: scroll;
+    scrollbar-width: none;
+  }
+}
