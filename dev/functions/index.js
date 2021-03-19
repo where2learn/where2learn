@@ -15,6 +15,7 @@ admin.initializeApp();
 // without authentication version
 exports.increaseTagCount = functions.https.onRequest((req, res) => {
   const value = req.query.value;  
+
   let documentRef = admin.firestore().doc('tags/' + value);
   documentRef.update(
     'count', firestore.FieldValue.increment(1)
@@ -45,9 +46,4 @@ exports.increaseTagCount = functions.https.onCall((data, context) => {
   }).then(doc => {
     return {text: `Hi ${name}, ${doc.get('value')} has current count ${doc.get('count')}`}
   })
-})
-
-// upload image
-exports.upload_image = functions.https.onRequest((req, res) => {
-
 })
