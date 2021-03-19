@@ -17,9 +17,9 @@ const getCardMinWidth = () => {
   if (windowInnerWidth < 800) {
     return "100%";
   } else if (windowInnerWidth < 1200) {
-    return "50%";
+    return "70%";
   } else {
-    return "40%";
+    return "80%";
   }
 };
 
