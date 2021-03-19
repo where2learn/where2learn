@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Form } from "react-bootstrap";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth, AuthProvider } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -8,7 +8,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, Box, TextField } from "@material-ui/core";
+import { Container, Box, TextField, Avatar } from "@material-ui/core";
 import NavDrawer from "../components/NavDrawer";
 import { useSnackbar } from "notistack";
 
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
+  const { login, signInWithGoogle } = useAuth();
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
@@ -49,6 +49,19 @@ const Login = () => {
     try {
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
+      enqueueSnackbar("Logged In", { variant: "success" });
+      history.push("/");
+    } catch {
+      enqueueSnackbar("Failed to log in", { variant: "error" });
+    }
+    setLoading(false);
+  }
+  async function handleClick(e) {
+    e.preventDefault();
+    console.log(e.target);
+    try {
+      setLoading(true);
+      await signInWithGoogle();
       enqueueSnackbar("Logged In", { variant: "success" });
       history.push("/");
     } catch {
@@ -106,11 +119,34 @@ const Login = () => {
                 </Button>
               </CardContent>
             </Form>
+            <Box mt={1}>
+            <CardActions >
+              <Typography>
+                <Button
+                  onClick={handleClick}
+                > 
+                  <Avatar alt="Google Logo" src="../../../static/images/google.png" />
+                  <Box m={1} /> 
+                  Sign in with Google
+                </Button>
+              </Typography>
+            </CardActions>
+            </Box>
+            <Box mt={3}>
             <CardActions>
               <Typography>
                 Need an account? <Link to='/signup'>Sign Up</Link>
               </Typography>
+              
             </CardActions>
+            <CardActions>
+              <Typography>
+                 <Link to='/forgot-password'>Forgot your password?</Link>
+              
+              </Typography>
+              
+            </CardActions>
+            </Box>
           </Card>
         </Box>
       </Container>
