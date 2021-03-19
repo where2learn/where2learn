@@ -12,9 +12,20 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import NavDrawer from "../components/NavDrawer";
 
+const getCardMinWidth = () => {
+  const windowInnerWidth = window.innerWidth;
+  if (windowInnerWidth < 800) {
+    return "100%";
+  } else if (windowInnerWidth < 1200) {
+    return "50%";
+  } else {
+    return "40%";
+  }
+};
+
 const useStyles = makeStyles((theme) => ({
   card: {
-    minWidth: 400,
+    minWidth: getCardMinWidth(),
     backgroundColor: theme.palette.background.paper,
     transform: "translate(0%,-10%)",
     padding: "1em 2em 1em 2em",

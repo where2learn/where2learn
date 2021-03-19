@@ -12,9 +12,20 @@ import Button from "@material-ui/core/Button";
 import NavDrawer from "../components/NavDrawer";
 import { useSnackbar } from "notistack";
 
+const getCardMinWidth = () => {
+  const windowInnerWidth = window.innerWidth;
+  if (windowInnerWidth < 800) {
+    return "100%";
+  } else if (windowInnerWidth < 1200) {
+    return "70%";
+  } else {
+    return "80%";
+  }
+};
+
 const useStyles = makeStyles((theme) => ({
   card: {
-    minWidth: 400,
+    minWidth: getCardMinWidth(),
     backgroundColor: theme.palette.background.paper,
     transform: "translate(0%,-10%)",
     padding: "1em 2em 1em 2em",
