@@ -1,13 +1,15 @@
 import React from "react";
 import Signup from "./pages/Signup";
 import { AuthProvider } from "./contexts/AuthContext";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import PrivateRoute from "./pages/PrivateRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import UpdateProfile from "./pages/UpdateProfile";
-import EditorDevPage from "./components/EditorDevPage";
+import EditorDevPage from "./pages/EditorDevPage";
+import ModulePreviewDevPage from "./pages/ModulePreviewDevPage";
 import { SnackbarProvider } from "notistack";
 
 import {
@@ -36,7 +38,6 @@ const App = () => {
             dark: "#ba000d",
             contrastText: "#000",
           },
-          // type: "dark",
           type: prefersDarkMode ? "dark" : "light",
         },
       }),
@@ -66,7 +67,12 @@ const App = () => {
                 <Route path='/signup' component={Signup} />
                 <Route path='/login' component={Login} />
                 <Route path='/forgot-password' component={ForgotPassword} />
+                {/* Everything Below is for developing and experimenting components instead of an actual page */}
                 <Route path='/editor' component={EditorDevPage} />
+                <Route
+                  path='/module-preview-dev'
+                  component={ModulePreviewDevPage}
+                />
               </Switch>
             </Paper>
           </ThemeProvider>
