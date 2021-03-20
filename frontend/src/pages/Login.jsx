@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Form } from "react-bootstrap";
-import { useAuth, AuthProvider } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -120,32 +120,30 @@ const Login = () => {
               </CardContent>
             </Form>
             <Box mt={1}>
-            <CardActions >
-              <Typography>
-                <Button
-                  onClick={handleClick}
-                > 
-                  <Avatar alt="Google Logo" src="../../../static/images/google.png" />
-                  <Box m={1} /> 
-                  Sign in with Google
-                </Button>
-              </Typography>
-            </CardActions>
+              <CardActions>
+                <Typography>
+                  <Button onClick={handleClick}>
+                    <Avatar
+                      alt='Google Logo'
+                      src='../../../static/images/google.png'
+                    />
+                    <Box m={1} />
+                    Sign in with Google
+                  </Button>
+                </Typography>
+              </CardActions>
             </Box>
             <Box mt={3}>
-            <CardActions>
-              <Typography>
-                Need an account? <Link to='/signup'>Sign Up</Link>
-              </Typography>
-              
-            </CardActions>
-            <CardActions>
-              <Typography>
-                 <Link to='/forgot-password'>Forgot your password?</Link>
-              
-              </Typography>
-              
-            </CardActions>
+              <CardActions>
+                <Typography>
+                  Need an account? <Link to='/signup'>Sign Up</Link>
+                </Typography>
+              </CardActions>
+              <CardActions>
+                <Typography>
+                  <Link to='/forgot-password'>Forgot your password?</Link>
+                </Typography>
+              </CardActions>
             </Box>
           </Card>
         </Box>

@@ -1,0 +1,46 @@
+.module-list {
+  .module-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    .preview-container {
+      padding: 1em 1em;
+      .module-preview-component {
+        margin: auto;
+      }
+    }
+  }
+  @media all and (max-width: 1150px) {
+    .module-container {
+      /* When on medium sized screens, we center it by evenly distributing empty space around items */
+      justify-content: space-around;
+      .preview-container {
+        // padding-right: 0em;
+        // padding-bottom: 3em;
+        // padding-left: 2em;
+      }
+    }
+  }
+
+  // /* Medium screens */
+  @media all and (max-width: 800px) {
+    .module-container {
+      /* When on medium sized screens, we center it by evenly distributing empty space around items */
+      justify-content: space-around;
+      .preview-container {
+        // padding-right: 0em;
+      }
+    }
+  }
+
+  // /* Small screens */
+  @media all and (max-width: 500px) {
+    .module-container {
+      /* On small screens, we are no longer using row direction but column */
+      flex-direction: column;
+      .preview-container {
+        // padding-right: 0em;
+      }
+    }
+  }
+}
