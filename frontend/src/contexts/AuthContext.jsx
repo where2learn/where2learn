@@ -38,14 +38,12 @@ export function AuthProvider({ children }) {
   function signInWithGoogle() {
     console.log("here");
     return auth.signInWithPopup(provider);
-  };
+  }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async userAuth => {
+    const unsubscribe = auth.onAuthStateChanged(async (userAuth) => {
       const user = await generateUserDocument(userAuth);
       setCurrentUser(user);
-      console.log("currentUser", currentUser);
-      console.log("user",user);
       setLoading(false);
     });
 
@@ -60,7 +58,7 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
-    signInWithGoogle
+    signInWithGoogle,
   };
 
   return (

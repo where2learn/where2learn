@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Form } from "react-bootstrap";
-import { useAuth, AuthProvider } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -8,10 +8,10 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, Box, TextField, Avatar  } from "@material-ui/core";
+import { Container, Box, TextField, Avatar } from "@material-ui/core";
 import NavDrawer from "../components/NavDrawer";
 import { useSnackbar } from "notistack";
-import {generateUserDocument} from "../firebase";
+import { generateUserDocument } from "../firebase";
 
 const getCardMinWidth = () => {
   const windowInnerWidth = window.innerWidth;
@@ -51,7 +51,10 @@ const Signup = () => {
 
     try {
       setLoading(true);
-      const user = await signup(emailRef.current.value, passwordRef.current.value);
+      const user = await signup(
+        emailRef.current.value,
+        passwordRef.current.value
+      );
       generateUserDocument(user);
       enqueueSnackbar("Account Created", { variant: "success" });
       history.push("/");
@@ -134,27 +137,25 @@ const Signup = () => {
               </CardContent>
             </Form>
             <Box mt={1}>
-            <CardActions >
-              <Typography>
-           
-              <Button 
-                onClick={handleClick}
-                
-              > 
-                <Avatar alt="Google Logo" src="../../../static/images/google.png" />
-                <Box m={1} /> 
-                Sign in with Google
-               </Button>
-              </Typography>
-            </CardActions>
+              <CardActions>
+                <Typography>
+                  <Button onClick={handleClick}>
+                    <Avatar
+                      alt='Google Logo'
+                      src='../../../static/images/google.png'
+                    />
+                    <Box m={1} />
+                    Sign in with Google
+                  </Button>
+                </Typography>
+              </CardActions>
             </Box>
             <Box mt={3}>
-            <CardActions>
-              <Typography>
-                Already have an account? <Link to='/login'>Log In</Link>
-              </Typography>
-
-            </CardActions>
+              <CardActions>
+                <Typography>
+                  Already have an account? <Link to='/login'>Log In</Link>
+                </Typography>
+              </CardActions>
             </Box>
           </Card>
         </Box>

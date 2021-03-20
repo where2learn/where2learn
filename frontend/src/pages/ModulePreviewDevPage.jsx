@@ -21,13 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ModulePreviewDevPage = () => {
   const classes = useStyles();
-  const handleDelete = () => {
-    console.info("You clicked the delete icon.");
-  };
-
-  const handleClick = () => {
-    console.info("You clicked the Chip.");
-  };
 
   return (
     <Container maxWidth='md' style={{ paddingTop: 100 }}>

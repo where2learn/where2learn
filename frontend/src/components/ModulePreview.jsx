@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -16,6 +15,7 @@ import Divider from "@material-ui/core/Divider";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
+    backgroundColor: theme.palette.background.paper,
   },
   media: {
     height: 140,
@@ -32,7 +32,7 @@ const ModulePreview = (props) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card className={`module-preview-component ${classes.root}`}>
       <CardHeader
         avatar={
           <Avatar aria-label='recipe' className={classes.avatar}>
@@ -47,11 +47,6 @@ const ModulePreview = (props) => {
         title={props.title}
         subheader={props.subheader}
       />
-      <CardMedia
-        className={classes.media}
-        image={props.cover_image}
-        title='Paella dish'
-      />
       <CardContent>
         <Typography variant='body2' color='textSecondary' component='p'>
           {props.description}
@@ -60,7 +55,12 @@ const ModulePreview = (props) => {
       <Divider />
       <CardActions>
         <IconButton disabled={true} aria-label='cart'>
-          <Badge badgeContent={props.num_star} color='primary' max={999}>
+          <Badge
+            showZero
+            badgeContent={props.num_star}
+            color='primary'
+            max={999}
+          >
             <StarIcon className={classes.starBtn} />
           </Badge>
         </IconButton>

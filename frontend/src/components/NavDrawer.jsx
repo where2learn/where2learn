@@ -163,21 +163,26 @@ const NavDrawer = (props) => {
   const MenuContent = () => (
     <React.Fragment>
       <List>
-        <ListItem button key="dashboard" className={classes.menuIconWrapper}>
+        <ListItem button key='dashboard' className={classes.menuIconWrapper}>
           <ListItemIcon className={classes.menuIcon}>
-            <Tooltip title="Dashboard" placement="right">
+            <Tooltip title='Dashboard' placement='right'>
               <DashboardIcon />
             </Tooltip>
           </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          <ListItemText primary='Dashboard' />
         </ListItem>
-        <ListItem button key="home" className={classes.menuIconWrapper}>
+        <ListItem
+          button
+          key='home'
+          className={classes.menuIconWrapper}
+          onClick={() => history.push("/")}
+        >
           <ListItemIcon className={classes.menuIcon}>
-            <Tooltip title="Home" placement="right">
+            <Tooltip title='Home' placement='right'>
               <HomeIcon />
             </Tooltip>
           </ListItemIcon>
-          <ListItemText primary="Home" />
+          <ListItemText primary='Home' />
         </ListItem>
       </List>
       <Divider />
@@ -185,15 +190,15 @@ const NavDrawer = (props) => {
         <ListItem
           onClick={() => setDarkTheme(!darkTheme)}
           button
-          key="toggle-theme"
+          key='toggle-theme'
           className={classes.menuIconWrapper}
         >
           <ListItemIcon className={classes.menuIcon}>
-            <Tooltip title="Toggle Theme" placement="right">
+            <Tooltip title='Toggle Theme' placement='right'>
               {darkTheme ? <Brightness2Icon /> : <Brightness7Icon />}
             </Tooltip>
           </ListItemIcon>
-          <ListItemText primary="Toggle Theme" />
+          <ListItemText primary='Toggle Theme' />
         </ListItem>
 
         {currentUser ? (
@@ -201,28 +206,28 @@ const NavDrawer = (props) => {
             <ListItem
               onClick={handleLogout}
               button
-              key="logout"
+              key='logout'
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>
-                <Tooltip title="Sign In" placement="right">
+                <Tooltip title='Sign In' placement='right'>
                   <ExitToAppIcon />
                 </Tooltip>
               </ListItemIcon>
-              <ListItemText primary="Logout" />
+              <ListItemText primary='Logout' />
             </ListItem>
             <ListItem
               onClick={() => history.push("/update-profile")}
               button
-              key="setting"
+              key='setting'
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>
-                <Tooltip title="Setting" placement="right">
+                <Tooltip title='Setting' placement='right'>
                   <SettingsIcon />
                 </Tooltip>
               </ListItemIcon>
-              <ListItemText primary="Setting" />
+              <ListItemText primary='Setting' />
             </ListItem>
           </>
         ) : (
@@ -230,24 +235,24 @@ const NavDrawer = (props) => {
             <ListItem
               onClick={() => history.push("/login")}
               button
-              key="login"
+              key='login'
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>
                 <AccountCircleIcon />
               </ListItemIcon>
-              <ListItemText primary="Sign In" />
+              <ListItemText primary='Sign In' />
             </ListItem>
             <ListItem
               onClick={() => history.push("/signup")}
               button
-              key="signup"
+              key='signup'
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>
                 <PersonAddIcon />
               </ListItemIcon>
-              <ListItemText primary="Sign Up" />
+              <ListItemText primary='Sign Up' />
             </ListItem>
           </>
         )}
@@ -259,17 +264,19 @@ const NavDrawer = (props) => {
     <div className={classes.root}>
       {smScreenMatch ? (
         <React.Fragment>
-          <Fab
-            onClick={toggleDrawer2(true)}
-            size="large"
-            color="primary"
-            aria-label="memu"
-            className={classes.menuFab}
-          >
-            <MenuIcon />
-          </Fab>
+          <div className='fixed-top'>
+            <Fab
+              onClick={toggleDrawer2(true)}
+              size='large'
+              color='primary'
+              aria-label='memu'
+              className={classes.menuFab}
+            >
+              <MenuIcon />
+            </Fab>
+          </div>
           <SwipeableDrawer
-            anchor="top"
+            anchor='top'
             open={open2}
             onClose={toggleDrawer2(false)}
             onOpen={toggleDrawer2(true)}
@@ -278,7 +285,7 @@ const NavDrawer = (props) => {
               className={clsx(classes.list, {
                 [classes.fullList]: true,
               })}
-              role="presentation"
+              role='presentation'
               onClick={toggleDrawer2(false)}
               onKeyDown={toggleDrawer2(false)}
             >
@@ -288,7 +295,7 @@ const NavDrawer = (props) => {
         </React.Fragment>
       ) : (
         <Drawer
-          variant="permanent"
+          variant='permanent'
           className={clsx(classes.drawer, {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
@@ -305,11 +312,11 @@ const NavDrawer = (props) => {
           <List className={classes.barBottom}>
             <ListItem
               button
-              key="toggle-drawer"
-              color="inherit"
-              aria-label="open drawer"
+              key='toggle-drawer'
+              color='inherit'
+              aria-label='open drawer'
               onClick={toggleDrawer}
-              edge="start"
+              edge='start'
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>

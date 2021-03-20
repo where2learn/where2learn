@@ -10,7 +10,10 @@ import ForgotPassword from "./pages/ForgotPassword";
 import UpdateProfile from "./pages/UpdateProfile";
 import EditorDevPage from "./pages/EditorDevPage";
 import ModulePreviewDevPage from "./pages/ModulePreviewDevPage";
+import Main from "./pages/Main";
 import { SnackbarProvider } from "notistack";
+import lightBlue from "@material-ui/core/colors/lightBlue";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 import {
   createMuiTheme,
@@ -27,18 +30,23 @@ const App = () => {
       createMuiTheme({
         palette: {
           primary: {
-            light: "#1976d2",
-            main: "#1976d2",
-            dark: "#000000",
-            contrastText: "#fff",
+            // light: "#1976d2",
+            // main: "#1976d2",
+            // dark: "#000000",
+            // contrastText: "#fff",
+            main: lightBlue[800],
           },
-          secondary: {
-            light: "#90a4ae",
-            main: "#90a4ae",
-            dark: "#ba000d",
-            contrastText: "#000",
-          },
+          // secondary: {
+          // light: "#90a4ae",
+          // main: "#90a4ae",
+          // dark: "#ba000d",
+          // contrastText: "#000",
+          // main: lime["A200"],
+          // },
           type: prefersDarkMode ? "dark" : "light",
+        },
+        darker: {
+          main: "#5c6ac4",
         },
       }),
     [prefersDarkMode]
@@ -48,6 +56,7 @@ const App = () => {
     root: {
       backgroundColor: theme.palette.background.default,
       minHeight: "100vh",
+      height: "100%",
     },
   });
   const classes = useStyles();
@@ -57,9 +66,11 @@ const App = () => {
       <SnackbarProvider maxSnack={10}>
         <AuthProvider>
           <ThemeProvider theme={theme}>
-            <Paper className={classes.root} square>
+            <CssBaseline />
+            <Paper className={classes.root} elevation={0} square>
               <Switch>
-                <PrivateRoute exact path='/' component={Dashboard} />
+                <PrivateRoute exact path='/' component={Main} />
+                <PrivateRoute exact path='/dashboard' component={Dashboard} />
                 <PrivateRoute
                   path='/update-profile'
                   component={UpdateProfile}
