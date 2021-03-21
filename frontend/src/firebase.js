@@ -1,6 +1,7 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+import 'firebase/storage';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -10,6 +11,24 @@ const app = firebase.initializeApp({
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
   appId: process.env.REACT_APP_FIREBASE_APPID,
 });
+
+// enable persistence (offline data access)
+firebase
+  .firestore()
+  .enablePersistence()
+  .catch((err) => {
+    if (err.code == 'failed-precondition') {
+      // Multiple tabs open, persistence can only be enabled
+      // in one tab at a a time.
+      // ...
+      console.log('enable persistence failed: failed-precondition');
+    } else if (err.code == 'unimplemented') {
+      // The current browser does not support all of the
+      // features required to enable persistence
+      // ...
+      console.log('enable persistence failed: unimplemented');
+    }
+  });
 
 export const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -32,7 +51,7 @@ export const generateUserDocument = async (user, additionalData) => {
         ...additionalData,
       });
     } catch (error) {
-      console.error("Error creating user document", error);
+      console.error('Error creating user document', error);
     }
   }
   return getUserDocument(user.uid);
@@ -48,7 +67,7 @@ const getUserDocument = async (uid) => {
       ...userDocument.data(),
     };
   } catch (error) {
-    console.error("Error fetching user", error);
+    console.error('Error fetching user', error);
   }
 };
 
@@ -56,8 +75,18 @@ const getUserDocument = async (uid) => {
 export const getModules = async () => {
   const snapshot = await firebase
     .firestore()
-    .collection("modules")
-    .orderBy("num_star", "desc")
+    .collection('modules')
+    .orderBy('num_star', 'desc')
     .get();
   return snapshot.docs.map((doc) => doc.data());
+};
+
+export const uploadImage = (rawImage) => {
+  var storageRef = firebase.storage().ref();
+  var imgRef = storageRef.child('/users/pictures/resized/mountains.jpg');
+  return imgRef.put(rawImage).then(async (snapshot) => {
+    console.log('Uploaded a blob or file!');
+    const url = await imgRef.getDownloadURL();
+    return url;
+  });
 };

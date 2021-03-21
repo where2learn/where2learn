@@ -14,6 +14,8 @@ import Main from "./pages/Main";
 import { SnackbarProvider } from "notistack";
 import lightBlue from "@material-ui/core/colors/lightBlue";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import UserProfile from "./pages/UserProfile";
+import AddModulePage from "./pages/AddModule";
 
 import {
   createMuiTheme,
@@ -75,8 +77,10 @@ const App = () => {
                   path='/update-profile'
                   component={UpdateProfile}
                 />
+                <PrivateRoute path='/user-profile' component={UserProfile}/>
                 <Route path='/signup' component={Signup} />
                 <Route path='/login' component={Login} />
+                <Route path='/add-module' component={AddModulePage} />
                 <Route path='/forgot-password' component={ForgotPassword} />
                 {/* Everything Below is for developing and experimenting components instead of an actual page */}
                 <Route path='/editor' component={EditorDevPage} />
