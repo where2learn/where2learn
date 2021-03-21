@@ -7,12 +7,12 @@ import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import { Button, Paper } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -45,13 +45,11 @@ const useStyles = makeStyles((theme) => ({
 const AddModule = () => {
   const [projectTitle, setProjectTitle] = useState('');
   const [projectId, setProjectId] = useState('');
-  const [editorContent, setEditorContent] = useState('');
+  const [editorContent, setEditorContent] = useState('Content Here');
   const [inlineEditorContent, setInlineEditorContent] = useState('');
   const [normalEditorContent, setNormalEditorContent] = useState('');
 
   const [inlineEditorSwitch, setInlineEditorSwitch] = useState(false);
-
-  useEffect(() => {}, [inlineEditorSwitch]);
 
   useEffect(() => {
     setEditorContent(
@@ -155,27 +153,32 @@ const AddModule = () => {
           <Divider />
           <br />
 
-          <div
-            className={classes.editorBGWrapper}
-            style={{ display: `${inlineEditorSwitch ? 'block' : 'none'}` }}
-          >
-            <Editor
-              width='100%'
-              updateContent={setInlineEditorContent}
-              height={400}
-              content={null}
-              inline={!inlineEditorSwitch}
-            />
-          </div>
-          <div style={{ display: `${!inlineEditorSwitch ? 'block' : 'none'}` }}>
-            <Editor
-              width='100%'
-              updateContent={setNormalEditorContent}
-              height={400}
-              content={null}
-              inline={inlineEditorSwitch}
-            />
-          </div>
+          {inlineEditorSwitch ? (
+            <div className={classes.editorBGWrapper}>
+              <Editor
+                key='inline-editor'
+                width='100%'
+                updateContent={setEditorContent}
+                height={400}
+                content={editorContent}
+                initialValue={editorContent}
+                inline={true}
+              />
+            </div>
+          ) : (
+            <div>
+              <Editor
+                key='normal-editor'
+                width='100%'
+                updateContent={setEditorContent}
+                height={400}
+                content={editorContent}
+                initialValue={editorContent}
+                inline={false}
+              />
+            </div>
+          )}
+
           <br />
           <Button
             variant='outlined'
