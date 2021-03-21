@@ -12,6 +12,24 @@ const app = firebase.initializeApp({
   appId: process.env.REACT_APP_FIREBASE_APPID,
 });
 
+// enable persistence (offline data access)
+firebase
+  .firestore()
+  .enablePersistence()
+  .catch((err) => {
+    if (err.code == "failed-precondition") {
+      // Multiple tabs open, persistence can only be enabled
+      // in one tab at a a time.
+      // ...
+      console.log("enable persistence failed: failed-precondition");
+    } else if (err.code == "unimplemented") {
+      // The current browser does not support all of the
+      // features required to enable persistence
+      // ...
+      console.log("enable persistence failed: unimplemented");
+    }
+  });
+
 export const provider = new firebase.auth.GoogleAuthProvider();
 
 export const auth = app.auth();
