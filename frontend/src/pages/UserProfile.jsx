@@ -80,6 +80,7 @@ const UserProfile = () => {
   const [userInfo, setUserInfo] = useState({ username: "User" });
   const [modules, setModules] = useState([]);
   const [stars, setStars] = useState([]);
+  const [numStars, setNumStars] = useState(0);
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -100,13 +101,20 @@ const UserProfile = () => {
     setOpen(false);
   };
 
+  const getStarCounts = (modules) => {
+    const star = modules.reduce((prev, module) => {
+      return prev + module.num_star;
+    }, 0);
+    return star;
+  };
+
   useEffect(() => {
     getUserInfo(currentUser.uid).then((user) => {
       setUserInfo(user);
     });
     getModulesByUsername(currentUser.username).then((modules) => {
       setModules(modules);
-      // setStars(stars);
+      setNumStars(getStarCounts(modules));
     });
     getStarModules(currentUser.username).then((modules) => {
       setStars(modules);
@@ -219,7 +227,7 @@ const UserProfile = () => {
             <br />
             <Box component="div">
               <Box component="span" className={classes.info}>
-                <StarHalf /> 200
+                <StarHalf /> {numStars}
               </Box>
               <Box component="span" className={classes.info}>
                 <CreditCard /> {userInfo.credit}
