@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import "firebase/storage";
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -60,4 +61,14 @@ export const getModules = async () => {
     .orderBy("num_star", "desc")
     .get();
   return snapshot.docs.map((doc) => doc.data());
+};
+
+export const uploadImage = (rawImage) => {
+  var storageRef = firebase.storage().ref();
+  var imgRef = storageRef.child("/users/pictures/resized/mountains.jpg");
+  return imgRef.put(rawImage).then(async (snapshot) => {
+    console.log("Uploaded a blob or file!");
+    const url = await imgRef.getDownloadURL();
+    return url;
+  });
 };
