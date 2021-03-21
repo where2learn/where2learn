@@ -133,4 +133,17 @@ export const getStarModules = async (username) => {
   // firestore.getAll(documentRef1, documentRef2).then((docs) =>)
 };
 
+export const updateAvatar = async (uid, newAvatar) => {
+  const userRef = firestore.doc("users/" + uid);
+  userRef
+    .update("avatar", newAvatar)
+    .then(() => {
+      return userRef.get();
+    })
+    .then((doc) => {
+      console.log("upload successfully!");
+      console.log("New Avatar address: " + doc.get("avatar"));
+    });
+};
+
 // =============================================

@@ -15,7 +15,12 @@ import WorkIcon from "@material-ui/icons/Work";
 import BeachAccessIcon from "@material-ui/icons/BeachAccess";
 import { Settings, StarHalf, CreditCard } from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
-import { getUserInfo, getModulesByUsername, getStarModules } from "../firebase";
+import {
+  getUserInfo,
+  getModulesByUsername,
+  getStarModules,
+  updateAvatar,
+} from "../firebase";
 import ModuleList from "../components/ModuleList";
 import {
   Button,
@@ -25,6 +30,7 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  Input,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -81,12 +87,16 @@ const UserProfile = () => {
   };
 
   const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleCloseSave = () => {
     const textField = document.getElementById("name");
     setUserInfo({
       ...userInfo,
       avatar: textField.value,
     });
-    console.log(textField.value);
+    updateAvatar(currentUser.uid, textField.value);
     setOpen(false);
   };
 
@@ -171,7 +181,7 @@ const UserProfile = () => {
               <DialogContentText>
                 Please make sure your avatar link is accessible
               </DialogContentText>
-              <TextField
+              <Input
                 autoFocus
                 margin="dense"
                 id="name"
@@ -182,7 +192,7 @@ const UserProfile = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleClose}>Save</Button>
+              <Button onClick={handleCloseSave}>Save</Button>
             </DialogActions>
           </Dialog>
           <br />
