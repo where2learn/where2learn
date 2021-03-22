@@ -122,7 +122,7 @@ export const getStarModules = async (username) => {
     .where("username", "==", username);
   const starQueries = await starRef.get();
   const stars = starQueries.docs.map((star) => star.data().module);
-  console.log(stars); // should get an array of module id
+  // console.log(stars); // should get an array of module id
   // find two ways to achieve this
   const modules = await firestore
     .collection("/modules")

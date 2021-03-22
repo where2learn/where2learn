@@ -32,6 +32,8 @@ import {
   TextField,
   Input,
 } from "@material-ui/core";
+import { connect } from "react-redux";
+import { mapStateToProps, mapDispatchToProps } from "../lib/redux_helper";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -72,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserProfile = () => {
+const UserProfile = (props) => {
   const classes = useStyles();
   const [state, setState] = useState("Modules");
   //   const [avatar, setAvatar] = useState();
@@ -109,13 +111,18 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    getUserInfo(currentUser.uid).then((user) => {
-      setUserInfo(user);
-    });
-    getModulesByUsername(currentUser.username).then((modules) => {
-      setModules(modules);
-      setNumStars(getStarCounts(modules));
-    });
+    props.loadUser(currentUser.uid);
+    props.loadModules(currentUser.username);
+    setNumStars(getStarCounts(props.modules));
+    // console.log(props.user);
+    // console.log(props.modules);
+    // getUserInfo(currentUser.uid).then((user) => {
+    //   setUserInfo(user);
+    // });
+    // getModulesByUsername(currentUser.username).then((modules) => {
+    //   setModules(modules);
+    //   setNumStars(getStarCounts(modules));
+    // });
     getStarModules(currentUser.username).then((modules) => {
       setStars(modules);
     });
@@ -124,7 +131,7 @@ const UserProfile = () => {
   const getCurrentState = () => {
     // console.log(userInfo);
     if (state === "Modules") {
-      return <ModuleList modules={modules} />;
+      return <ModuleList modules={props.modules} />;
     } else if (state === "Stars") {
       return <ModuleList modules={stars} />;
     }
@@ -169,9 +176,10 @@ const UserProfile = () => {
             }}
             onClick={handleClickOpen}
           >
-            {userInfo.avatar ? (
+            {props.user.avatar ? (
               <img
-                src={userInfo.avatar}
+                // src={userInfo.avatar}
+                src={props.user.avatar}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -211,7 +219,7 @@ const UserProfile = () => {
               display="block"
               className={classes.centerText}
             >
-              {userInfo.username}
+              {props.user.username}
             </Box>
             <br />
             <List className={classes.root}>
@@ -230,7 +238,7 @@ const UserProfile = () => {
                 <StarHalf /> {numStars}
               </Box>
               <Box component="span" className={classes.info}>
-                <CreditCard /> {userInfo.credit}
+                <CreditCard /> {props.user.credit}
               </Box>
             </Box>
           </Paper>
@@ -283,4 +291,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);
