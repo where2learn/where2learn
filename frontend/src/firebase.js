@@ -81,6 +81,30 @@ export const getModules = async () => {
   return snapshot.docs.map((doc) => doc.data());
 };
 
+export const getModuleRefById = (id) => {
+  return firestore.collection('modules').doc(id);
+};
+
+export const getModuleById = (id) => {
+  return firestore
+    .collection('modules')
+    .doc(id)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        return doc.data();
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('No such document!');
+        return undefined;
+      }
+    })
+    .catch((error) => {
+      console.log('Error getting document:', error);
+      return undefined;
+    });
+};
+
 export const uploadImage = (rawImage) => {
   var storageRef = firebase.storage().ref();
   var imgRef = storageRef.child('/users/pictures/resized/mountains.jpg');
@@ -93,7 +117,7 @@ export const uploadImage = (rawImage) => {
 
 // ========== User Profile Page ===============
 export const getUserInfo = async (uid) => {
-  const userRef = firestore.doc("/users/" + uid);
+  const userRef = firestore.doc('/users/' + uid);
   const snapshot = await userRef.get();
 
   return snapshot.data();
@@ -101,8 +125,8 @@ export const getUserInfo = async (uid) => {
 
 export const getModulesByUsername = async (username) => {
   const moduleRef = firestore
-    .collection("/modules")
-    .where("author", "==", username);
+    .collection('/modules')
+    .where('author', '==', username);
   const moduleQueries = await moduleRef.get();
   const modules = moduleQueries.docs.map((doc) => doc.data());
   // const starRef = firestore
@@ -118,15 +142,15 @@ export const getModulesByUsername = async (username) => {
 
 export const getStarModules = async (username) => {
   const starRef = firestore
-    .collection("stars")
-    .where("username", "==", username);
+    .collection('stars')
+    .where('username', '==', username);
   const starQueries = await starRef.get();
   const stars = starQueries.docs.map((star) => star.data().module);
   console.log(stars); // should get an array of module id
   // find two ways to achieve this
   const modules = await firestore
-    .collection("/modules")
-    .where(firebase.firestore.FieldPath.documentId(), "in", stars)
+    .collection('/modules')
+    .where(firebase.firestore.FieldPath.documentId(), 'in', stars)
     .get();
   return modules.docs.map((doc) => doc.data());
 
@@ -134,15 +158,15 @@ export const getStarModules = async (username) => {
 };
 
 export const updateAvatar = async (uid, newAvatar) => {
-  const userRef = firestore.doc("users/" + uid);
+  const userRef = firestore.doc('users/' + uid);
   userRef
-    .update("avatar", newAvatar)
+    .update('avatar', newAvatar)
     .then(() => {
       return userRef.get();
     })
     .then((doc) => {
-      console.log("upload successfully!");
-      console.log("New Avatar address: " + doc.get("avatar"));
+      console.log('upload successfully!');
+      console.log('New Avatar address: ' + doc.get('avatar'));
     });
 };
 
