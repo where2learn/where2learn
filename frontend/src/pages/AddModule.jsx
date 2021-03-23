@@ -11,6 +11,9 @@ import { Button } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
+import Paper from "@material-ui/core/Paper";
+import Chip from "@material-ui/core/Chip";
+
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -38,24 +41,29 @@ const useStyles = makeStyles((theme) => ({
   },
   editorBG: {
     height: "100%",
+    height: "1.5rem",
+  },
+  chip: {
+    margin: theme.spacing(0.5),
+  },
+  tagBG: {
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    listStyle: "none",
+    padding: theme.spacing(0.5),
+    margin: 0,
   },
 }));
 
 const AddModule = () => {
   const [projectTitle, setProjectTitle] = useState("");
   const [projectId, setProjectId] = useState("");
+  const [tagInput, setTagInput] = useState("");
+  const [tags, setTags] = useState([]);
   const [editorContent, setEditorContent] = useState("Content Here");
-  const [inlineEditorContent, setInlineEditorContent] = useState("");
-  const [normalEditorContent, setNormalEditorContent] = useState("");
 
   const [inlineEditorSwitch, setInlineEditorSwitch] = useState(false);
-
-  useEffect(() => {
-    setEditorContent(
-      inlineEditorSwitch ? inlineEditorContent : normalEditorContent
-    );
-  }, [inlineEditorContent, inlineEditorContent]);
-
   const classes = useStyles();
 
   const validProjectTitle = (project_title) => {
@@ -77,6 +85,17 @@ const AddModule = () => {
       return "Error";
     }
   };
+  
+  const updateTags = (e) => {
+    e.preventDefault();
+    setTags([...tags, tagInput]);
+    setTagInput("");
+    console.log(tags);
+  };
+
+  const deleteTag = (tagToDelete) => {
+    setTags((tags) => tags.filter((tag) => tag !== tagToDelete));
+  };
 
   useEffect(() => {
     setProjectId(produceProjectID(projectTitle));
@@ -87,6 +106,7 @@ const AddModule = () => {
     console.log("Submiting");
     console.log(`projectTitle:\n${projectTitle}`);
     console.log(`projectId:\n${projectId}`);
+    console.log(`tags:\n${tags}`);
     console.log(`editorContent:\n${editorContent}`);
   };
 
@@ -126,69 +146,92 @@ const AddModule = () => {
             />
           </Grid>
         </Grid>
-        <form onSubmit={onSubmit}>
+        <TextField
+          className={classes.textField}
+          label='Profile Title'
+          id='project-title'
+          fullWidth
+          value={projectTitle}
+          onChange={updateProjectTitle}
+          variant='outlined'
+        />
+
+        <TextField
+          className={classes.textField}
+          label='Profile ID'
+          id='project-id'
+          fullWidth
+          value={projectId}
+          onChange={(e) => setProjectId(e.target.value)}
+          variant='outlined'
+          helperText='Must Be Unique Within Your Modules'
+        />
+        <form onSubmit={updateTags}>
           <TextField
             className={classes.textField}
-            label='Profile Title'
-            id='project-title'
+            label='Tag'
+            id='tags-input'
             fullWidth
-            value={projectTitle}
-            onChange={updateProjectTitle}
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
             variant='outlined'
+            helperText='Press Enter to add a Tag'
           />
-          <br />
-
-          <TextField
-            className={classes.textField}
-            label='Profile ID'
-            id='project-id'
-            fullWidth
-            value={projectId}
-            onChange={(e) => setProjectId(e.target.value)}
-            variant='outlined'
-            helperText='Must Be Unique Within Your Modules'
-          />
-
-          <Divider />
-          <br />
-
-          {inlineEditorSwitch ? (
-            <div className={classes.editorBGWrapper}>
-              <Editor
-                key='inline-editor'
-                width='100%'
-                updateContent={setEditorContent}
-                height={400}
-                content={editorContent}
-                initialValue={editorContent}
-                inline={true}
-              />
-            </div>
-          ) : (
-            <div>
-              <Editor
-                key='normal-editor'
-                width='100%'
-                updateContent={setEditorContent}
-                height={400}
-                content={editorContent}
-                initialValue={editorContent}
-                inline={false}
-              />
-            </div>
-          )}
-
-          <br />
-          <Button
-            variant='outlined'
-            className='float-right'
-            color='inherit'
-            size='large'
-            type='submit'
-          >
-            Submit
-          </Button>
         </form>
+        {tags.length != 0 && (
+          <Paper elevation={3} className={classes.tagBG}>
+            {tags.map((tag, index) => {
+              return (
+                <Chip
+                  key={index}
+                  label={tag}
+                  onDelete={() => deleteTag(tag)}
+                  className={classes.chip}
+                />
+              );
+            })}
+          </Paper>
+        )}
+
+        <Divider />
+        <br />
+        {inlineEditorSwitch ? (
+          <div className={classes.editorBGWrapper}>
+            <Editor
+              key='inline-editor'
+              width='100%'
+              updateContent={setEditorContent}
+              height={400}
+              content={editorContent}
+              initialValue={editorContent}
+              inline={true}
+            />
+          </div>
+        ) : (
+          <div>
+            <Editor
+              key='normal-editor'
+              width='100%'
+              updateContent={setEditorContent}
+              height={400}
+              content={editorContent}
+              initialValue={editorContent}
+              inline={false}
+            />
+          </div>
+        )}
+
+        <br />
+        <Button
+          variant='outlined'
+          className='float-right'
+          color='inherit'
+          size='large'
+          type='submit'
+          onClick={onSubmit}
+        >
+          Submit
+        </Button>
       </Container>
     </NavDrawer>
   );

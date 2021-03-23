@@ -16,6 +16,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import UserProfile from "./pages/UserProfile";
 import AddModulePage from "./pages/AddModule";
 import { realtimeUpdateTheme } from "./firebase";
+
 import {
   createMuiTheme,
   makeStyles,
