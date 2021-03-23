@@ -27,8 +27,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Fab from '@material-ui/core/Fab';
 
-
-import { updateUserTheme } from "../firebase";
+import { updateUserTheme } from '../firebase';
 
 const drawerWidth = 240;
 
@@ -128,7 +127,7 @@ const NavDrawer = (props) => {
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const { currentUser, logout } = useAuth();
-  const [darkTheme, setDarkTheme] = React.useState(currentUser.theme == "dark");
+  const [darkTheme, setDarkTheme] = React.useState(currentUser.theme == 'dark');
   const { enqueueSnackbar } = useSnackbar();
   const smScreenMatch = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -137,7 +136,7 @@ const NavDrawer = (props) => {
     enqueueSnackbar(`Theme Switched to "${darkTheme ? 'DARK' : 'LIGHT'}"`, {
       variant: 'info',
     });
-    updateUserTheme(currentUser.uid, darkTheme ? "dark" : "light");
+    updateUserTheme(currentUser.uid, darkTheme ? 'dark' : 'light');
   }, [darkTheme, enqueueSnackbar]);
 
   const toggleDrawer = () => {
@@ -195,10 +194,10 @@ const NavDrawer = (props) => {
       <List>
         <ListItem
           button
-          key='add-module'
+          key='module/add'
           className={classes.menuIconWrapper}
           onClick={() => {
-            history.push('/add-module');
+            history.push('/module/add');
           }}
         >
           <ListItemIcon className={classes.menuIcon}>

@@ -57,7 +57,6 @@ const Main = () => {
   useEffect(() => {
     setTags(['react', 'vue']);
     initAllModules();
-    console.log(tagInputRef.current);
     tagInputRef.current.onChange = (e) => {
       console.log(e.target);
     };
