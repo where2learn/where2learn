@@ -32,19 +32,8 @@ const App = () => {
       createMuiTheme({
         palette: {
           primary: {
-            // light: "#1976d2",
-            // main: "#1976d2",
-            // dark: "#000000",
-            // contrastText: "#fff",
             main: lightBlue[800],
           },
-          // secondary: {
-          // light: "#90a4ae",
-          // main: "#90a4ae",
-          // dark: "#ba000d",
-          // contrastText: "#000",
-          // main: lime["A200"],
-          // },
           type: prefersDarkMode ? "dark" : "light",
         },
         darker: {
@@ -77,7 +66,7 @@ const App = () => {
                   path='/update-profile'
                   component={UpdateProfile}
                 />
-                <PrivateRoute path='/user-profile' component={UserProfile}/>
+                <PrivateRoute path='/user-profile' component={UserProfile} />
                 <Route path='/signup' component={Signup} />
                 <Route path='/login' component={Login} />
                 <Route path='/add-module' component={AddModulePage} />
