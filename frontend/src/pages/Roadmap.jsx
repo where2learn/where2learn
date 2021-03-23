@@ -10,11 +10,11 @@ import NavDrawer from "../components/NavDrawer";
 const getboxWidth = () => {
     const windowInnerWidth = window.innerWidth;
     if (windowInnerWidth < 800) {
-      return 100;
+      return 80;
     } else if (windowInnerWidth < 1200) {
-      return 150;
+      return 120;
     } else {
-      return 300;
+      return 180;
     }
   };
 
