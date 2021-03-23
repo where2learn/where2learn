@@ -19,6 +19,7 @@ import EditModulePage from './pages/EditModulePage';
 import DisplayModulePage from './pages/DisplayModulePage';
 import { realtimeUpdateTheme } from './firebase';
 
+
 import {
   createMuiTheme,
   makeStyles,
@@ -49,6 +50,9 @@ const App = () => {
       backgroundColor: darkTheme.palette.background.default,
       minHeight: '100vh',
       height: '100%',
+      backgroundColor: theme.palette.background.default,
+      minHeight: "100vh",
+      minWidth: "100vw",
     },
   });
 
@@ -65,6 +69,10 @@ const App = () => {
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute path='/update-profile' component={UpdateProfile} />
               <PrivateRoute path='/user-profile' component={UserProfile} />
+                  <Route
+                    path='/roadmap-vis'
+                    component={Roadmap}
+                  />
               <Route path='/signup' component={Signup} />
               <Route path='/login' component={Login} />
               <Route path='/module/add' component={AddModulePage} />
@@ -82,7 +90,6 @@ const App = () => {
         </ThemeProvider>
       </SnackbarProvider>
     </Router>
-  );
 };
 
 export default App;
