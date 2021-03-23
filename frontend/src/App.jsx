@@ -17,8 +17,8 @@ import UserProfile from './pages/UserProfile';
 import AddModulePage from './pages/AddModule';
 import EditModulePage from './pages/EditModulePage';
 import DisplayModulePage from './pages/DisplayModulePage';
+import Roadmap from './pages/Roadmap'
 import { realtimeUpdateTheme } from './firebase';
-
 
 import {
   createMuiTheme,
@@ -85,11 +85,16 @@ const App = () => {
                 path='/module-preview-dev'
                 component={ModulePreviewDevPage}
               />
+              <Route
+                    path='/roadmap-vis'
+                    component={Roadmap}
+              />
             </Switch>
           </Paper>
         </ThemeProvider>
       </SnackbarProvider>
     </Router>
+  );
 };
 
 export default App;

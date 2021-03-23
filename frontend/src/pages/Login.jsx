@@ -118,7 +118,6 @@ const Login = () => {
                 >
                   Login
                 </Button>
-
                 <br /> <br />  <br />
                 <Button
                   onClick={handleClick}
@@ -129,8 +128,7 @@ const Login = () => {
                   Sign in with Google
                 </Button>
               </CardContent>
-            </Form>
-            
+            </Form>           
             <Box mt={3}>
               <CardActions>
                 <Typography>
