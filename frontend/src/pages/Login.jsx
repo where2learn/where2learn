@@ -90,6 +90,7 @@ const Login = () => {
                   Login
                 </Typography>
                 <div>
+                
                   <TextField
                     fullWidth
                     inputRef={emailRef}
@@ -117,22 +118,19 @@ const Login = () => {
                 >
                   Login
                 </Button>
+
+                <br /> <br />  <br />
+                <Button
+                  onClick={handleClick}
+                  fullWidth
+                > 
+                  <Avatar alt="Google Logo" src="/google.png" />
+                  <Box m={1} /> 
+                  Sign in with Google
+                </Button>
               </CardContent>
             </Form>
-            <Box mt={1}>
-              <CardActions>
-                <Typography>
-                  <Button onClick={handleClick}>
-                    <Avatar
-                      alt='Google Logo'
-                      src='../../../static/images/google.png'
-                    />
-                    <Box m={1} />
-                    Sign in with Google
-                  </Button>
-                </Typography>
-              </CardActions>
-            </Box>
+            
             <Box mt={3}>
               <CardActions>
                 <Typography>
