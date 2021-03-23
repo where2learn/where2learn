@@ -146,4 +146,10 @@ export const updateAvatar = async (uid, newAvatar) => {
     });
 };
 
+export const realtimeUpdateTheme = async (uid, callback) => {
+  firestore.doc(`users/${uid}`).onSnapshot((doc) => {
+    callback(doc.data().theme);
+  });
+};
+
 // =============================================
