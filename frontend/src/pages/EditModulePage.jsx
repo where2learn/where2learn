@@ -29,6 +29,7 @@ const EditModulePage = (props) => {
           module_id={module && module.module_id ? module.module_id : ''}
           module_title={module && module.title ? module.title : ''}
           title='Edit A Module'
+          content={content}
           updateContent={setContent}
           onSubmit={onSubmit}
         />

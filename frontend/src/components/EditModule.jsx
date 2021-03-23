@@ -217,25 +217,27 @@ const EditModule = (props) => {
         {inlineEditorSwitch ? (
           <div className={classes.editorBGWrapper}>
             <Editor
-              // initialValue={props.initialValue}
+              initialValue={props.initialValue}
               key='inline-editor'
               width='100%'
               updateContent={setEditorContent}
               height={400}
               initialValue={editorContent}
               inline={true}
+              content={props.content}
             />
           </div>
         ) : (
           <div>
             <Editor
-              // initialValue={props.initialValue}
+              initialValue={props.initialValue}
               key='normal-editor'
               width='100%'
               updateContent={setEditorContent}
               height={400}
               initialValue={editorContent}
               inline={false}
+              content={props.content}
             />
           </div>
         )}
