@@ -1,25 +1,25 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import Editor from '../components/Editor';
-import NavDrawer from '../components/NavDrawer';
-import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import { Button } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import Switch from '@material-ui/core/Switch';
+import React, { useState, useRef, useEffect } from "react";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import Editor from "../components/Editor";
+import NavDrawer from "../components/NavDrawer";
+import Divider from "@material-ui/core/Divider";
+import TextField from "@material-ui/core/TextField";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import { Button } from "@material-ui/core";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Grid from "@material-ui/core/Grid";
+import Switch from "@material-ui/core/Switch";
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
     margin: theme.spacing(1),
   },
   link: {
-    display: 'flex',
+    display: "flex",
   },
   icon: {
     marginRight: theme.spacing(0.5),
@@ -33,21 +33,20 @@ const useStyles = makeStyles((theme) => ({
   editorBGWrapper: {
     backgroundColor: theme.palette.background.paper,
     // minHeight: '20rem',
-    height: '100%',
-    padding: '2rem',
+    height: "100%",
+    padding: "2rem",
   },
   editorBG: {
-    height: '100%',
-    height: '1.5rem',
+    height: "100%",
   },
 }));
 
 const AddModule = () => {
-  const [projectTitle, setProjectTitle] = useState('');
-  const [projectId, setProjectId] = useState('');
-  const [editorContent, setEditorContent] = useState('Content Here');
-  const [inlineEditorContent, setInlineEditorContent] = useState('');
-  const [normalEditorContent, setNormalEditorContent] = useState('');
+  const [projectTitle, setProjectTitle] = useState("");
+  const [projectId, setProjectId] = useState("");
+  const [editorContent, setEditorContent] = useState("Content Here");
+  const [inlineEditorContent, setInlineEditorContent] = useState("");
+  const [normalEditorContent, setNormalEditorContent] = useState("");
 
   const [inlineEditorSwitch, setInlineEditorSwitch] = useState(false);
 
@@ -72,10 +71,10 @@ const AddModule = () => {
     if (validProjectTitle(project_title)) {
       return project_title
         .trim()
-        .replaceAll(/[\s-_]+/g, ' ')
-        .replaceAll(/\s/g, '_');
+        .replaceAll(/[\s-_]+/g, " ")
+        .replaceAll(/\s/g, "_");
     } else {
-      return 'Error';
+      return "Error";
     }
   };
 
@@ -85,7 +84,7 @@ const AddModule = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log('Submiting');
+    console.log("Submiting");
     console.log(`projectTitle:\n${projectTitle}`);
     console.log(`projectId:\n${projectId}`);
     console.log(`editorContent:\n${editorContent}`);
@@ -106,7 +105,7 @@ const AddModule = () => {
                 Username
               </Typography>
               <Typography color='textPrimary' className={classes.link}>
-                {projectId ? projectId : '<project id>'}
+                {projectId ? projectId : "<project id>"}
               </Typography>
             </Breadcrumbs>
           </Grid>
