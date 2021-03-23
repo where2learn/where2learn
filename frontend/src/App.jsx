@@ -12,11 +12,9 @@ import EditorDevPage from "./pages/EditorDevPage";
 import ModulePreviewDevPage from "./pages/ModulePreviewDevPage";
 import Main from "./pages/Main";
 import { SnackbarProvider } from "notistack";
-import lightBlue from "@material-ui/core/colors/lightBlue";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import UserProfile from "./pages/UserProfile";
 import AddModulePage from "./pages/AddModule";
-import { firestore } from "./firebase";
 import { realtimeUpdateTheme } from "./firebase";
 import {
   createMuiTheme,

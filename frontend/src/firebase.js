@@ -146,6 +146,13 @@ export const updateAvatar = async (uid, newAvatar) => {
     });
 };
 
+export const updateUserTheme = (uid, theme) => {
+  firestore.doc(`users/${uid}`).update({
+    theme,
+  });
+};
+
+// realtime database
 export const realtimeUpdateTheme = async (uid, callback) => {
   firestore.doc(`users/${uid}`).onSnapshot((doc) => {
     callback(doc.data().theme);
