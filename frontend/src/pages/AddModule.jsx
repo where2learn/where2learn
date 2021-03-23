@@ -14,6 +14,7 @@ import Switch from "@material-ui/core/Switch";
 import Paper from "@material-ui/core/Paper";
 import Chip from "@material-ui/core/Chip";
 
+
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +64,6 @@ const AddModule = () => {
   const [editorContent, setEditorContent] = useState("Content Here");
 
   const [inlineEditorSwitch, setInlineEditorSwitch] = useState(false);
-
   const classes = useStyles();
 
   const validProjectTitle = (project_title) => {
@@ -85,7 +85,7 @@ const AddModule = () => {
       return "Error";
     }
   };
-
+  
   const updateTags = (e) => {
     e.preventDefault();
     setTags([...tags, tagInput]);

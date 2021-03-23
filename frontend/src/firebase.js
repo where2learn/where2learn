@@ -90,3 +90,73 @@ export const uploadImage = (rawImage) => {
     return url;
   });
 };
+
+// ========== User Profile Page ===============
+export const getUserInfo = async (uid) => {
+  const userRef = firestore.doc("/users/" + uid);
+  const snapshot = await userRef.get();
+
+  return snapshot.data();
+};
+
+export const getModulesByUsername = async (username) => {
+  const moduleRef = firestore
+    .collection("/modules")
+    .where("author", "==", username);
+  const moduleQueries = await moduleRef.get();
+  const modules = moduleQueries.docs.map((doc) => doc.data());
+  // const starRef = firestore
+  //   .collection("/stars")
+  //   .where("username", "==", "username");
+  // const starQueries = await starRef.get();
+  // const stars = starQueries.docs.map((star) => star.data());
+
+  // const starts =
+
+  return modules;
+};
+
+export const getStarModules = async (username) => {
+  const starRef = firestore
+    .collection("stars")
+    .where("username", "==", username);
+  const starQueries = await starRef.get();
+  const stars = starQueries.docs.map((star) => star.data().module);
+  console.log(stars); // should get an array of module id
+  // find two ways to achieve this
+  const modules = await firestore
+    .collection("/modules")
+    .where(firebase.firestore.FieldPath.documentId(), "in", stars)
+    .get();
+  return modules.docs.map((doc) => doc.data());
+
+  // firestore.getAll(documentRef1, documentRef2).then((docs) =>)
+};
+
+export const updateAvatar = async (uid, newAvatar) => {
+  const userRef = firestore.doc("users/" + uid);
+  userRef
+    .update("avatar", newAvatar)
+    .then(() => {
+      return userRef.get();
+    })
+    .then((doc) => {
+      console.log("upload successfully!");
+      console.log("New Avatar address: " + doc.get("avatar"));
+    });
+};
+
+export const updateUserTheme = (uid, theme) => {
+  firestore.doc(`users/${uid}`).update({
+    theme,
+  });
+};
+
+// realtime database
+export const realtimeUpdateTheme = async (uid, callback) => {
+  firestore.doc(`users/${uid}`).onSnapshot((doc) => {
+    callback(doc.data().theme);
+  });
+};
+
+// =============================================
