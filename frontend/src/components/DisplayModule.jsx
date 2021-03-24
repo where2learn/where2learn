@@ -61,15 +61,16 @@ const DisplayModule = (props) => {
   const [fullModuleId, setFullModuleId] = useState('');
   const [star, setStar] = useState(false);
   const classes = useStyles();
-  useEffect(async () => {
+  useEffect(() => {
     const id = constructFullModuleId(
       props.match.params.username,
       props.match.params.module_id
     );
-    realtimeUpdateModule(id, setModule);
-  }, []);
+    const unsubscribe = realtimeUpdateModule(id, setModule);
+    return unsubscribe;
+  }, [props.match.params.username, props.match.params.module_id]);
 
-  useEffect(async () => {
+  useEffect(() => {
     setFullModuleId(
       constructFullModuleId(
         props.match.params.username,
@@ -83,11 +84,17 @@ const DisplayModule = (props) => {
         hljs.highlightBlock(block);
       });
     });
-    if (module) {
-      const starExists = await userHasStarModule(module.author, fullModuleId);
-      setStar(starExists);
-    }
-  }, [module]);
+    (async () => {
+      if (module) {
+        setStar(await userHasStarModule(module.author, fullModuleId));
+      }
+    })();
+  }, [
+    module,
+    fullModuleId,
+    props.match.params.username,
+    props.match.params.module_id,
+  ]);
 
   const toggleStar = async (e) => {
     if (module && module.author && fullModuleId) {

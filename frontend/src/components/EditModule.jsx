@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Editor from '../components/Editor';
@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
   },
   editorBG: {
     height: '100%',
-    height: '1.5rem',
   },
   chip: {
     margin: theme.spacing(0.5),
@@ -80,22 +79,24 @@ const EditModule = (props) => {
     if (props.updateContent) {
       props.updateContent(editorContent);
     }
-  }, [editorContent]);
+  }, [editorContent, props]);
 
   const updateProjectTitle = (e) => {
     if (validProjectTitle(e.target.value)) setModuleTitle(e.target.value);
   };
 
-  const produceProjectID = (project_title) => {
+  const updateModuleID = useCallback((project_title) => {
     if (validProjectTitle(project_title)) {
-      return project_title
-        .trim()
-        .replaceAll(/[\s-_]+/g, ' ')
-        .replaceAll(/\s/g, '_');
+      setModuleId(
+        project_title
+          .trim()
+          .replaceAll(/[\s-_]+/g, ' ')
+          .replaceAll(/\s/g, '_')
+      );
     } else {
-      return 'Error';
+      setModuleId('Error');
     }
-  };
+  }, []);
 
   const updateTags = (e) => {
     e.preventDefault();
@@ -108,9 +109,8 @@ const EditModule = (props) => {
   };
 
   useEffect(() => {
-    if (!props.module_id && moduleTitle)
-      setModuleId(produceProjectID(moduleTitle));
-  }, [moduleTitle]);
+    if (!props.module_id && moduleTitle) updateModuleID(moduleTitle);
+  }, [moduleTitle, props.module_id, updateModuleID]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -198,7 +198,7 @@ const EditModule = (props) => {
             helperText='Press Enter to add a Tag'
           />
         </form>
-        {tags && tags.length != 0 && (
+        {tags && tags.length !== 0 && (
           <Paper elevation={3} className={classes.tagBG}>
             {tags.map((tag, index) => {
               return (
@@ -218,12 +218,10 @@ const EditModule = (props) => {
         {inlineEditorSwitch ? (
           <div className={classes.editorBGWrapper}>
             <Editor
-              initialValue={props.initialValue}
               key='inline-editor'
               width='100%'
               updateContent={setEditorContent}
               height={400}
-              initialValue={editorContent}
               inline={true}
               content={props.content}
             />
@@ -231,12 +229,10 @@ const EditModule = (props) => {
         ) : (
           <div>
             <Editor
-              initialValue={props.initialValue}
               key='normal-editor'
               width='100%'
               updateContent={setEditorContent}
               height={400}
-              initialValue={editorContent}
               inline={false}
               content={props.content}
             />

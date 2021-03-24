@@ -3,9 +3,6 @@ import ModulePreview from '../components/ModulePreview';
 import '../style/ModuleList.scss';
 
 const ModuleList = (props) => {
-  React.useEffect(() => {
-    console.log(props.modules);
-  }, []);
   return (
     <div className='module-list'>
       <div className='module-container'>

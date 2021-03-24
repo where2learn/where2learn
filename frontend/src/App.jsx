@@ -17,7 +17,7 @@ import UserProfile from './pages/UserProfile';
 import AddModulePage from './pages/AddModule';
 import EditModulePage from './pages/EditModulePage';
 import DisplayModulePage from './pages/DisplayModulePage';
-import Roadmap from './pages/Roadmap'
+import Roadmap from './pages/Roadmap';
 import { realtimeUpdateTheme } from './firebase';
 
 import {
@@ -38,12 +38,12 @@ const App = () => {
     },
   });
 
-  useEffect(async () => {
+  useEffect(() => {
     realtimeUpdateTheme(currentUser.uid, setDBTheme);
     // const theme = await getTheme(currentUser, setDBTheme);
     // console.log(theme);
     // setDBTheme(theme);
-  }, []);
+  }, [currentUser]);
 
   const useStyles = makeStyles({
     root: {
@@ -66,10 +66,7 @@ const App = () => {
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute path='/update-profile' component={UpdateProfile} />
               <PrivateRoute path='/user-profile' component={UserProfile} />
-                  <Route
-                    path='/roadmap-vis'
-                    component={Roadmap}
-                  />
+              <Route path='/roadmap-vis' component={Roadmap} />
               <Route path='/signup' component={Signup} />
               <Route path='/login' component={Login} />
               <Route path='/module/add' component={AddModulePage} />
@@ -85,10 +82,7 @@ const App = () => {
                 path='/module-preview-dev'
                 component={ModulePreviewDevPage}
               />
-              <Route
-                    path='/roadmap-vis'
-                    component={Roadmap}
-              />
+              <Route path='/roadmap-vis' component={Roadmap} />
             </Switch>
           </Paper>
         </ThemeProvider>

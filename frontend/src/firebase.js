@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
-import { constructFullModuleId, constructStarId } from './firestore_data';
+import { constructStarId } from './firestore_data';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -18,12 +18,12 @@ firebase
   .firestore()
   .enablePersistence()
   .catch((err) => {
-    if (err.code == 'failed-precondition') {
+    if (err.code === 'failed-precondition') {
       // Multiple tabs open, persistence can only be enabled
       // in one tab at a a time.
       // ...
       console.log('enable persistence failed: failed-precondition');
-    } else if (err.code == 'unimplemented') {
+    } else if (err.code === 'unimplemented') {
       // The current browser does not support all of the
       // features required to enable persistence
       // ...
@@ -191,12 +191,13 @@ export const realtimeUpdateTheme = (uid, callback) => {
 };
 
 export const realtimeUpdateModule = (full_module_id, callback) => {
-  firestore
+  const unsubscribe = firestore
     .collection('modules')
     .doc(full_module_id)
     .onSnapshot((doc) => {
       callback(doc.data());
     });
+  return unsubscribe;
 };
 
 // =============================================
