@@ -12,7 +12,6 @@ const app = firebase.initializeApp({
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
   appId: process.env.REACT_APP_FIREBASE_APPID,
 });
-
 // enable persistence (offline data access)
 firebase
   .firestore()
@@ -37,7 +36,7 @@ export const auth = app.auth();
 
 export const firestore = firebase.firestore();
 export default app;
-
+// console.log(firebase.firestore().Timestamp.now);
 export const generateUserDocument = async (user, additionalData) => {
   if (!user) return;
 

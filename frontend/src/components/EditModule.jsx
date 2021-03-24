@@ -13,8 +13,11 @@ import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
-
+import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
+
+import { constructModuleObject } from '../firestore_data';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -57,24 +60,43 @@ const EditModule = (props) => {
   const [moduleTitle, setModuleTitle] = useState(props.module_title || '');
   const [moduleId, setModuleId] = useState(props.module_id || '');
   const [tagInput, setTagInput] = useState('');
+  const [mediaType, setMediaType] = useState({
+    text: true,
+    video: false,
+    image: false,
+    audio: false,
+  });
   const [tags, setTags] = useState(props.tags || []);
   const [editorContent, setEditorContent] = useState(props.initialValue || '');
+  const { enqueueSnackbar } = useSnackbar();
 
+  const [errMsgs, setErrMsgs] = useState({
+    title: null,
+    module_id: null,
+    tags: null,
+  });
+
+  const handleMediaTypeChange = (event) => {
+    setMediaType({ ...mediaType, [event.target.name]: event.target.checked });
+  };
+
+  // initialize value from props to local state, TODO: experiment wether these can be removed
   useEffect(() => {
     setEditorContent(props.initialValue);
-    setTags(props.tags);
-    setModuleTitle(props.module_title);
+    setTags(tags || props.tags || []);
+    setModuleTitle(props.module_title || '');
     setModuleId(props.module_id);
   }, [props.initialValue, props.tags, props.module_title, props.module_id]);
 
   const [inlineEditorSwitch, setInlineEditorSwitch] = useState(false);
   const classes = useStyles();
 
-  const validProjectTitle = (project_title) => {
+  const validProjectTitle = (title) => {
     const regex = /^([a-zA-Z\d-_\s]+)?$/g;
-    return project_title.match(regex) ? true : false;
+    return title.match(regex) ? true : false;
   };
 
+  // update editor component to parent component
   useEffect(() => {
     if (props.updateContent) {
       props.updateContent(editorContent);
@@ -82,17 +104,21 @@ const EditModule = (props) => {
   }, [editorContent, props]);
 
   const updateProjectTitle = (e) => {
-    if (validProjectTitle(e.target.value)) setModuleTitle(e.target.value);
+    if (validProjectTitle(e.target.value)) {
+      setModuleTitle(e.target.value || '');
+    }
   };
 
-  const updateModuleID = useCallback((project_title) => {
-    if (validProjectTitle(project_title)) {
+  const updateModuleID = useCallback((title) => {
+    if (validProjectTitle(title)) {
       setModuleId(
-        project_title
+        title
           .trim()
           .replaceAll(/[\s-_]+/g, ' ')
           .replaceAll(/\s/g, '_')
       );
+    } else if (title.length === 0) {
+      setModuleId('');
     } else {
       setModuleId('Error');
     }
@@ -108,24 +134,91 @@ const EditModule = (props) => {
     setTags((tags) => tags.filter((tag) => tag !== tagToDelete));
   };
 
+  // update module_id according to module title
   useEffect(() => {
+    // if a module_id is passed from parent, then we don't change it here
+    if (moduleTitle.length === 0) updateModuleID(moduleTitle);
     if (!props.module_id && moduleTitle) updateModuleID(moduleTitle);
   }, [moduleTitle, props.module_id, updateModuleID]);
 
+  // update error message for title
+  useEffect(() => {
+    if (moduleTitle) {
+      setErrMsgs({ ...errMsgs, title: null });
+    }
+  }, [moduleTitle]);
+
+  // update error message for module_id
+  useEffect(() => {
+    if (moduleId) {
+      setErrMsgs({ ...errMsgs, module_id: null });
+    }
+  }, [moduleId]);
+
+  // update error message for tags
+  useEffect(() => {
+    if (tagInput) {
+      setErrMsgs({ ...errMsgs, tags: null });
+    }
+  }, [tagInput]);
+
+  const validateForSubmit = () => {
+    let err = false;
+    const newErrMsgs = {};
+    if (!moduleTitle) {
+      newErrMsgs.title = 'Cannot Be Empty';
+      err = true;
+    }
+    if (!moduleId) {
+      newErrMsgs.module_id = 'Cannot Be Empty';
+      err = true;
+    }
+    if (tags.length === 0) {
+      newErrMsgs.tags = 'Cannot Be Empty';
+      err = true;
+    }
+    setErrMsgs({ ...errMsgs, ...newErrMsgs });
+    return err;
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log('Submiting');
-    console.log(`projectTitle:\n${moduleTitle}`);
-    console.log(`projectId:\n${moduleId}`);
-    console.log(`tags:\n${tags}`);
-    console.log(`editorContent:\n${editorContent}`);
-    if (props.onSubmit) {
-      props.onSubmit({
-        projectTitle: moduleTitle,
-        projectId: moduleId,
-        tags,
-        editorContent,
-      });
+    const err = validateForSubmit();
+    if (err) {
+      console.error('error validating the data to submit');
+    } else {
+      console.log('Submiting');
+      console.log(`projectTitle:\n${moduleTitle}`);
+      console.log(`projectId:\n${moduleId}`);
+      console.log(`tags:\n${tags}`);
+      console.log(`editorContent:\n${editorContent}`);
+      if (props.onSubmit) {
+        props.onSubmit({
+          projectTitle: moduleTitle,
+          projectId: moduleId,
+          tags,
+          editorContent,
+        });
+      }
+      const mediaTypeArr = [];
+      for (const [key, value] of Object.entries(mediaType)) {
+        console.log(`${key}: ${value}`);
+        if (value) {
+          mediaTypeArr.push(key);
+        }
+      }
+      console.log(
+        constructModuleObject({
+          title: moduleTitle,
+          module_id: moduleId,
+          tags,
+          content: editorContent,
+          roadmap: null,
+          media_type: mediaTypeArr,
+          type: 'regular',
+          mode: props.mode,
+        })
+      );
     }
   };
 
@@ -172,7 +265,14 @@ const EditModule = (props) => {
           fullWidth
           value={moduleTitle}
           onChange={updateProjectTitle}
+          // onChange={(e) => {
+          //   console.log(e.target.value);
+          //   console.log(typeof e.target.value);
+          // }}
           variant='outlined'
+          autoFocus
+          helperText={errMsgs.title || null}
+          error={Boolean(errMsgs.title)}
         />
         {props.mode !== 'edit' && (
           <TextField
@@ -183,7 +283,10 @@ const EditModule = (props) => {
             value={moduleId}
             onChange={(e) => setModuleId(e.target.value)}
             variant='outlined'
-            helperText='Must Be Unique Within Your Modules'
+            helperText={
+              errMsgs.module_id || 'Must Be Unique Within Your Modules'
+            }
+            error={Boolean(errMsgs.module_id)}
           />
         )}
         <form onSubmit={updateTags}>
@@ -195,7 +298,8 @@ const EditModule = (props) => {
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
             variant='outlined'
-            helperText='Press Enter to add a Tag'
+            helperText={errMsgs.tags || 'Press Enter to add a Tag'}
+            error={Boolean(errMsgs.tags)}
           />
         </form>
         {tags && tags.length !== 0 && (
@@ -212,7 +316,6 @@ const EditModule = (props) => {
             })}
           </Paper>
         )}
-
         <Divider />
         <br />
         {inlineEditorSwitch ? (
@@ -238,8 +341,52 @@ const EditModule = (props) => {
             />
           </div>
         )}
-
         <br />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={mediaType.text}
+              onChange={handleMediaTypeChange}
+              name='text'
+              color='secondary'
+            />
+          }
+          label='Text'
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={mediaType.image}
+              onChange={handleMediaTypeChange}
+              name='image'
+              color='secondary'
+            />
+          }
+          label='Image'
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={mediaType.video}
+              onChange={handleMediaTypeChange}
+              name='video'
+              color='secondary'
+            />
+          }
+          label='Video'
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={mediaType.video}
+              onChange={handleMediaTypeChange}
+              name='video'
+              color='secondary'
+            />
+          }
+          label='Video'
+        />
+
         <Button
           variant='outlined'
           className='float-right'
@@ -250,7 +397,6 @@ const EditModule = (props) => {
         >
           Submit
         </Button>
-
         {/* <div dangerouslySetInnerHTML={{ __html: editorContent }} /> */}
       </Container>
     </NavDrawer>
