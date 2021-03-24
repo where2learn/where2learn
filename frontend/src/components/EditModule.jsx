@@ -83,7 +83,7 @@ const EditModule = (props) => {
   // initialize value from props to local state, TODO: experiment wether these can be removed
   useEffect(() => {
     setEditorContent(props.initialValue);
-    setTags(tags || props.tags || []);
+    setTags(props.tags || []);
     setModuleTitle(props.module_title || '');
     setModuleId(props.module_id);
   }, [props.initialValue, props.tags, props.module_title, props.module_id]);
@@ -144,21 +144,21 @@ const EditModule = (props) => {
   // update error message for title
   useEffect(() => {
     if (moduleTitle) {
-      setErrMsgs({ ...errMsgs, title: null });
+      setErrMsgs((err_msgs) => ({ ...err_msgs, title: null }));
     }
   }, [moduleTitle]);
 
   // update error message for module_id
   useEffect(() => {
     if (moduleId) {
-      setErrMsgs({ ...errMsgs, module_id: null });
+      setErrMsgs((err_msgs) => ({ ...err_msgs, module_id: null }));
     }
   }, [moduleId]);
 
   // update error message for tags
   useEffect(() => {
     if (tagInput) {
-      setErrMsgs({ ...errMsgs, tags: null });
+      setErrMsgs((err_msgs) => ({ ...err_msgs, tags: null }));
     }
   }, [tagInput]);
 

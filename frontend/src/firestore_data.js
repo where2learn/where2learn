@@ -1,5 +1,3 @@
-import { firestore } from './firebase';
-
 export const constructFullModuleId = (username, module_id) =>
   `${username}\\${module_id}`;
 
