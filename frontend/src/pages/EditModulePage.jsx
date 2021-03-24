@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { getModuleById } from '../firebase';
 import Container from '@material-ui/core/Container';
@@ -11,12 +11,12 @@ const EditModulePage = (props) => {
   const [module, setModule] = useState(null);
   const [content, setContent] = useState(null);
 
-  useEffect(async () => {
-    console.log(props.match.params.id);
-    const data = await getModuleById(props.match.params.id);
-    setModule(data);
-    console.log(data);
-  }, []);
+  useEffect(() => {
+    (async () => {
+      const data = await getModuleById(props.match.params.id);
+      setModule(data);
+    })();
+  }, [props.match.params.id]);
 
   const onSubmit = (module) => {};
 
@@ -24,6 +24,7 @@ const EditModulePage = (props) => {
     <NavDrawer>
       <Container maxWidth='md'>
         <EditModule
+          mode='edit'
           initialValue={module && module.content ? module.content : ''}
           tags={module && module.tags ? module.tags : []}
           module_id={module && module.module_id ? module.module_id : ''}

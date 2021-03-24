@@ -17,7 +17,7 @@ import UserProfile from './pages/UserProfile';
 import AddModulePage from './pages/AddModule';
 import EditModulePage from './pages/EditModulePage';
 import DisplayModulePage from './pages/DisplayModulePage';
-import Roadmap from './pages/Roadmap'
+import Roadmap from './pages/Roadmap';
 import { realtimeUpdateTheme } from './firebase';
 
 import {
@@ -38,12 +38,12 @@ const App = () => {
     },
   });
 
-  useEffect(async () => {
+  useEffect(() => {
     realtimeUpdateTheme(currentUser.uid, setDBTheme);
     // const theme = await getTheme(currentUser, setDBTheme);
     // console.log(theme);
     // setDBTheme(theme);
-  }, []);
+  }, [currentUser]);
 
   const useStyles = makeStyles({
     root: {
@@ -66,15 +66,15 @@ const App = () => {
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute path='/update-profile' component={UpdateProfile} />
               <PrivateRoute path='/user-profile' component={UserProfile} />
-                  <Route
-                    path='/roadmap-vis'
-                    component={Roadmap}
-                  />
+              <Route path='/roadmap-vis' component={Roadmap} />
               <Route path='/signup' component={Signup} />
               <Route path='/login' component={Login} />
               <Route path='/module/add' component={AddModulePage} />
               <Route path='/module/edit/:id' component={EditModulePage} />
-              <Route path='/module/:id' component={DisplayModulePage} />
+              <Route
+                path='/module/:username/:module_id'
+                component={DisplayModulePage}
+              />
               <Route path='/forgot-password' component={ForgotPassword} />
               {/* Everything Below is for developing and experimenting components instead of an actual page */}
               <Route path='/editor' component={EditorDevPage} />
@@ -82,10 +82,7 @@ const App = () => {
                 path='/module-preview-dev'
                 component={ModulePreviewDevPage}
               />
-              <Route
-                    path='/roadmap-vis'
-                    component={Roadmap}
-              />
+              <Route path='/roadmap-vis' component={Roadmap} />
             </Switch>
           </Paper>
         </ThemeProvider>

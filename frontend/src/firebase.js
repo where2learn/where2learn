@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
+import { constructStarId } from './firestore_data';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -11,18 +12,17 @@ const app = firebase.initializeApp({
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
   appId: process.env.REACT_APP_FIREBASE_APPID,
 });
-
 // enable persistence (offline data access)
 firebase
   .firestore()
   .enablePersistence()
   .catch((err) => {
-    if (err.code == 'failed-precondition') {
+    if (err.code === 'failed-precondition') {
       // Multiple tabs open, persistence can only be enabled
       // in one tab at a a time.
       // ...
       console.log('enable persistence failed: failed-precondition');
-    } else if (err.code == 'unimplemented') {
+    } else if (err.code === 'unimplemented') {
       // The current browser does not support all of the
       // features required to enable persistence
       // ...
@@ -36,7 +36,7 @@ export const auth = app.auth();
 
 export const firestore = firebase.firestore();
 export default app;
-
+// console.log(firebase.firestore().Timestamp.now);
 export const generateUserDocument = async (user, additionalData) => {
   if (!user) return;
 
@@ -103,6 +103,12 @@ export const getModuleById = (id) => {
       console.log('Error getting document:', error);
       return undefined;
     });
+};
+
+export const incrementModuleStar = (full_module_id, amount) => {
+  return firestore.doc(`modules/${full_module_id}`).update({
+    num_star: firebase.firestore.FieldValue.increment(amount),
+  });
 };
 
 export const uploadImage = (rawImage) => {
@@ -177,10 +183,50 @@ export const updateUserTheme = (uid, theme) => {
 };
 
 // realtime database
-export const realtimeUpdateTheme = async (uid, callback) => {
+export const realtimeUpdateTheme = (uid, callback) => {
   firestore.doc(`users/${uid}`).onSnapshot((doc) => {
     callback(doc.data().theme);
   });
 };
 
+export const realtimeUpdateModule = (full_module_id, callback) => {
+  const unsubscribe = firestore
+    .collection('modules')
+    .doc(full_module_id)
+    .onSnapshot((doc) => {
+      callback(doc.data());
+    });
+  return unsubscribe;
+};
+
 // =============================================
+// Star related
+export const starModule = async (username, full_module_id, unstar = false) => {
+  const batch = firestore.batch();
+  const starRef = firestore
+    .collection('stars')
+    .doc(constructStarId(username, full_module_id));
+  if (unstar) {
+    batch.delete(starRef);
+  } else {
+    batch.set(starRef, { username, module: full_module_id });
+  }
+  // TODO: add the following to cloud function
+  const moduleRef = firestore.doc(`modules/${full_module_id}`);
+  batch.update(moduleRef, {
+    num_star: firebase.firestore.FieldValue.increment(unstar ? -1 : 1),
+  });
+  try {
+    await batch.commit();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const userHasStarModule = async (username, full_module_id) => {
+  const snapshot = await firestore
+    .collection('stars')
+    .doc(constructStarId(username, full_module_id))
+    .get();
+  return snapshot.exists;
+};
