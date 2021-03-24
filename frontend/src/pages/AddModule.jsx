@@ -7,7 +7,7 @@ const AddModule = () => {
   return (
     <NavDrawer>
       <Container maxWidth='md'>
-        <EditModule title='Add A Module' />
+        <EditModule title='Add A Module' mode='add' />
       </Container>
     </NavDrawer>
   );

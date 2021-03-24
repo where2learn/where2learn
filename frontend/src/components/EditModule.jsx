@@ -174,17 +174,18 @@ const EditModule = (props) => {
           onChange={updateProjectTitle}
           variant='outlined'
         />
-
-        <TextField
-          className={classes.textField}
-          label='Module ID'
-          id='module-id'
-          fullWidth
-          value={moduleId}
-          onChange={(e) => setModuleId(e.target.value)}
-          variant='outlined'
-          helperText='Must Be Unique Within Your Modules'
-        />
+        {props.mode !== 'edit' && (
+          <TextField
+            className={classes.textField}
+            label='Module ID'
+            id='module-id'
+            fullWidth
+            value={moduleId}
+            onChange={(e) => setModuleId(e.target.value)}
+            variant='outlined'
+            helperText='Must Be Unique Within Your Modules'
+          />
+        )}
         <form onSubmit={updateTags}>
           <TextField
             className={classes.textField}

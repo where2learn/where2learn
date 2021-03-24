@@ -24,6 +24,7 @@ const EditModulePage = (props) => {
     <NavDrawer>
       <Container maxWidth='md'>
         <EditModule
+          mode='edit'
           initialValue={module && module.content ? module.content : ''}
           tags={module && module.tags ? module.tags : []}
           module_id={module && module.module_id ? module.module_id : ''}

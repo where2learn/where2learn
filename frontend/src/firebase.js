@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
+import { constructFullModuleId, constructStarId } from './firestore_data';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -105,6 +106,12 @@ export const getModuleById = (id) => {
     });
 };
 
+export const incrementModuleStar = (full_module_id, amount) => {
+  return firestore.doc(`modules/${full_module_id}`).update({
+    num_star: firebase.firestore.FieldValue.increment(amount),
+  });
+};
+
 export const uploadImage = (rawImage) => {
   var storageRef = firebase.storage().ref();
   var imgRef = storageRef.child('/users/pictures/resized/mountains.jpg');
@@ -177,10 +184,49 @@ export const updateUserTheme = (uid, theme) => {
 };
 
 // realtime database
-export const realtimeUpdateTheme = async (uid, callback) => {
+export const realtimeUpdateTheme = (uid, callback) => {
   firestore.doc(`users/${uid}`).onSnapshot((doc) => {
     callback(doc.data().theme);
   });
 };
 
+export const realtimeUpdateModule = (full_module_id, callback) => {
+  firestore
+    .collection('modules')
+    .doc(full_module_id)
+    .onSnapshot((doc) => {
+      callback(doc.data());
+    });
+};
+
 // =============================================
+// Star related
+export const starModule = async (username, full_module_id, unstar = false) => {
+  const batch = firestore.batch();
+  const starRef = firestore
+    .collection('stars')
+    .doc(constructStarId(username, full_module_id));
+  if (unstar) {
+    batch.delete(starRef);
+  } else {
+    batch.set(starRef, { username, module: full_module_id });
+  }
+  // TODO: add the following to cloud function
+  const moduleRef = firestore.doc(`modules/${full_module_id}`);
+  batch.update(moduleRef, {
+    num_star: firebase.firestore.FieldValue.increment(unstar ? -1 : 1),
+  });
+  try {
+    await batch.commit();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const userHasStarModule = async (username, full_module_id) => {
+  const snapshot = await firestore
+    .collection('stars')
+    .doc(constructStarId(username, full_module_id))
+    .get();
+  return snapshot.exists;
+};
