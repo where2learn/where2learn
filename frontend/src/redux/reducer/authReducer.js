@@ -5,6 +5,7 @@ import {
   AUTH_USER,
   SIGN_OUT_USER,
   AUTH_INFO_SUCCESS,
+  UPDATE_AVATAR,
 } from "../actions/actionType";
 
 const auth = (state = { user: {}, modules: [], currentUser: {} }, action) => {
@@ -42,10 +43,16 @@ const auth = (state = { user: {}, modules: [], currentUser: {} }, action) => {
         currentUser: action.currentUser,
       };
     case AUTH_INFO_SUCCESS:
+      // console.log(action.currentUser);
       return {
         user: state.user,
         modules: state.modules,
         currentUser: action.currentUser,
+      };
+    case UPDATE_AVATAR:
+      state.user.avatar = action.avatar;
+      return {
+        ...state,
       };
     default:
       return state;

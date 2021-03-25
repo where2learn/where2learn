@@ -3,8 +3,9 @@ import {
   loadModules,
   authUser,
   signOutUser,
+  updateAvatarAction,
 } from "../redux/actions/authActions";
-import { getUserInfo, getModulesByUsername } from "../firebase";
+import { getUserInfo, getModulesByUsername, updateAvatar } from "../firebase";
 import { auth } from "../firebase";
 
 // export const mapStateToProps = (state) => ({
@@ -30,23 +31,16 @@ const login = (email, password) => (dispatch) => {
   dispatch(authUser(user));
 };
 
-// export function verifyAuth() {
-//   return function (dispatch) {
-//     auth.onAuthStateChanged((user) => {
-//       if (user) {
-//         dispatch(authUser());
-//       } else {
-//         dispatch(signOutUser());
-//       }
-//     });
-//   };
-// }
+const changeAvatar = (avatar) => (dispatch) => {
+  dispatch(updateAvatarAction(avatar));
+};
 
 export const mapDispatchToProps = (dispatch) => {
   return {
     loadUser: (uid) => fetchUser(uid)(dispatch),
     loadModules: (username) => fetchModules(username)(dispatch),
     login: (email, password) => login(email, password)(dispatch),
+    updateAvatar: (avatar) => changeAvatar(avatar)(dispatch),
   };
 };
 

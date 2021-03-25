@@ -5,6 +5,7 @@ import {
   AUTH_USER,
   SIGN_OUT_USER,
   AUTH_INFO_SUCCESS,
+  UPDATE_AVATAR,
 } from "./actionType";
 
 export function loadUser(user) {
@@ -46,4 +47,9 @@ export function signOutUser() {
 export const authInfoSuccess = (user) => ({
   type: AUTH_INFO_SUCCESS,
   currentUser: user,
+});
+
+export const updateAvatarAction = (avatar) => ({
+  type: UPDATE_AVATAR,
+  avatar: avatar,
 });
