@@ -129,7 +129,6 @@ const NavDrawer = (props) => {
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
-  const { currentUser, logout } = useAuth();
   const [darkTheme, setDarkTheme] = React.useState(props.user.theme === "dark");
   const { enqueueSnackbar } = useSnackbar();
   const smScreenMatch = useMediaQuery(theme.breakpoints.down("sm"));
@@ -151,7 +150,7 @@ const NavDrawer = (props) => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await props.logout();
       enqueueSnackbar("Logged Out", { variant: "success" });
       history.push("/login");
     } catch {

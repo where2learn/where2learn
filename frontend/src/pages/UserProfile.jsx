@@ -76,10 +76,6 @@ const useStyles = makeStyles((theme) => ({
 const UserProfile = (props) => {
   const classes = useStyles();
   const [state, setState] = useState("Modules");
-  //   const [avatar, setAvatar] = useState();
-  // const { currentUser } = useAuth();
-  // const [userInfo, setUserInfo] = useState({ username: "User" });
-  // const [modules, setModules] = useState([]);
   const [stars, setStars] = useState([]);
   const [numStars, setNumStars] = useState(0);
   const [open, setOpen] = useState(false);
@@ -94,11 +90,7 @@ const UserProfile = (props) => {
 
   const handleCloseSave = () => {
     const textField = document.getElementById("name");
-    // setUserInfo({
-    //   ...userInfo,
-    //   avatar: textField.value,
-    // });
-    updateAvatar(props.currentUser.uid, textField.value);
+    props.updateAvatar(props.currentUser.uid, textField.value);
     setOpen(false);
   };
 
@@ -113,25 +105,12 @@ const UserProfile = (props) => {
     props.loadUser(props.currentUser.uid);
     props.loadModules(props.user.username);
     setNumStars(getStarCounts(props.modules));
-    // console.log(props.user);
-    // console.log(props.modules);
-    // getUserInfo(props.currentUser.uid).then((user) => {
-    //   setUserInfo(user);
-    // });
-    // getModulesByUsername(currentUser.username).then((modules) => {
-    //   setModules(modules);
-    //   setNumStars(getStarCounts(modules));
-    // });
     getStarModules(props.user.username).then((modules) => {
       setStars(modules);
     });
   }, []);
 
-  useEffect(() => {
-    props.loadUser(props.currentUser.uid);
-  }, [props.user]);
   const getCurrentState = () => {
-    // console.log(userInfo);
     if (state === "Modules") {
       return <ModuleList modules={props.modules} />;
     } else if (state === "Stars") {
@@ -180,7 +159,6 @@ const UserProfile = (props) => {
           >
             {props.user.avatar ? (
               <img
-                // src={userInfo.avatar}
                 src={props.user.avatar}
                 style={{
                   width: "100%",
@@ -275,8 +253,6 @@ const UserProfile = (props) => {
             </List>
           </Paper>
         </Grid>
-        {/* <Container style={{float: "left", width: "30%", height: "100%"}}></Container>
-                <Container className={classes.grey} style={{float: "left", width: "70%", height: "100%"}}></Container> */}
         <Grid
           item
           xs={12}

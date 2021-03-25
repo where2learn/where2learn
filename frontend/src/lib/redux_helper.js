@@ -8,20 +8,14 @@ import {
 import { getUserInfo, getModulesByUsername, updateAvatar } from "../firebase";
 import { auth } from "../firebase";
 
-// export const mapStateToProps = (state) => ({
-//   ...state,
-// });
-
 const fetchUser = (uid) => (dispatch) => {
   getUserInfo(uid).then((data) => {
-    // console.log(data);
     dispatch(loadUser(data));
   });
 };
 
 const fetchModules = (username) => (dispatch) => {
   getModulesByUsername(username).then((modules) => {
-    // console.log(modules);
     dispatch(loadModules(modules));
   });
 };
@@ -31,7 +25,8 @@ const login = (email, password) => (dispatch) => {
   dispatch(authUser(user));
 };
 
-const changeAvatar = (avatar) => (dispatch) => {
+const changeAvatar = (uid, avatar) => (dispatch) => {
+  updateAvatar(uid, avatar);
   dispatch(updateAvatarAction(avatar));
 };
 
@@ -40,12 +35,12 @@ export const mapDispatchToProps = (dispatch) => {
     loadUser: (uid) => fetchUser(uid)(dispatch),
     loadModules: (username) => fetchModules(username)(dispatch),
     login: (email, password) => login(email, password)(dispatch),
-    updateAvatar: (avatar) => changeAvatar(avatar)(dispatch),
+    updateAvatar: (uid, avatar) => changeAvatar(uid, avatar)(dispatch),
+    logout: () => signOutUser(),
   };
 };
 
 export const mapStateToProps = (state) => {
-  // console.log(state.auth);
   return {
     user: state.auth.user,
     modules: state.auth.modules,

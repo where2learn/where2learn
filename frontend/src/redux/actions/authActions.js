@@ -1,7 +1,6 @@
 import {
   LOAD_USER,
   LOAD_MODULES,
-  LOGIN,
   AUTH_USER,
   SIGN_OUT_USER,
   AUTH_INFO_SUCCESS,
@@ -9,7 +8,6 @@ import {
 } from "./actionType";
 
 export function loadUser(user) {
-  // console.log(user);
   return {
     type: LOAD_USER, // Type of your action
     user: user, // Information carried
@@ -22,13 +20,6 @@ export function loadModules(modules) {
     modules: modules,
   };
 }
-
-// export function login(currentUser) {
-//   return {
-//     type: LOGIN,
-//     currentUser: currentUser,
-//   };
-// }
 
 export function authUser(currentUser) {
   return {
