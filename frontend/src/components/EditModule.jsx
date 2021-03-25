@@ -169,7 +169,7 @@ const EditModule = (props) => {
       newErrMsgs.title = 'Cannot Be Empty';
       err = true;
     }
-    if (!moduleId) {
+    if (!moduleId && props.mode != 'edit') {
       newErrMsgs.module_id = 'Cannot Be Empty';
       err = true;
     }
@@ -194,10 +194,17 @@ const EditModule = (props) => {
         }
       }
       if (props.onSubmit) {
+        let module_id;
+        if (props.mode === 'edit') {
+          module_id = props.module_id;
+        } else if (props.mode === 'add') {
+          module_id = moduleId;
+        } else {
+        }
         props.onSubmit(
           constructModuleObject({
             title: moduleTitle,
-            module_id: moduleId,
+            module_id,
             tags,
             content: editorContent,
             roadmap: null,

@@ -131,10 +131,12 @@ export const addmodule = (username, module) => {
 };
 
 export const editModule = (username, module) => {
+  console.log(module);
   const full_module_id = `${username}\\${module.module_id}`;
+  console.log(full_module_id);
   const new_module = { ...module };
   delete new_module.module_id;
-  console.log(new_module);
+  return firestore.collection('modules').doc(full_module_id).update(new_module);
 };
 
 // ========== User Profile Page ===============
