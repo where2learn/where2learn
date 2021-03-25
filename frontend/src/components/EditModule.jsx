@@ -98,9 +98,9 @@ const EditModule = (props) => {
 
   // update editor component to parent component
   useEffect(() => {
-    if (props.updateContent) {
-      props.updateContent(editorContent);
-    }
+    // if (props.updateContent) {
+    //   props.updateContent(editorContent);
+    // }
   }, [editorContent, props]);
 
   const updateProjectTitle = (e) => {
@@ -329,7 +329,7 @@ const EditModule = (props) => {
               updateContent={setEditorContent}
               height={400}
               inline={false}
-              content={props.content}
+              content={editorContent}
             />
           </div>
         )}
