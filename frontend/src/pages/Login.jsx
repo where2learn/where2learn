@@ -56,9 +56,10 @@ const Login = (props) => {
       history.push("/");
     } catch {
       enqueueSnackbar("Failed to log in", { variant: "error" });
+      setLoading(false);
     }
-    setLoading(false);
   }
+
   async function handleClick(e) {
     e.preventDefault();
     console.log(e.target);
@@ -69,8 +70,8 @@ const Login = (props) => {
       history.push("/");
     } catch {
       enqueueSnackbar("Failed to log in", { variant: "error" });
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (
