@@ -169,7 +169,7 @@ const EditModule = (props) => {
       newErrMsgs.title = 'Cannot Be Empty';
       err = true;
     }
-    if (!moduleId && props.mode != 'edit') {
+    if (!moduleId && props.mode !== 'edit') {
       newErrMsgs.module_id = 'Cannot Be Empty';
       err = true;
     }

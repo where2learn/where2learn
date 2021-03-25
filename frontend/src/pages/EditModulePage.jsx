@@ -23,7 +23,7 @@ const EditModulePage = (props) => {
       const data = await getModuleById(full_module_id);
       setModule(data);
     })();
-  }, [props.match.params.id]);
+  }, [props.match.params.module_id, props.match.params.username]);
 
   const onSubmit = (module) => {
     editModule(currentUser.username, module)
