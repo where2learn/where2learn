@@ -7,14 +7,10 @@ const ModuleList = (props) => {
     <div className='module-list'>
       <div className='module-container'>
         {props.modules.map((module, index) => {
-          const full_module_id = `${module.author}\\${module.module_id}`;
           return (
             <div key={index} className='preview-container'>
               <ModulePreview
-                // onClick={() => {
-                //   console.log('hi');
-                // }}
-                title_link={`/module/${encodeURIComponent(full_module_id)}`}
+                title_link={`/module/display/${module.author}/${module.module_id}`}
                 num_star={module.num_star}
                 cover_image='https://avatars.githubusercontent.com/u/33727687?s=460&u=7fd97fe40129bdebcfc0bbccc75657735969e5e5&v=4'
                 title={module.title}

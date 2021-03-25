@@ -10,7 +10,6 @@ import StarIcon from '@material-ui/icons/Star';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Badge from '@material-ui/core/Badge';
-import hljs from 'highlight.js';
 import {
   starModule,
   realtimeUpdateModule,
@@ -61,6 +60,7 @@ const DisplayModule = (props) => {
   const [fullModuleId, setFullModuleId] = useState('');
   const [star, setStar] = useState(false);
   const classes = useStyles();
+
   useEffect(() => {
     const id = constructFullModuleId(
       props.match.params.username,
@@ -78,12 +78,6 @@ const DisplayModule = (props) => {
       )
     );
 
-    // add syntax highlight
-    document.addEventListener('DOMContentLoaded', (event) => {
-      document.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightBlock(block);
-      });
-    });
     (async () => {
       if (module) {
         setStar(await userHasStarModule(module.author, fullModuleId));

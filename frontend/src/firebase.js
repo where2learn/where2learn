@@ -121,6 +121,14 @@ export const uploadImage = (rawImage) => {
   });
 };
 
+export const addmodule = (username, module) => {
+  const full_module_id = `${username}\\${module.module_id}`;
+  const new_module = { ...module, num_star: 0 };
+  return firestore.collection('modules').doc(full_module_id).set(new_module);
+};
+
+export const editmodule = (newModule) => {};
+
 // ========== User Profile Page ===============
 export const getUserInfo = async (uid) => {
   const userRef = firestore.doc('/users/' + uid);
