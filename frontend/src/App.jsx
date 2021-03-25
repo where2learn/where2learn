@@ -18,6 +18,7 @@ import AddModulePage from './pages/AddModulePage';
 import EditModulePage from './pages/EditModulePage';
 import DisplayModulePage from './pages/DisplayModulePage';
 import Roadmap from './pages/Roadmap';
+import { grey } from '@material-ui/core/colors';
 import { realtimeUpdateTheme } from './firebase';
 
 import {
@@ -34,6 +35,18 @@ const App = () => {
   const { currentUser } = useAuth();
   const darkTheme = createMuiTheme({
     palette: {
+      bg: {
+        l1: dbTheme === 'dark' ? grey[900] : grey[50],
+        l2: dbTheme === 'dark' ? grey[800] : grey[100],
+        l3: dbTheme === 'dark' ? grey[700] : grey[200],
+        l4: dbTheme === 'dark' ? grey[600] : grey[300],
+        l5: dbTheme === 'dark' ? grey[500] : grey[400],
+        l6: dbTheme === 'dark' ? grey[400] : grey[500],
+        l7: dbTheme === 'dark' ? grey[300] : grey[600],
+        l8: dbTheme === 'dark' ? grey[200] : grey[700],
+        l9: dbTheme === 'dark' ? grey[100] : grey[800],
+        l10: dbTheme === 'dark' ? grey[50] : grey[900],
+      },
       type: dbTheme ? dbTheme : prefersDarkMode,
     },
   });
@@ -50,6 +63,7 @@ const App = () => {
   const useStyles = makeStyles({
     root: {
       backgroundColor: darkTheme.palette.background.default,
+      // backgroundColor: darkTheme.palette.bg.l1,
       minHeight: '100vh',
       height: '100%',
     },
