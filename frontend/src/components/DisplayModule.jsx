@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useAuth } from '../contexts/AuthContext';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { withStyles } from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Star';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import EditIcon from '@material-ui/icons/Edit';
 import Badge from '@material-ui/core/Badge';
-import hljs from 'highlight.js';
 import {
   starModule,
   realtimeUpdateModule,
@@ -41,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
     marginBottom: theme.spacing(2),
   },
-  starBtn: {
+  bottomBtn: {
     marginTop: '1rem',
     float: 'right',
   },
@@ -61,6 +63,9 @@ const DisplayModule = (props) => {
   const [fullModuleId, setFullModuleId] = useState('');
   const [star, setStar] = useState(false);
   const classes = useStyles();
+  const history = useHistory();
+  const { currentUser } = useAuth();
+
   useEffect(() => {
     const id = constructFullModuleId(
       props.match.params.username,
@@ -78,12 +83,6 @@ const DisplayModule = (props) => {
       )
     );
 
-    // add syntax highlight
-    document.addEventListener('DOMContentLoaded', (event) => {
-      document.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightBlock(block);
-      });
-    });
     (async () => {
       if (module) {
         setStar(await userHasStarModule(module.author, fullModuleId));
@@ -131,16 +130,29 @@ const DisplayModule = (props) => {
               }}
             />
           </Paper>
-          <IconButton className={classes.starBtn} onClick={toggleStar}>
-            <StyledBadge
-              showZero
-              badgeContent={module && module.num_star ? module.num_star : 0}
-              color='primary'
-              max={999}
-            >
-              {star ? <StarIcon /> : <StarBorderIcon />}
-            </StyledBadge>
-          </IconButton>
+          <div className={classes.bottomBtn}>
+            {currentUser && currentUser.username === module.author && (
+              <IconButton
+                onClick={() => {
+                  const url = `/module/edit/${props.match.params.username}/${props.match.params.module_id}`;
+                  history.push(url);
+                }}
+              >
+                <EditIcon />
+              </IconButton>
+            )}
+
+            <IconButton onClick={toggleStar}>
+              <StyledBadge
+                showZero
+                badgeContent={module && module.num_star ? module.num_star : 0}
+                color='primary'
+                max={999}
+              >
+                {star ? <StarIcon /> : <StarBorderIcon />}
+              </StyledBadge>
+            </IconButton>
+          </div>
         </React.Fragment>
       ) : (
         <h1>404 Module Not Found</h1>

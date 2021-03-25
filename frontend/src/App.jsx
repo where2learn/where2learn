@@ -14,7 +14,7 @@ import Main from './pages/Main';
 import { SnackbarProvider } from 'notistack';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import UserProfile from './pages/UserProfile';
-import AddModulePage from './pages/AddModule';
+import AddModulePage from './pages/AddModulePage';
 import EditModulePage from './pages/EditModulePage';
 import DisplayModulePage from './pages/DisplayModulePage';
 import Roadmap from './pages/Roadmap';
@@ -71,11 +71,14 @@ const App = () => {
               <Route path='/roadmap-vis' component={Roadmap} />
               <Route path='/signup' component={Signup} />
               <Route path='/login' component={Login} />
-              <Route path='/module/add' component={AddModulePage} />
-              <Route path='/module/edit/:id' component={EditModulePage} />
               <Route
-                path='/module/:username/:module_id'
+                path='/module/display/:username/:module_id'
                 component={DisplayModulePage}
+              />
+              <Route path='/module/add' component={AddModulePage} />
+              <Route
+                path='/module/edit/:username/:module_id'
+                component={EditModulePage}
               />
               <Route path='/forgot-password' component={ForgotPassword} />
               {/* Everything Below is for developing and experimenting components instead of an actual page */}

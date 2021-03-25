@@ -16,7 +16,6 @@ import Chip from '@material-ui/core/Chip';
 import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
-
 import { constructModuleObject } from '../firestore_data';
 
 const useStyles = makeStyles((theme) => ({
@@ -89,6 +88,7 @@ const EditModule = (props) => {
   }, [props.initialValue, props.tags, props.module_title, props.module_id]);
 
   const [inlineEditorSwitch, setInlineEditorSwitch] = useState(false);
+  const [roadmapSwitch, setRoadmapSwitch] = useState(false);
   const classes = useStyles();
 
   const validProjectTitle = (title) => {
@@ -169,7 +169,7 @@ const EditModule = (props) => {
       newErrMsgs.title = 'Cannot Be Empty';
       err = true;
     }
-    if (!moduleId) {
+    if (!moduleId && props.mode != 'edit') {
       newErrMsgs.module_id = 'Cannot Be Empty';
       err = true;
     }
@@ -187,38 +187,34 @@ const EditModule = (props) => {
     if (err) {
       console.error('error validating the data to submit');
     } else {
-      console.log('Submiting');
-      console.log(`projectTitle:\n${moduleTitle}`);
-      console.log(`projectId:\n${moduleId}`);
-      console.log(`tags:\n${tags}`);
-      console.log(`editorContent:\n${editorContent}`);
-      if (props.onSubmit) {
-        props.onSubmit({
-          projectTitle: moduleTitle,
-          projectId: moduleId,
-          tags,
-          editorContent,
-        });
-      }
       const mediaTypeArr = [];
       for (const [key, value] of Object.entries(mediaType)) {
-        console.log(`${key}: ${value}`);
         if (value) {
           mediaTypeArr.push(key);
         }
       }
-      console.log(
-        constructModuleObject({
-          title: moduleTitle,
-          module_id: moduleId,
-          tags,
-          content: editorContent,
-          roadmap: null,
-          media_type: mediaTypeArr,
-          type: 'regular',
-          mode: props.mode,
-        })
-      );
+      if (props.onSubmit) {
+        let module_id;
+        if (props.mode === 'edit') {
+          module_id = props.module_id;
+        } else if (props.mode === 'add') {
+          module_id = moduleId;
+        } else {
+          console.error("mode doesn't exist");
+        }
+        props.onSubmit(
+          constructModuleObject({
+            title: moduleTitle,
+            module_id,
+            tags,
+            content: editorContent,
+            roadmap: null,
+            media_type: mediaTypeArr,
+            type: 'regular',
+            mode: props.mode,
+          })
+        );
+      }
     }
   };
 
@@ -265,10 +261,6 @@ const EditModule = (props) => {
           fullWidth
           value={moduleTitle}
           onChange={updateProjectTitle}
-          // onChange={(e) => {
-          //   console.log(e.target.value);
-          //   console.log(typeof e.target.value);
-          // }}
           variant='outlined'
           autoFocus
           helperText={errMsgs.title || null}
@@ -343,60 +335,75 @@ const EditModule = (props) => {
         )}
         <br />
         <FormControlLabel
+          // className='float-right'
           control={
-            <Checkbox
-              checked={mediaType.text}
-              onChange={handleMediaTypeChange}
-              name='text'
-              color='secondary'
+            <Switch
+              checked={roadmapSwitch}
+              onChange={() => {
+                setRoadmapSwitch(!roadmapSwitch);
+              }}
+              name='roadmap-switch'
+              color='primary'
             />
           }
-          label='Text'
+          label='Roadmap'
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={mediaType.image}
-              onChange={handleMediaTypeChange}
-              name='image'
-              color='secondary'
-            />
-          }
-          label='Image'
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={mediaType.video}
-              onChange={handleMediaTypeChange}
-              name='video'
-              color='secondary'
-            />
-          }
-          label='Video'
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={mediaType.video}
-              onChange={handleMediaTypeChange}
-              name='video'
-              color='secondary'
-            />
-          }
-          label='Video'
-        />
-
-        <Button
-          variant='outlined'
-          className='float-right'
-          color='inherit'
-          size='large'
-          type='submit'
-          onClick={onSubmit}
-        >
-          Submit
-        </Button>
+        <div>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={mediaType.text}
+                onChange={handleMediaTypeChange}
+                name='text'
+                color='secondary'
+              />
+            }
+            label='Text'
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={mediaType.image}
+                onChange={handleMediaTypeChange}
+                name='image'
+                color='secondary'
+              />
+            }
+            label='Image'
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={mediaType.audio}
+                onChange={handleMediaTypeChange}
+                name='audio'
+                color='secondary'
+              />
+            }
+            label='Audio'
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={mediaType.video}
+                onChange={handleMediaTypeChange}
+                name='video'
+                color='secondary'
+              />
+            }
+            label='Video'
+          />
+          <Button
+            variant='outlined'
+            className='float-right'
+            color='inherit'
+            size='large'
+            type='submit'
+            onClick={onSubmit}
+          >
+            Submit
+          </Button>
+        </div>
         {/* <div dangerouslySetInnerHTML={{ __html: editorContent }} /> */}
       </Container>
     </NavDrawer>
