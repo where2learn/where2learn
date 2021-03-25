@@ -200,6 +200,7 @@ const EditModule = (props) => {
         } else if (props.mode === 'add') {
           module_id = moduleId;
         } else {
+          console.error("mode doesn't exist");
         }
         props.onSubmit(
           constructModuleObject({
