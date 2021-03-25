@@ -27,7 +27,6 @@ const fetchModules = (username) => (dispatch) => {
 
 const login = (email, password) => (dispatch) => {
   const user = auth.signInWithEmailAndPassword(email, password);
-  // console.log(user);
   dispatch(authUser(user));
 };
 

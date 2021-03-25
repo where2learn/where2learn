@@ -1,51 +1,51 @@
-import React, { useEffect } from 'react';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import HomeIcon from '@material-ui/icons/Home';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Brightness7Icon from '@material-ui/icons/Brightness7';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
-import { useHistory } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useSnackbar } from 'notistack';
-import Tooltip from '@material-ui/core/Tooltip';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Fab from '@material-ui/core/Fab';
+import React, { useEffect } from "react";
+import clsx from "clsx";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import SettingsIcon from "@material-ui/icons/Settings";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import HomeIcon from "@material-ui/icons/Home";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import Brightness2Icon from "@material-ui/icons/Brightness2";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { useSnackbar } from "notistack";
+import Tooltip from "@material-ui/core/Tooltip";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Fab from "@material-ui/core/Fab";
 
-import { connect } from 'react-redux';
-import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
+import { connect } from "react-redux";
+import { mapStateToProps, mapDispatchToProps } from "../lib/redux_helper";
 
-import { updateUserTheme } from '../firebase';
+import { updateUserTheme } from "../firebase";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   bottomNav: {
-    width: '100%',
-    position: 'fixed',
+    width: "100%",
+    position: "fixed",
     bottom: 0,
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -62,35 +62,35 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 36,
   },
   hide: {
-    display: 'none',
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: "nowrap",
   },
   drawerOpen: {
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   drawerClose: {
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    overflowX: 'hidden',
+    overflowX: "hidden",
     width: theme.spacing(3) + 1,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: theme.spacing(7) + 1,
     },
   },
   toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     // ...theme.mixins.toolbar,
@@ -100,26 +100,26 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   barBottom: {
-    marginTop: 'auto',
+    marginTop: "auto",
   },
   list: {
     width: 250,
   },
   fullList: {
-    width: 'auto',
+    width: "auto",
   },
   menuFab: {
-    position: 'absolute',
+    position: "absolute",
     top: theme.spacing(2),
     left: theme.spacing(2),
   },
   menuIconWrapper: {
-    '&:hover': {
-      color: '#3498db',
+    "&:hover": {
+      color: "#3498db",
     },
   },
   menuIcon: {
-    color: 'inherit',
+    color: "inherit",
   },
 }));
 
@@ -130,17 +130,20 @@ const NavDrawer = (props) => {
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const { currentUser, logout } = useAuth();
-  const [darkTheme, setDarkTheme] = React.useState(props.user.theme === 'dark');
+  const [darkTheme, setDarkTheme] = React.useState(props.user.theme === "dark");
   const { enqueueSnackbar } = useSnackbar();
-  const smScreenMatch = useMediaQuery(theme.breakpoints.down('sm'));
+  const smScreenMatch = useMediaQuery(theme.breakpoints.down("sm"));
 
   // toggle theme
   useEffect(() => {
-    enqueueSnackbar(`Theme Switched to "${darkTheme ? 'DARK' : 'LIGHT'}"`, {
-      variant: 'info',
+    // console.log(props.currentUser);
+    enqueueSnackbar(`Theme Switched to "${darkTheme ? "DARK" : "LIGHT"}"`, {
+      variant: "info",
     });
-    updateUserTheme(currentUser.uid, darkTheme ? 'dark' : 'light');
-  }, [darkTheme, enqueueSnackbar, currentUser.uid]);
+    if (props.currentUser) {
+      updateUserTheme(props.currentUser.uid, darkTheme ? "dark" : "light");
+    }
+  }, [darkTheme, enqueueSnackbar]);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -149,18 +152,18 @@ const NavDrawer = (props) => {
   const handleLogout = async () => {
     try {
       await logout();
-      enqueueSnackbar('Logged Out', { variant: 'success' });
-      history.push('/login');
+      enqueueSnackbar("Logged Out", { variant: "success" });
+      history.push("/login");
     } catch {
-      enqueueSnackbar("Couldn't Log Out", { variant: 'error' });
+      enqueueSnackbar("Couldn't Log Out", { variant: "error" });
     }
   };
 
   const toggleDrawer2 = (open2) => (event) => {
     if (
       event &&
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
     ) {
       return;
     }
@@ -171,44 +174,44 @@ const NavDrawer = (props) => {
   const MenuContent = () => (
     <React.Fragment>
       <List>
-        <ListItem button key='dashboard' className={classes.menuIconWrapper}>
+        <ListItem button key="dashboard" className={classes.menuIconWrapper}>
           <ListItemIcon className={classes.menuIcon}>
-            <Tooltip title='Dashboard' placement='right'>
+            <Tooltip title="Dashboard" placement="right">
               <DashboardIcon />
             </Tooltip>
           </ListItemIcon>
-          <ListItemText primary='Dashboard' />
+          <ListItemText primary="Dashboard" />
         </ListItem>
         <ListItem
           button
-          key='home'
+          key="home"
           className={classes.menuIconWrapper}
-          onClick={() => history.push('/')}
+          onClick={() => history.push("/")}
         >
           <ListItemIcon className={classes.menuIcon}>
-            <Tooltip title='Home' placement='right'>
+            <Tooltip title="Home" placement="right">
               <HomeIcon />
             </Tooltip>
           </ListItemIcon>
-          <ListItemText primary='Home' />
+          <ListItemText primary="Home" />
         </ListItem>
       </List>
       <Divider />
       <List>
         <ListItem
           button
-          key='module/add'
+          key="module/add"
           className={classes.menuIconWrapper}
           onClick={() => {
-            history.push('/module/add');
+            history.push("/module/add");
           }}
         >
           <ListItemIcon className={classes.menuIcon}>
-            <Tooltip title='Add Module' placement='right'>
+            <Tooltip title="Add Module" placement="right">
               <AddCircleIcon />
             </Tooltip>
           </ListItemIcon>
-          <ListItemText primary='Add Module' />
+          <ListItemText primary="Add Module" />
         </ListItem>
       </List>
 
@@ -217,69 +220,69 @@ const NavDrawer = (props) => {
         <ListItem
           onClick={() => setDarkTheme(!darkTheme)}
           button
-          key='toggle-theme'
+          key="toggle-theme"
           className={classes.menuIconWrapper}
         >
           <ListItemIcon className={classes.menuIcon}>
-            <Tooltip title='Toggle Theme' placement='right'>
+            <Tooltip title="Toggle Theme" placement="right">
               {darkTheme ? <Brightness2Icon /> : <Brightness7Icon />}
             </Tooltip>
           </ListItemIcon>
-          <ListItemText primary='Toggle Theme' />
+          <ListItemText primary="Toggle Theme" />
         </ListItem>
 
-        {currentUser ? (
+        {props.currentUser ? (
           <>
             <ListItem
               onClick={handleLogout}
               button
-              key='logout'
+              key="logout"
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>
-                <Tooltip title='Logout' placement='right'>
+                <Tooltip title="Logout" placement="right">
                   <ExitToAppIcon />
                 </Tooltip>
               </ListItemIcon>
-              <ListItemText primary='Logout' />
+              <ListItemText primary="Logout" />
             </ListItem>
             <ListItem
-              onClick={() => history.push('/update-profile')}
+              onClick={() => history.push("/update-profile")}
               button
-              key='setting'
+              key="setting"
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>
-                <Tooltip title='Setting' placement='right'>
+                <Tooltip title="Setting" placement="right">
                   <SettingsIcon />
                 </Tooltip>
               </ListItemIcon>
-              <ListItemText primary='Setting' />
+              <ListItemText primary="Setting" />
             </ListItem>
           </>
         ) : (
           <>
             <ListItem
-              onClick={() => history.push('/login')}
+              onClick={() => history.push("/login")}
               button
-              key='login'
+              key="login"
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>
                 <AccountCircleIcon />
               </ListItemIcon>
-              <ListItemText primary='Sign In' />
+              <ListItemText primary="Sign In" />
             </ListItem>
             <ListItem
-              onClick={() => history.push('/signup')}
+              onClick={() => history.push("/signup")}
               button
-              key='signup'
+              key="signup"
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>
                 <PersonAddIcon />
               </ListItemIcon>
-              <ListItemText primary='Sign Up' />
+              <ListItemText primary="Sign Up" />
             </ListItem>
           </>
         )}
@@ -291,19 +294,19 @@ const NavDrawer = (props) => {
     <div className={classes.root}>
       {smScreenMatch ? (
         <React.Fragment>
-          <div className='fixed-top'>
+          <div className="fixed-top">
             <Fab
               onClick={toggleDrawer2(true)}
-              size='large'
-              color='primary'
-              aria-label='memu'
+              size="large"
+              color="primary"
+              aria-label="memu"
               className={classes.menuFab}
             >
               <MenuIcon />
             </Fab>
           </div>
           <SwipeableDrawer
-            anchor='top'
+            anchor="top"
             open={open2}
             onClose={toggleDrawer2(false)}
             onOpen={toggleDrawer2(true)}
@@ -312,7 +315,7 @@ const NavDrawer = (props) => {
               className={clsx(classes.list, {
                 [classes.fullList]: true,
               })}
-              role='presentation'
+              role="presentation"
               onClick={toggleDrawer2(false)}
               onKeyDown={toggleDrawer2(false)}
             >
@@ -322,7 +325,7 @@ const NavDrawer = (props) => {
         </React.Fragment>
       ) : (
         <Drawer
-          variant='permanent'
+          variant="permanent"
           className={clsx(classes.drawer, {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
@@ -339,11 +342,11 @@ const NavDrawer = (props) => {
           <List className={classes.barBottom}>
             <ListItem
               button
-              key='toggle-drawer'
-              color='inherit'
-              aria-label='open drawer'
+              key="toggle-drawer"
+              color="inherit"
+              aria-label="open drawer"
               onClick={toggleDrawer}
-              edge='start'
+              edge="start"
               className={classes.menuIconWrapper}
             >
               <ListItemIcon className={classes.menuIcon}>
