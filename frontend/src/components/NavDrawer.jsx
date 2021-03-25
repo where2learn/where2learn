@@ -128,7 +128,7 @@ const NavDrawer = (props) => {
   const [open2, setOpen2] = React.useState(false);
   const { currentUser, logout } = useAuth();
   const [darkTheme, setDarkTheme] = React.useState(
-    currentUser.theme === 'dark'
+    currentUser ? currentUser.theme === 'dark' : false
   );
   const { enqueueSnackbar } = useSnackbar();
   const smScreenMatch = useMediaQuery(theme.breakpoints.down('sm'));
@@ -138,8 +138,10 @@ const NavDrawer = (props) => {
     enqueueSnackbar(`Theme Switched to "${darkTheme ? 'DARK' : 'LIGHT'}"`, {
       variant: 'info',
     });
-    updateUserTheme(currentUser.uid, darkTheme ? 'dark' : 'light');
-  }, [darkTheme, enqueueSnackbar, currentUser.uid]);
+    if (currentUser) {
+      updateUserTheme(currentUser.uid, darkTheme ? 'dark' : 'light');
+    }
+  }, [darkTheme, enqueueSnackbar, currentUser]);
 
   const toggleDrawer = () => {
     setOpen(!open);

@@ -39,7 +39,9 @@ const App = () => {
   });
 
   useEffect(() => {
-    realtimeUpdateTheme(currentUser.uid, setDBTheme);
+    if (currentUser) {
+      realtimeUpdateTheme(currentUser.uid, setDBTheme);
+    }
     // const theme = await getTheme(currentUser, setDBTheme);
     // console.log(theme);
     // setDBTheme(theme);
