@@ -1,24 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { getModuleById } from '../firebase';
 import Container from '@material-ui/core/Container';
-
 import NavDrawer from '../components/NavDrawer';
-
 import EditModule from '../components/EditModule';
+import { editModule } from '../firebase';
+import { constructFullModuleId } from '../firestore_data';
 
 const EditModulePage = (props) => {
+  const { currentUser } = useAuth();
+
   const [module, setModule] = useState(null);
   const [content, setContent] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const data = await getModuleById(props.match.params.id);
+      const full_module_id = constructFullModuleId(
+        props.match.params.username,
+        props.match.params.module_id
+      );
+      const data = await getModuleById(full_module_id);
       setModule(data);
     })();
-  }, [props.match.params.id]);
+  }, [props.match.params.module_id, props.match.params.username]);
 
-  const onSubmit = (module) => {};
+  const onSubmit = (module) => {
+    editModule(currentUser.username, module)
+      .then(() => {
+        console.log('successfully edited module');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <NavDrawer>
