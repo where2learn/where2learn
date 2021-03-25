@@ -366,13 +366,13 @@ const EditModule = (props) => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={mediaType.video}
+                checked={mediaType.audio}
                 onChange={handleMediaTypeChange}
-                name='video'
+                name='audio'
                 color='secondary'
               />
             }
-            label='Video'
+            label='Audio'
           />
           <FormControlLabel
             control={

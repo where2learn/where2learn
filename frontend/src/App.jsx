@@ -76,7 +76,10 @@ const App = () => {
                 component={DisplayModulePage}
               />
               <Route path='/module/add' component={AddModulePage} />
-              <Route path='/module/edit/:id' component={EditModulePage} />
+              <Route
+                path='/module/edit/:username/:module_id'
+                component={EditModulePage}
+              />
               <Route path='/forgot-password' component={ForgotPassword} />
               {/* Everything Below is for developing and experimenting components instead of an actual page */}
               <Route path='/editor' component={EditorDevPage} />

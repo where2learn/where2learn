@@ -122,12 +122,20 @@ export const uploadImage = (rawImage) => {
 };
 
 export const addmodule = (username, module) => {
+  console.log(username);
+  console.log(module);
   const full_module_id = `${username}\\${module.module_id}`;
-  const new_module = { ...module, num_star: 0 };
+  const new_module = { ...module, num_star: 0, author: username };
+
   return firestore.collection('modules').doc(full_module_id).set(new_module);
 };
 
-export const editmodule = (newModule) => {};
+export const editModule = (username, module) => {
+  const full_module_id = `${username}\\${module.module_id}`;
+  const new_module = { ...module };
+  delete new_module.module_id;
+  console.log(new_module);
+};
 
 // ========== User Profile Page ===============
 export const getUserInfo = async (uid) => {
