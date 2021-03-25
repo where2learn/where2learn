@@ -94,6 +94,7 @@ const Login = (props) => {
                   Login
                 </Typography>
                 <div>
+                
                   <TextField
                     fullWidth
                     inputRef={emailRef}
@@ -120,6 +121,15 @@ const Login = (props) => {
                   disabled={loading}
                 >
                   Login
+                </Button>
+                <br /> <br />  <br />
+                <Button
+                  onClick={handleClick}
+                  fullWidth
+                > 
+                  <Avatar alt="Google Logo" src="/google.png" />
+                  <Box m={1} /> 
+                  Sign in with Google
                 </Button>
               </CardContent>
             </Form>

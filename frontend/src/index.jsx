@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import { AuthProvider } from "./contexts/AuthContext";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import { configStore } from "./redux/configStore";
 import { PersistGate } from "redux-persist/integration/react";
