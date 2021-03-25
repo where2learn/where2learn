@@ -24,11 +24,11 @@ import {
   createMuiTheme,
   makeStyles,
   ThemeProvider,
-} from "@material-ui/core/styles";
-import { Paper } from "@material-ui/core";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { connect } from "react-redux";
-import { mapStateToProps, mapDispatchToProps } from "./lib/redux_helper";
+} from '@material-ui/core/styles';
+import { Paper } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from './lib/redux_helper';
 
 const App = (props) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -41,7 +41,7 @@ const App = (props) => {
   });
 
   useEffect(() => {
-    realtimeUpdateTheme(currentUser.uid, setDBTheme);
+    realtimeUpdateTheme(props.currentUser.uid, setDBTheme);
     // const theme = await getTheme(currentUser, setDBTheme);
     // console.log(theme);
     // setDBTheme(theme);
@@ -60,7 +60,6 @@ const App = (props) => {
   return (
     <Router>
       <SnackbarProvider maxSnack={10}>
-        <AuthProvider>
         <ThemeProvider theme={darkTheme}>
           <CssBaseline />
           <Paper className={classes.root} elevation={0} square>
@@ -89,7 +88,6 @@ const App = (props) => {
             </Switch>
           </Paper>
         </ThemeProvider>
-        </AuthProvider>
       </SnackbarProvider>
     </Router>
   );

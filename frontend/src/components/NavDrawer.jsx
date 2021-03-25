@@ -27,6 +27,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Fab from '@material-ui/core/Fab';
 
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
+
 import { updateUserTheme } from '../firebase';
 
 const drawerWidth = 240;
@@ -127,9 +130,7 @@ const NavDrawer = (props) => {
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const { currentUser, logout } = useAuth();
-  const [darkTheme, setDarkTheme] = React.useState(
-    currentUser.theme === 'dark'
-  );
+  const [darkTheme, setDarkTheme] = React.useState(props.user.theme === 'dark');
   const { enqueueSnackbar } = useSnackbar();
   const smScreenMatch = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -360,4 +361,4 @@ const NavDrawer = (props) => {
   );
 };
 
-export default NavDrawer;
+export default connect(mapStateToProps, mapDispatchToProps)(NavDrawer);
