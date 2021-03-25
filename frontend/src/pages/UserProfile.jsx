@@ -111,18 +111,18 @@ const UserProfile = (props) => {
   };
 
   useEffect(() => {
-    props.loadUser(currentUser.uid);
-    props.loadModules(currentUser.username);
-    setNumStars(getStarCounts(props.modules));
+    // props.loadUser(currentUser.uid);
+    // props.loadModules(currentUser.username);
+    // setNumStars(getStarCounts(props.modules));
     // console.log(props.user);
     // console.log(props.modules);
-    // getUserInfo(currentUser.uid).then((user) => {
-    //   setUserInfo(user);
-    // });
-    // getModulesByUsername(currentUser.username).then((modules) => {
-    //   setModules(modules);
-    //   setNumStars(getStarCounts(modules));
-    // });
+    getUserInfo(currentUser.uid).then((user) => {
+      setUserInfo(user);
+    });
+    getModulesByUsername(currentUser.username).then((modules) => {
+      setModules(modules);
+      setNumStars(getStarCounts(modules));
+    });
     getStarModules(currentUser.username).then((modules) => {
       setStars(modules);
     });
@@ -131,7 +131,7 @@ const UserProfile = (props) => {
   const getCurrentState = () => {
     // console.log(userInfo);
     if (state === "Modules") {
-      return <ModuleList modules={props.modules} />;
+      return <ModuleList modules={modules} />;
     } else if (state === "Stars") {
       return <ModuleList modules={stars} />;
     }
@@ -176,10 +176,10 @@ const UserProfile = (props) => {
             }}
             onClick={handleClickOpen}
           >
-            {props.user.avatar ? (
+            {userInfo.avatar ? (
               <img
                 // src={userInfo.avatar}
-                src={props.user.avatar}
+                src={userInfo.avatar}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -219,7 +219,7 @@ const UserProfile = (props) => {
               display="block"
               className={classes.centerText}
             >
-              {props.user.username}
+              {userInfo.username}
             </Box>
             <br />
             <List className={classes.root}>
@@ -238,7 +238,7 @@ const UserProfile = (props) => {
                 <StarHalf /> {numStars}
               </Box>
               <Box component="span" className={classes.info}>
-                <CreditCard /> {props.user.credit}
+                <CreditCard /> {userInfo.credit}
               </Box>
             </Box>
           </Paper>

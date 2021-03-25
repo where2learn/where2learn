@@ -24,8 +24,10 @@ import {
 } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { connect } from "react-redux";
+import { mapStateToProps, mapDispatchToProps } from "./lib/redux_helper";
 
-const App = () => {
+const App = (props) => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const theme = React.useMemo(
     () =>
@@ -71,13 +73,28 @@ const App = () => {
             <CssBaseline />
             <Paper className={classes.root} elevation={0} square>
               <Switch>
-                <PrivateRoute exact path="/" component={Main} />
-                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                <PrivateRoute
+                  exact
+                  path="/"
+                  component={Main}
+                  authed={props.currentUser}
+                />
+                <PrivateRoute
+                  exact
+                  path="/dashboard"
+                  component={Dashboard}
+                  authed={props.currentUser}
+                />
                 <PrivateRoute
                   path="/update-profile"
                   component={UpdateProfile}
+                  authed={props.currentUser}
                 />
-                <PrivateRoute path="/user-profile" component={UserProfile} />
+                <PrivateRoute
+                  path="/user-profile"
+                  component={UserProfile}
+                  authed={props.currentUser}
+                />
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" component={Login} />
                 <Route path="/add-module" component={AddModulePage} />
@@ -97,4 +114,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

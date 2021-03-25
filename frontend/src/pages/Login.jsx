@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
@@ -11,6 +11,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container, Box, TextField, Avatar } from "@material-ui/core";
 import NavDrawer from "../components/NavDrawer";
 import { useSnackbar } from "notistack";
+import { connect } from "react-redux";
+import { mapStateToProps, mapDispatchToProps } from "../lib/redux_helper";
+import { auth, generateUserDocument } from "../firebase";
 
 const getCardMinWidth = () => {
   const windowInnerWidth = window.innerWidth;
@@ -33,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = (props) => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const { login, signInWithGoogle } = useAuth();
@@ -48,7 +51,7 @@ const Login = () => {
     console.log(e.target);
     try {
       setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
+      await props.login(emailRef.current.value, passwordRef.current.value);
       enqueueSnackbar("Logged In", { variant: "success" });
       history.push("/");
     } catch {
@@ -74,17 +77,17 @@ const Login = () => {
     <NavDrawer>
       <Container>
         <Box
-          display='flex'
-          justifyContent='center'
+          display="flex"
+          justifyContent="center"
           mt={10}
-          bgcolor='background.default'
+          bgcolor="background.default"
         >
-          <Card className={classes.card} color='secondary'>
+          <Card className={classes.card} color="secondary">
             <Form onSubmit={handleSubmit}>
               <CardContent>
                 <Typography
-                  variant='h3'
-                  component='h3'
+                  variant="h3"
+                  component="h3"
                   style={{ textAlign: "center" }}
                 >
                   Login
@@ -93,26 +96,26 @@ const Login = () => {
                   <TextField
                     fullWidth
                     inputRef={emailRef}
-                    margin='normal'
-                    label='Email'
-                    type='email'
+                    margin="normal"
+                    label="Email"
+                    type="email"
                   />
                 </div>
                 <div>
                   <TextField
                     fullWidth
-                    margin='normal'
+                    margin="normal"
                     inputRef={passwordRef}
-                    label='Password'
-                    type='password'
+                    label="Password"
+                    type="password"
                   />
                 </div>
                 <br />
                 <Button
                   fullWidth
-                  type='submit'
-                  color='primary'
-                  variant='contained'
+                  type="submit"
+                  color="primary"
+                  variant="contained"
                   disabled={loading}
                 >
                   Login
@@ -124,8 +127,8 @@ const Login = () => {
                 <Typography>
                   <Button onClick={handleClick}>
                     <Avatar
-                      alt='Google Logo'
-                      src='../../../static/images/google.png'
+                      alt="Google Logo"
+                      src="../../../static/images/google.png"
                     />
                     <Box m={1} />
                     Sign in with Google
@@ -136,12 +139,12 @@ const Login = () => {
             <Box mt={3}>
               <CardActions>
                 <Typography>
-                  Need an account? <Link to='/signup'>Sign Up</Link>
+                  Need an account? <Link to="/signup">Sign Up</Link>
                 </Typography>
               </CardActions>
               <CardActions>
                 <Typography>
-                  <Link to='/forgot-password'>Forgot your password?</Link>
+                  <Link to="/forgot-password">Forgot your password?</Link>
                 </Typography>
               </CardActions>
             </Box>
@@ -151,4 +154,4 @@ const Login = () => {
     </NavDrawer>
   );
 };
-export default Login;
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
