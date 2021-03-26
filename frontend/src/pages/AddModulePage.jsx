@@ -13,7 +13,7 @@ const AddModulePage = (props) => {
   const submit = (module) => {
     addmodule(props.user.username, module)
       .then(() => {
-        console.log("successfully added module");
+        console.log('Successfully Added Module');
       })
       .catch((error) => {
         console.error(error);
