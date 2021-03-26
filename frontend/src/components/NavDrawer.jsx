@@ -144,7 +144,7 @@ const NavDrawer = (props) => {
       updateUserTheme(props.currentUser.uid, darkTheme ? 'dark' : 'light');
       props.loadUser(props.currentUser.uid);
     }
-  }, [darkTheme, enqueueSnackbar]);
+  }, [darkTheme, enqueueSnackbar, props.currentUser]);
 
   const toggleDrawer = () => {
     setOpen(!open);

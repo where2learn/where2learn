@@ -15,7 +15,6 @@ import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
-import { useSnackbar } from 'notistack';
 import { constructModuleObject } from '../firestore_data';
 
 const maxDescriptionLength = 160;
@@ -73,7 +72,6 @@ const EditModule = (props) => {
   });
   const [tags, setTags] = useState(props.tags || []);
   const [editorContent, setEditorContent] = useState(props.initialValue || '');
-  const { enqueueSnackbar } = useSnackbar();
 
   const [helperText, setHelperText] = useState({
     title: null,

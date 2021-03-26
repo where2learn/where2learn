@@ -4,15 +4,14 @@ import {
   authUser,
   signOutUser,
   updateAvatarAction,
-} from "../redux/actions/authActions";
+} from '../redux/actions/authActions';
 import {
   getUserInfo,
   getModulesByUsername,
   updateAvatar,
   provider,
-} from "../firebase";
-import { auth } from "../firebase";
-import { useRouteMatch } from "react-router";
+} from '../firebase';
+import { auth } from '../firebase';
 
 const fetchUser = (uid) => (dispatch) => {
   getUserInfo(uid).then((data) => {
