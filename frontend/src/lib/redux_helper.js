@@ -1,18 +1,20 @@
 import {
   loadUser,
-  loadModules,
   authUser,
   signOutUser,
   updateAvatarAction,
 } from "../redux/actions/authActions";
+
+import { loadModules, clearModules } from "../redux/actions/moduleAction";
+
 import {
   getUserInfo,
   getModulesByUsername,
   updateAvatar,
   provider,
 } from "../firebase";
+
 import { auth } from "../firebase";
-import { useRouteMatch } from "react-router";
 
 const fetchUser = (uid) => (dispatch) => {
   getUserInfo(uid).then((data) => {
@@ -36,14 +38,6 @@ const signup = (email, password) => (dispatch) => {
   dispatch(authUser(user));
 };
 
-// const updateEmail = (currentUser, email) => (dispatch) => {
-//   return currentUser.updateEmail(email);
-// };
-
-// const updatePassword = (currentUser, password) => {
-//   return currentUser.updatePassword(password);
-// };
-
 export const resetPassword = (email) => {
   return auth.sendPasswordResetEmail(email);
 };
@@ -53,9 +47,15 @@ const changeAvatar = (uid, avatar) => (dispatch) => {
   dispatch(updateAvatarAction(avatar));
 };
 
-const signInWithPopup = () => {
+const signInWithPopup = (dispatch) => {
   const userAuth = auth.signInWithPopup(provider);
+  dispatch(authUser(userAuth));
   return userAuth;
+};
+
+const setStoreToNull = (dispatch) => {
+  dispatch(signOutUser());
+  dispatch(clearModules());
 };
 
 export const mapDispatchToProps = (dispatch) => {
@@ -64,18 +64,18 @@ export const mapDispatchToProps = (dispatch) => {
     loadModules: (username) => fetchModules(username)(dispatch),
     login: (email, password) => login(email, password)(dispatch),
     updateAvatar: (uid, avatar) => changeAvatar(uid, avatar)(dispatch),
-    logout: () => signOutUser(),
-    signInWithGoogle: () => signInWithPopup(),
+    logout: () => setStoreToNull(dispatch),
+    signInWithGoogle: () => signInWithPopup(dispatch),
     signup: (email, password) => signup(email, password)(dispatch),
-    // updateEmail: (email) => updateEmail(email)(dispatch),
-    // updatePassword: (password) => updatePassword(password)(dispatch),
   };
 };
 
 export const mapStateToProps = (state) => {
+  // console.log(state);
   return {
-    user: state.auth.user,
-    modules: state.auth.modules,
-    currentUser: state.auth.currentUser,
+    auth: state.auth,
+    // user: state.auth.user,
+    // currentUser: state.auth.currentUser,
+    modules: state.moduleReducer.modules,
   };
 };

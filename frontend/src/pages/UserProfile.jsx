@@ -12,7 +12,12 @@ import {
 import ImageIcon from "@material-ui/icons/Image";
 import WorkIcon from "@material-ui/icons/Work";
 import BeachAccessIcon from "@material-ui/icons/BeachAccess";
-import { Settings, StarHalf, CreditCard } from "@material-ui/icons";
+import {
+  Settings,
+  StarHalf,
+  CreditCard,
+  ReportProblemSharp,
+} from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 import {
   getUserInfo,
@@ -89,7 +94,7 @@ const UserProfile = (props) => {
 
   const handleCloseSave = () => {
     const textField = document.getElementById("name");
-    props.updateAvatar(props.currentUser.uid, textField.value);
+    props.updateAvatar(props.auth.currentUser.uid, textField.value);
     setOpen(false);
   };
 
@@ -100,15 +105,25 @@ const UserProfile = (props) => {
     return star;
   };
 
-  useEffect(() => {
-    console.log(props.currentUser);
-    props.loadUser(props.currentUser.uid);
-    props.loadModules(props.user.username);
-    setNumStars(getStarCounts(props.modules));
-    getStarModules(props.user.username).then((modules) => {
-      setStars(modules);
-    });
-  }, [props.currentUser]);
+  // useEffect(async () => {
+  //   await props.loadUser(props.auth.currentUser.uid);
+  //   await props.loadModules(props.auth.user.username);
+  //   setNumStars(getStarCounts(props.modules));
+  //   getStarModules(props.auth.user.username).then((modules) => {
+  //     setStars(modules);
+  //   });
+  // }, []);
+
+  useEffect(async () => {
+    if (props.auth.currentUser && props.auth.user) {
+      await props.loadModules(props.auth.user.username);
+      await props.loadUser(props.auth.currentUser.uid);
+      setNumStars(getStarCounts(props.modules));
+      getStarModules(props.auth.user.username).then((modules) => {
+        setStars(modules);
+      });
+    }
+  }, []);
 
   const getCurrentState = () => {
     if (state === "Modules") {
@@ -157,9 +172,9 @@ const UserProfile = (props) => {
             }}
             onClick={handleClickOpen}
           >
-            {props.user.avatar ? (
+            {props.auth.user && props.auth.user.avatar ? (
               <img
-                src={props.user.avatar}
+                src={props.auth.user.avatar}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -199,7 +214,7 @@ const UserProfile = (props) => {
               display="block"
               className={classes.centerText}
             >
-              {props.user.username}
+              {props.auth.user ? props.auth.user.username : "NULL"}
             </Box>
             <br />
             <List className={classes.root}>
@@ -218,7 +233,7 @@ const UserProfile = (props) => {
                 <StarHalf /> {numStars}
               </Box>
               <Box component="span" className={classes.info}>
-                <CreditCard /> {props.user.credit}
+                <CreditCard /> {props.auth.user ? props.auth.user.credit : 0}
               </Box>
             </Box>
           </Paper>

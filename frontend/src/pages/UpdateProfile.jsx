@@ -49,7 +49,7 @@ const UpdateProfile = (props) => {
   const classes = useStyles();
 
   function handleSubmit(e) {
-    console.log("update profile", props.currentUser);
+    console.log("update profile", props.auth.currentUser);
     e.preventDefault();
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match");
@@ -59,7 +59,7 @@ const UpdateProfile = (props) => {
     // setLoading(true);
     // setError("");
 
-    // if (emailRef.current.value !== props.currentUser.email) {
+    // if (emailRef.current.value !== props.auth.currentUser.email) {
     //   promises.push(props.updateEmail(emailRef.current.value));
     // }
     // if (passwordRef.current.value) {

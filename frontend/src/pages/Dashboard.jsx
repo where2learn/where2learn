@@ -74,7 +74,7 @@ const Dashboard = (props) => {
               </Typography>
               {error && <Alert severity="error">{error}</Alert>}
               <Typography align="center">
-                <strong>Email:</strong> {props.currentUser.email}
+                <strong>Email:</strong> {props.auth.currentUser.email}
               </Typography>
               <br />
               <Button

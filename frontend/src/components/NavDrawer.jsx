@@ -129,19 +129,19 @@ const NavDrawer = (props) => {
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [darkTheme, setDarkTheme] = React.useState(
-    props.user ? props.user.theme === "dark" : true
+    props.auth.user ? props.auth.user.theme === "dark" : true
   );
   const { enqueueSnackbar } = useSnackbar();
   const smScreenMatch = useMediaQuery(theme.breakpoints.down("sm"));
 
   // toggle theme
   useEffect(() => {
-    // console.log(props.currentUser);
+    // console.log(props.auth.currentUser);
     enqueueSnackbar(`Theme Switched to "${darkTheme ? "DARK" : "LIGHT"}"`, {
       variant: "info",
     });
-    if (props.currentUser) {
-      updateUserTheme(props.currentUser.uid, darkTheme ? "dark" : "light");
+    if (props.auth.currentUser) {
+      updateUserTheme(props.auth.currentUser.uid, darkTheme ? "dark" : "light");
     }
   }, [darkTheme, enqueueSnackbar]);
 
@@ -231,7 +231,7 @@ const NavDrawer = (props) => {
           <ListItemText primary="Toggle Theme" />
         </ListItem>
 
-        {props.currentUser ? (
+        {props.auth.currentUser ? (
           <>
             <ListItem
               onClick={handleLogout}

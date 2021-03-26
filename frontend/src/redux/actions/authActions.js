@@ -1,6 +1,5 @@
 import {
   LOAD_USER,
-  LOAD_MODULES,
   AUTH_USER,
   SIGN_OUT_USER,
   AUTH_INFO_SUCCESS,
@@ -14,13 +13,6 @@ export function loadUser(user) {
   };
 }
 
-export function loadModules(modules) {
-  return {
-    type: LOAD_MODULES,
-    modules: modules,
-  };
-}
-
 export function authUser(currentUser) {
   return {
     type: AUTH_USER,
@@ -31,7 +23,6 @@ export function authUser(currentUser) {
 export function signOutUser() {
   return {
     type: SIGN_OUT_USER,
-    currentUser: null,
   };
 }
 

@@ -11,9 +11,9 @@ const AddModulePage = (props) => {
   // const { currentUser } = useAuth();
 
   const submit = (module) => {
-    addmodule(props.user.username, module)
+    addmodule(props.auth.user.username, module)
       .then(() => {
-        console.log('Successfully Added Module');
+        console.log("Successfully Added Module");
       })
       .catch((error) => {
         console.error(error);
