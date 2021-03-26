@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Signup from './pages/Signup';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Signup from './pages/Signup';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
-import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 import PrivateRoute from './pages/PrivateRoute';
 import ForgotPassword from './pages/ForgotPassword';
 import UpdateProfile from './pages/UpdateProfile';
@@ -13,8 +12,8 @@ import ModulePreviewDevPage from './pages/ModulePreviewDevPage';
 import Main from './pages/Main';
 import { SnackbarProvider } from 'notistack';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import UserProfile from './pages/UserProfile';
 import AddModulePage from './pages/AddModulePage';
+import UserProfile from './pages/UserProfile';
 import EditModulePage from './pages/EditModulePage';
 import DisplayModulePage from './pages/DisplayModulePage';
 import Roadmap from './pages/Roadmap';
@@ -28,11 +27,13 @@ import {
 } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from './lib/redux_helper';
 
-const App = () => {
+const App = (props) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [dbTheme, setDBTheme] = useState('light');
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
   const darkTheme = createMuiTheme({
     palette: {
       bg: {
@@ -52,18 +53,19 @@ const App = () => {
   });
 
   useEffect(() => {
-    if (currentUser) {
-      realtimeUpdateTheme(currentUser.uid, setDBTheme);
+    if (props.currentUser && props.currentUser.uid) {
+      props.loadUser(props.currentUser.uid);
+      console.log(props.currentUser);
+      realtimeUpdateTheme(props.currentUser.uid, setDBTheme);
     }
     // const theme = await getTheme(currentUser, setDBTheme);
     // console.log(theme);
     // setDBTheme(theme);
-  }, [currentUser]);
+  }, []);
 
   const useStyles = makeStyles({
     root: {
       backgroundColor: darkTheme.palette.background.default,
-      // backgroundColor: darkTheme.palette.bg.l1,
       minHeight: '100vh',
       height: '100%',
     },
@@ -78,12 +80,31 @@ const App = () => {
           <CssBaseline />
           <Paper className={classes.root} elevation={0} square>
             <Switch>
-              <PrivateRoute exact path='/' component={Main} />
-              <PrivateRoute exact path='/dashboard' component={Dashboard} />
-              <PrivateRoute path='/update-profile' component={UpdateProfile} />
-              <PrivateRoute path='/user-profile' component={UserProfile} />
+              <PrivateRoute
+                exact
+                component={Main}
+                path='/'
+                authed={props.currentUser}
+              />
+              <PrivateRoute
+                component={Dashboard}
+                exact
+                path='/dashboard'
+                authed={props.currentUser}
+              />
+              <PrivateRoute
+                path='/update-profile'
+                component={UpdateProfile}
+                authed={props.currentUser}
+              />
+              <PrivateRoute
+                path='/user-profile'
+                component={UserProfile}
+                authed={props.currentUser}
+              />
               <Route path='/roadmap-vis' component={Roadmap} />
               <Route path='/signup' component={Signup} />
+              <Route path='/module/add' component={AddModulePage} />
               <Route path='/login' component={Login} />
               <Route
                 path='/module/display/:username/:module_id'
@@ -110,4 +131,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

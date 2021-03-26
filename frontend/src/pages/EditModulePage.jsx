@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { getModuleById } from '../firebase';
 import Container from '@material-ui/core/Container';
 import NavDrawer from '../components/NavDrawer';
@@ -8,8 +7,11 @@ import EditModule from '../components/EditModule';
 import { editModule } from '../firebase';
 import { constructFullModuleId } from '../firestore_data';
 
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
+
 const EditModulePage = (props) => {
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
 
   const [module, setModule] = useState(null);
   const [content, setContent] = useState(null);
@@ -26,7 +28,7 @@ const EditModulePage = (props) => {
   }, [props.match.params.module_id, props.match.params.username]);
 
   const onSubmit = (module) => {
-    editModule(currentUser.username, module)
+    editModule(props.user.username, module)
       .then(() => {
         console.log('successfully edited module');
       })
@@ -54,4 +56,7 @@ const EditModulePage = (props) => {
   );
 };
 
-export default withRouter(EditModulePage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(EditModulePage));

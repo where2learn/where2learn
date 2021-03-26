@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Editor as TinyEditor } from '@tinymce/tinymce-react';
 import { uploadImage } from '../firebase';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
 const ModuleEditor = ({
   updateContent,
@@ -9,7 +11,20 @@ const ModuleEditor = ({
   inline,
   content,
   initialValue,
+  user,
 }) => {
+  const [darkTheme, setDarkTheme] = useState('light');
+
+  useEffect(() => {
+    if (
+      user.theme == 'dark' ||
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    ) {
+      setDarkTheme(true);
+    } else {
+    }
+  }, [user]);
+
   const handleEditorChange = (e, editor) => {
     if (updateContent) {
       updateContent(e.target.getContent());
@@ -41,12 +56,8 @@ const ModuleEditor = ({
         toolbar_mode: 'sliding',
         statusbar: true,
         paste_data_images: true,
-        skin: window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'oxide-dark'
-          : '',
-        content_css: window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : '',
+        skin: darkTheme ? 'oxide-dark' : '',
+        content_css: darkTheme ? 'dark' : '',
         images_upload_handler: image_upload_handler,
       }}
       onChange={handleEditorChange}
@@ -54,4 +65,4 @@ const ModuleEditor = ({
   );
 };
 
-export default ModuleEditor;
+export default connect(mapStateToProps, mapDispatchToProps)(ModuleEditor);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import Editor from '../components/Editor';
+import Editor from '../components/ModuleEditor';
 import NavDrawer from '../components/NavDrawer';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
@@ -233,7 +233,11 @@ const EditModule = (props) => {
                 Username
               </Typography>
               <Typography color='textPrimary' className={classes.link}>
-                {moduleId ? moduleId : '<module id>'}
+                {props.mode === 'edit'
+                  ? props.module_id
+                  : moduleId
+                  ? moduleId
+                  : '<module id>'}
               </Typography>
             </Breadcrumbs>
           </Grid>

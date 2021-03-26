@@ -4,13 +4,16 @@ import Alert from "@material-ui/lab/Alert";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
 import Button from "@material-ui/core/Button";
 import { Container, Box, TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import NavDrawer from "../components/NavDrawer";
+
+import { connect } from "react-redux";
+import { mapStateToProps, mapDispatchToProps } from "../lib/redux_helper";
 
 const getCardMinWidth = () => {
   const windowInnerWidth = window.innerWidth;
@@ -35,104 +38,104 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UpdateProfile = () => {
+const UpdateProfile = (props) => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { currentUser, updatePassword, updateEmail } = useAuth();
+  // const { currentUser, updatePassword, updateEmail } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const classes = useStyles();
 
   function handleSubmit(e) {
-    console.log("update profile", currentUser)
+    console.log("update profile", props.currentUser);
     e.preventDefault();
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match");
     }
 
-    const promises = [];
-    setLoading(true);
-    setError("");
+    // const promises = [];
+    // setLoading(true);
+    // setError("");
 
-    if (emailRef.current.value !== currentUser.email) {
-      promises.push(updateEmail(emailRef.current.value));
-    }
-    if (passwordRef.current.value) {
-      promises.push(updatePassword(passwordRef.current.value));
-    }
+    // if (emailRef.current.value !== props.currentUser.email) {
+    //   promises.push(props.updateEmail(emailRef.current.value));
+    // }
+    // if (passwordRef.current.value) {
+    //   promises.push(props.updatePassword(passwordRef.current.value));
+    // }
 
-    Promise.all(promises)
-      .then(() => {
-        history.push("/");
-      })
-      .catch(() => {
-        setError("Failed to update account");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    // Promise.all(promises)
+    //   .then(() => {
+    //     history.push("/");
+    //   })
+    //   .catch(() => {
+    //     setError("Failed to update account");
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
   }
 
   return (
     <NavDrawer>
-      <Container maxWidth='sm'>
+      <Container maxWidth="sm">
         <Box
-          display='flex'
-          justifyContent='center'
+          display="flex"
+          justifyContent="center"
           mt={"25%"}
-          alignItems='center'
-          maxHeight='100vh'
-          bgcolor='background.default'
+          alignItems="center"
+          maxHeight="100vh"
+          bgcolor="background.default"
         >
           <Card className={classes.card}>
             <CardContent>
               <Typography
-                variant='h4'
-                component='h3'
+                variant="h4"
+                component="h3"
                 style={{ textAlign: "center" }}
               >
                 Update Profile
               </Typography>
-              {error && <Alert severity='error'>{error}</Alert>}
+              {error && <Alert severity="error">{error}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <div>
                   <TextField
                     fullWidth
                     inputRef={emailRef}
-                    margin='normal'
-                    label='Email'
-                    type='email'
+                    margin="normal"
+                    label="Email"
+                    type="email"
                   />
                 </div>
                 <div>
                   <TextField
                     fullWidth
-                    margin='normal'
+                    margin="normal"
                     inputRef={passwordRef}
-                    label='Password'
-                    placeholder='Leave blank to keep the same'
-                    type='password'
+                    label="Password"
+                    placeholder="Leave blank to keep the same"
+                    type="password"
                   />
                 </div>
 
                 <div>
                   <TextField
                     fullWidth
-                    margin='normal'
+                    margin="normal"
                     inputRef={passwordConfirmRef}
-                    label='Password Confirmation'
-                    placeholder='Leave blank to keep the same'
-                    type='password'
+                    label="Password Confirmation"
+                    placeholder="Leave blank to keep the same"
+                    type="password"
                   />
                 </div>
                 <br />
                 <Button
                   disabled={loading}
-                  type='submit'
-                  color='primary'
-                  variant='contained'
+                  type="submit"
+                  color="primary"
+                  variant="contained"
                   fullWidth
                 >
                   Update
@@ -140,7 +143,7 @@ const UpdateProfile = () => {
               </Form>
             </CardContent>
             <CardActions classes={{ root: classes.cardaction }}>
-              <Link to='/'>Cancel</Link>
+              <Link to="/">Cancel</Link>
             </CardActions>
           </Card>
         </Box>
@@ -148,4 +151,4 @@ const UpdateProfile = () => {
     </NavDrawer>
   );
 };
-export default UpdateProfile;
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateProfile);

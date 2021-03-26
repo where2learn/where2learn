@@ -5,7 +5,6 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { useAuth } from '../contexts/AuthContext';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { withStyles } from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Star';
@@ -19,6 +18,9 @@ import {
   userHasStarModule,
 } from '../firebase';
 import { constructFullModuleId } from '../firestore_data';
+
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
 const useStyles = makeStyles((theme) => ({
   paperBG: {
@@ -64,7 +66,7 @@ const DisplayModule = (props) => {
   const [star, setStar] = useState(false);
   const classes = useStyles();
   const history = useHistory();
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
 
   useEffect(() => {
     const id = constructFullModuleId(
@@ -131,7 +133,7 @@ const DisplayModule = (props) => {
             />
           </Paper>
           <div className={classes.bottomBtn}>
-            {currentUser && currentUser.username === module.author && (
+            {props.user && props.user.username === module.author && (
               <IconButton
                 onClick={() => {
                   const url = `/module/edit/${props.match.params.username}/${props.match.params.module_id}`;
@@ -161,4 +163,7 @@ const DisplayModule = (props) => {
   );
 };
 
-export default withRouter(DisplayModule);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(DisplayModule));

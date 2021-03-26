@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { Form } from "react-bootstrap";
-import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -12,6 +11,8 @@ import { Container, Box, TextField, Avatar } from "@material-ui/core";
 import NavDrawer from "../components/NavDrawer";
 import { useSnackbar } from "notistack";
 import { generateUserDocument } from "../firebase";
+import { connect } from "react-redux";
+import { mapStateToProps, mapDispatchToProps } from "../lib/redux_helper";
 
 const getCardMinWidth = () => {
   const windowInnerWidth = window.innerWidth;
@@ -32,11 +33,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signup = () => {
+const Signup = (props) => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup, signInWithGoogle } = useAuth();
+  // const { signup, signInWithGoogle } = useAuth();
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const classes = useStyles();
@@ -51,7 +52,7 @@ const Signup = () => {
 
     try {
       setLoading(true);
-      const user = await signup(
+      const user = await props.signup(
         emailRef.current.value,
         passwordRef.current.value
       );
@@ -69,7 +70,7 @@ const Signup = () => {
     console.log(e.target);
     try {
       setLoading(true);
-      await signInWithGoogle();
+      await props.signInWithGoogle();
       enqueueSnackbar("Logged In", { variant: "success" });
       history.push("/");
     } catch {
@@ -82,17 +83,17 @@ const Signup = () => {
     <NavDrawer>
       <Container>
         <Box
-          display='flex'
-          justifyContent='center'
+          display="flex"
+          justifyContent="center"
           mt={10}
-          bgcolor='background.default'
+          bgcolor="background.default"
         >
-          <Card className={classes.card} color='secondary'>
+          <Card className={classes.card} color="secondary">
             <Form onSubmit={handleSubmit}>
               <CardContent>
                 <Typography
-                  variant='h3'
-                  component='h3'
+                  variant="h3"
+                  component="h3"
                   style={{ textAlign: "center" }}
                 >
                   Sign Up
@@ -101,35 +102,35 @@ const Signup = () => {
                   <TextField
                     fullWidth
                     inputRef={emailRef}
-                    margin='normal'
-                    label='Email'
-                    type='email'
+                    margin="normal"
+                    label="Email"
+                    type="email"
                   />
                 </div>
                 <div>
                   <TextField
                     fullWidth
-                    margin='normal'
+                    margin="normal"
                     inputRef={passwordRef}
-                    label='Password'
-                    type='password'
+                    label="Password"
+                    type="password"
                   />
                 </div>
                 <div>
                   <TextField
                     fullWidth
-                    margin='normal'
+                    margin="normal"
                     inputRef={passwordConfirmRef}
-                    label='Confirm Password'
-                    type='password'
+                    label="Confirm Password"
+                    type="password"
                   />
                 </div>
                 <br />
                 <Button
                   fullWidth
-                  type='submit'
-                  variant='contained'
-                  color='primary'
+                  type="submit"
+                  variant="contained"
+                  color="primary"
                   disabled={loading}
                 >
                   Sign Up
@@ -141,8 +142,8 @@ const Signup = () => {
                 <Typography>
                   <Button onClick={handleClick}>
                     <Avatar
-                      alt='Google Logo'
-                      src='../../../static/images/google.png'
+                      alt="Google Logo"
+                      src="../../../static/images/google.png"
                     />
                     <Box m={1} />
                     Sign in with Google
@@ -153,7 +154,7 @@ const Signup = () => {
             <Box mt={3}>
               <CardActions>
                 <Typography>
-                  Already have an account? <Link to='/login'>Log In</Link>
+                  Already have an account? <Link to="/login">Log In</Link>
                 </Typography>
               </CardActions>
             </Box>
@@ -163,4 +164,4 @@ const Signup = () => {
     </NavDrawer>
   );
 };
-export default Signup;
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

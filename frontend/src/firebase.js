@@ -3,6 +3,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
 import { constructStarId } from './firestore_data';
+import { dark } from '@material-ui/core/styles/createPalette';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -44,10 +45,14 @@ export const generateUserDocument = async (user, additionalData) => {
   const snapshot = await userRef.get();
 
   if (!snapshot.exists) {
-    const { email } = user;
+    const { email, uid } = user;
+    console.log(email);
     try {
       await userRef.set({
-        email,
+        email: email,
+        theme: 'light',
+        credit: 0,
+        username: uid,
         ...additionalData,
       });
     } catch (error) {
@@ -86,6 +91,7 @@ export const getModuleRefById = (id) => {
 };
 
 export const getModuleById = (id) => {
+  console.log(id);
   return firestore
     .collection('modules')
     .doc(id)
@@ -167,35 +173,39 @@ export const getUserInfo = async (uid) => {
 };
 
 export const getModulesByUsername = async (username) => {
-  const moduleRef = firestore
-    .collection('/modules')
-    .where('author', '==', username);
-  const moduleQueries = await moduleRef.get();
-  const modules = moduleQueries.docs.map((doc) => doc.data());
-  // const starRef = firestore
-  //   .collection("/stars")
-  //   .where("username", "==", "username");
-  // const starQueries = await starRef.get();
-  // const stars = starQueries.docs.map((star) => star.data());
-
-  // const starts =
-
-  return modules;
+  if (username) {
+    const moduleRef = firestore
+      .collection('/modules')
+      .where('author', '==', username);
+    const moduleQueries = await moduleRef.get();
+    const modules = moduleQueries.docs.map((doc) => doc.data());
+    return modules;
+  } else {
+    return [];
+  }
 };
 
 export const getStarModules = async (username) => {
-  const starRef = firestore
-    .collection('stars')
-    .where('username', '==', username);
-  const starQueries = await starRef.get();
-  const stars = starQueries.docs.map((star) => star.data().module);
-  console.log(stars); // should get an array of module id
+  var stars = [];
+  if (username) {
+    const starRef = firestore
+      .collection('stars')
+      .where('username', '==', username);
+    const starQueries = await starRef.get();
+    stars = starQueries.docs.map((star) => star.data().module);
+  }
+
+  // console.log(stars); // should get an array of module id
   // find two ways to achieve this
-  const modules = await firestore
-    .collection('/modules')
-    .where(firebase.firestore.FieldPath.documentId(), 'in', stars)
-    .get();
-  return modules.docs.map((doc) => doc.data());
+  if (stars.length !== 0) {
+    const modules = await firestore
+      .collection('/modules')
+      .where(firebase.firestore.FieldPath.documentId(), 'in', stars)
+      .get();
+    return modules.docs.map((doc) => doc.data());
+  } else {
+    return [];
+  }
 
   // firestore.getAll(documentRef1, documentRef2).then((docs) =>)
 };
