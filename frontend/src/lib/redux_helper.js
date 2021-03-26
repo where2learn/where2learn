@@ -5,7 +5,12 @@ import {
   signOutUser,
   updateAvatarAction,
 } from "../redux/actions/authActions";
-import { getUserInfo, getModulesByUsername, updateAvatar } from "../firebase";
+import {
+  getUserInfo,
+  getModulesByUsername,
+  updateAvatar,
+  provider,
+} from "../firebase";
 import { auth } from "../firebase";
 
 const fetchUser = (uid) => (dispatch) => {
@@ -25,6 +30,23 @@ const login = (email, password) => (dispatch) => {
   dispatch(authUser(user));
 };
 
+const signup = (email, password) => (dispatch) => {
+  const user = auth.createUserWithEmailAndPassword(email, password);
+  dispatch(authUser(user));
+};
+
+// const updateEmail = (currentUser, email) => (dispatch) => {
+//   return currentUser.updateEmail(email);
+// };
+
+// const updatePassword = (currentUser, password) => {
+//   return currentUser.updatePassword(password);
+// };
+
+export const resetPassword = (email) => {
+  return auth.sendPasswordResetEmail(email);
+};
+
 const changeAvatar = (uid, avatar) => (dispatch) => {
   updateAvatar(uid, avatar);
   dispatch(updateAvatarAction(avatar));
@@ -37,6 +59,10 @@ export const mapDispatchToProps = (dispatch) => {
     login: (email, password) => login(email, password)(dispatch),
     updateAvatar: (uid, avatar) => changeAvatar(uid, avatar)(dispatch),
     logout: () => signOutUser(),
+    signInWithGoogle: () => auth.signInWithPopup(provider),
+    signup: (email, password) => signup(email, password)(dispatch),
+    // updateEmail: (email) => updateEmail(email)(dispatch),
+    // updatePassword: (password) => updatePassword(password)(dispatch),
   };
 };
 

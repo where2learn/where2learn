@@ -1,39 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { useHistory } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { useAuth } from '../contexts/AuthContext';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import { withStyles } from '@material-ui/core/styles';
-import StarIcon from '@material-ui/icons/Star';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import EditIcon from '@material-ui/icons/Edit';
-import Badge from '@material-ui/core/Badge';
+import React, { useEffect, useState } from "react";
+import { withRouter } from "react-router-dom";
+import Paper from "@material-ui/core/Paper";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { useHistory } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import { withStyles } from "@material-ui/core/styles";
+import StarIcon from "@material-ui/icons/Star";
+import IconButton from "@material-ui/core/IconButton";
+import StarBorderIcon from "@material-ui/icons/StarBorder";
+import EditIcon from "@material-ui/icons/Edit";
+import Badge from "@material-ui/core/Badge";
 import {
   starModule,
   realtimeUpdateModule,
   userHasStarModule,
-} from '../firebase';
-import { constructFullModuleId } from '../firestore_data';
+} from "../firebase";
+import { constructFullModuleId } from "../firestore_data";
+
+import { connect } from "react-redux";
+import { mapStateToProps, mapDispatchToProps } from "../lib/redux_helper";
 
 const useStyles = makeStyles((theme) => ({
   paperBG: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    padding: '2rem',
-    '& > *': {
-      width: '100%',
+    display: "flex",
+    flexWrap: "wrap",
+    padding: "2rem",
+    "& > *": {
+      width: "100%",
     },
-    '& pre > code': {
+    "& pre > code": {
       color: theme.palette.text.primary,
     },
   },
   link: {
-    display: 'flex',
+    display: "flex",
   },
   icon: {
     marginRight: theme.spacing(0.5),
@@ -44,8 +46,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   bottomBtn: {
-    marginTop: '1rem',
-    float: 'right',
+    marginTop: "1rem",
+    float: "right",
   },
 }));
 
@@ -54,17 +56,17 @@ const StyledBadge = withStyles((theme) => ({
     right: -10,
     top: 0,
     border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
+    padding: "0 4px",
   },
 }))(Badge);
 
 const DisplayModule = (props) => {
   const [module, setModule] = useState(null);
-  const [fullModuleId, setFullModuleId] = useState('');
+  const [fullModuleId, setFullModuleId] = useState("");
   const [star, setStar] = useState(false);
   const classes = useStyles();
   const history = useHistory();
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
 
   useEffect(() => {
     const id = constructFullModuleId(
@@ -107,31 +109,31 @@ const DisplayModule = (props) => {
         <React.Fragment>
           <Paper className={classes.paperBG} elevation={3}>
             {module && (
-              <Typography variant='h2' gutterBottom>
+              <Typography variant="h2" gutterBottom>
                 {module && module.title}
               </Typography>
             )}
             <Breadcrumbs className={classes.breadcrumbs}>
-              <Typography color='textPrimary' className={classes.link}>
+              <Typography color="textPrimary" className={classes.link}>
                 <AccountCircleIcon
-                  style={{ marginTop: '1.5px' }}
+                  style={{ marginTop: "1.5px" }}
                   className={classes.icon}
                 />
-                {module && module.author ? module.author : '<username>'}
+                {module && module.author ? module.author : "<username>"}
               </Typography>
-              <Typography color='textPrimary' className={classes.link}>
-                {module && module.module_id ? module.module_id : '<module id>'}
+              <Typography color="textPrimary" className={classes.link}>
+                {module && module.module_id ? module.module_id : "<module id>"}
               </Typography>
             </Breadcrumbs>
 
             <div
               dangerouslySetInnerHTML={{
-                __html: module && module.content ? module.content : '',
+                __html: module && module.content ? module.content : "",
               }}
             />
           </Paper>
           <div className={classes.bottomBtn}>
-            {currentUser && currentUser.username === module.author && (
+            {props.currentUser && props.currentUser.username === module.author && (
               <IconButton
                 onClick={() => {
                   const url = `/module/edit/${props.match.params.username}/${props.match.params.module_id}`;
@@ -146,7 +148,7 @@ const DisplayModule = (props) => {
               <StyledBadge
                 showZero
                 badgeContent={module && module.num_star ? module.num_star : 0}
-                color='primary'
+                color="primary"
                 max={999}
               >
                 {star ? <StarIcon /> : <StarBorderIcon />}
@@ -161,4 +163,7 @@ const DisplayModule = (props) => {
   );
 };
 
-export default withRouter(DisplayModule);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(DisplayModule));

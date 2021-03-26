@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import NavDrawer from "../components/NavDrawer";
 import { Box, Avatar, Paper, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -102,13 +101,14 @@ const UserProfile = (props) => {
   };
 
   useEffect(() => {
+    console.log(props.currentUser);
     props.loadUser(props.currentUser.uid);
     props.loadModules(props.user.username);
     setNumStars(getStarCounts(props.modules));
     getStarModules(props.user.username).then((modules) => {
       setStars(modules);
     });
-  }, []);
+  }, [props.currentUser]);
 
   const getCurrentState = () => {
     if (state === "Modules") {

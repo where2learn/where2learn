@@ -21,7 +21,6 @@ import Brightness7Icon from "@material-ui/icons/Brightness7";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Brightness2Icon from "@material-ui/icons/Brightness2";
 import { useHistory } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import { useSnackbar } from "notistack";
 import Tooltip from "@material-ui/core/Tooltip";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -129,7 +128,9 @@ const NavDrawer = (props) => {
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
-  const [darkTheme, setDarkTheme] = React.useState(props.user.theme === "dark");
+  const [darkTheme, setDarkTheme] = React.useState(
+    props.user ? props.user.theme === "dark" : true
+  );
   const { enqueueSnackbar } = useSnackbar();
   const smScreenMatch = useMediaQuery(theme.breakpoints.down("sm"));
 
