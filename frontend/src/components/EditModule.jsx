@@ -18,6 +18,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import { constructModuleObject } from '../firestore_data';
 
+const maxDescriptionLength = 160;
+
 const useStyles = makeStyles((theme) => ({
   textField: {
     margin: theme.spacing(1),
@@ -59,6 +61,10 @@ const EditModule = (props) => {
   const [moduleTitle, setModuleTitle] = useState(props.module_title || '');
   const [moduleId, setModuleId] = useState(props.module_id || '');
   const [tagInput, setTagInput] = useState('');
+  const [descriptionErrIndicator, setDescriptionErrIndicator] = useState(false);
+  const [descriptionInput, setDescriptionInput] = useState(
+    props.description || ''
+  );
   const [mediaType, setMediaType] = useState({
     text: true,
     video: false,
@@ -69,10 +75,11 @@ const EditModule = (props) => {
   const [editorContent, setEditorContent] = useState(props.initialValue || '');
   const { enqueueSnackbar } = useSnackbar();
 
-  const [errMsgs, setErrMsgs] = useState({
+  const [helperText, setHelperText] = useState({
     title: null,
     module_id: null,
     tags: null,
+    description: null,
   });
 
   const handleMediaTypeChange = (event) => {
@@ -141,43 +148,62 @@ const EditModule = (props) => {
     if (!props.module_id && moduleTitle) updateModuleID(moduleTitle);
   }, [moduleTitle, props.module_id, updateModuleID]);
 
-  // update error message for title
+  // update title message for title
   useEffect(() => {
     if (moduleTitle) {
-      setErrMsgs((err_msgs) => ({ ...err_msgs, title: null }));
+      setHelperText((helperText) => ({ ...helperText, title: null }));
     }
   }, [moduleTitle]);
 
-  // update error message for module_id
+  // update module_id message for module_id
   useEffect(() => {
     if (moduleId) {
-      setErrMsgs((err_msgs) => ({ ...err_msgs, module_id: null }));
+      setHelperText((helperText) => ({ ...helperText, module_id: null }));
     }
   }, [moduleId]);
 
-  // update error message for tags
+  // update tag message for tags
   useEffect(() => {
     if (tagInput) {
-      setErrMsgs((err_msgs) => ({ ...err_msgs, tags: null }));
+      setHelperText((helperText) => ({ ...helperText, tags: null }));
     }
   }, [tagInput]);
 
+  // update description helper text
+  useEffect(() => {
+    if (descriptionInput !== null && descriptionInput !== undefined) {
+      const helperText_ = `Max Description Length: ${descriptionInput.length}/${maxDescriptionLength}`;
+      setHelperText((helperText) => ({
+        ...helperText,
+        description: helperText_,
+      }));
+      setDescriptionErrIndicator(false);
+    }
+  }, [descriptionInput]);
+
   const validateForSubmit = () => {
     let err = false;
-    const newErrMsgs = {};
+    const newHelperTexts = {};
     if (!moduleTitle) {
-      newErrMsgs.title = 'Cannot Be Empty';
+      newHelperTexts.title = 'Cannot Be Empty';
       err = true;
     }
     if (!moduleId && props.mode !== 'edit') {
-      newErrMsgs.module_id = 'Cannot Be Empty';
+      newHelperTexts.module_id = 'Cannot Be Empty';
       err = true;
     }
     if (tags.length === 0) {
-      newErrMsgs.tags = 'Cannot Be Empty';
+      newHelperTexts.tags = 'Cannot Be Empty';
       err = true;
     }
-    setErrMsgs({ ...errMsgs, ...newErrMsgs });
+    if (descriptionInput.length === 0) {
+      newHelperTexts.description = 'Cannot Be Empty';
+      setDescriptionErrIndicator(true);
+    }
+    if (descriptionInput.length > maxDescriptionLength) {
+      setDescriptionErrIndicator(true);
+    }
+    setHelperText({ ...helperText, ...newHelperTexts });
     return err;
   };
 
@@ -212,6 +238,7 @@ const EditModule = (props) => {
             media_type: mediaTypeArr,
             type: 'regular',
             mode: props.mode,
+            description: descriptionInput,
           })
         );
       }
@@ -260,15 +287,33 @@ const EditModule = (props) => {
         </Grid>
         <TextField
           className={classes.textField}
+          inputProps={{ spellCheck: 'false' }}
           label='Module Title'
           id='module-title'
           fullWidth
-          value={moduleTitle}
           onChange={updateProjectTitle}
           variant='outlined'
           autoFocus
-          helperText={errMsgs.title || null}
-          error={Boolean(errMsgs.title)}
+          helperText={helperText.title || null}
+          error={Boolean(helperText.title)}
+        />
+        <TextField
+          className={classes.textField}
+          inputProps={{ spellCheck: 'false' }}
+          label='Description'
+          id='module-description'
+          fullWidth
+          multiline
+          error={descriptionErrIndicator}
+          value={descriptionInput}
+          onChange={(e) => {
+            if (e.target.value.length <= maxDescriptionLength) {
+              setDescriptionInput(e.target.value);
+            }
+          }}
+          variant='outlined'
+          helperText={helperText.description || null}
+          // helperText='hi'
         />
         {props.mode !== 'edit' && (
           <TextField
@@ -280,9 +325,9 @@ const EditModule = (props) => {
             onChange={(e) => setModuleId(e.target.value)}
             variant='outlined'
             helperText={
-              errMsgs.module_id || 'Must Be Unique Within Your Modules'
+              helperText.module_id || 'Must Be Unique Within Your Modules'
             }
-            error={Boolean(errMsgs.module_id)}
+            error={Boolean(helperText.module_id)}
           />
         )}
         <form onSubmit={updateTags}>
@@ -294,8 +339,8 @@ const EditModule = (props) => {
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
             variant='outlined'
-            helperText={errMsgs.tags || 'Press Enter to add a Tag'}
-            error={Boolean(errMsgs.tags)}
+            helperText={helperText.tags || 'Press Enter to add a Tag'}
+            error={Boolean(helperText.tags)}
           />
         </form>
         {tags && tags.length !== 0 && (
