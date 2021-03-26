@@ -4,26 +4,28 @@ import { uploadImage } from '../firebase';
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
-const ModuleEditor = ({
-  updateContent,
-  height = 600,
-  width = '100%',
-  inline,
-  content,
-  initialValue,
-  user,
-}) => {
-  const [darkTheme, setDarkTheme] = useState('light');
+const ModuleEditor = (props) => {
+  const {
+    updateContent,
+    height = 600,
+    width = '100%',
+    inline,
+    content,
+    initialValue,
+  } = props;
+  const [darkTheme, setDarkTheme] = useState(false);
 
   useEffect(() => {
+    console.log(props.user);
     if (
-      user.theme == 'dark' ||
+      props.user.theme == 'dark' ||
       window.matchMedia('(prefers-color-scheme: dark)').matches
     ) {
       setDarkTheme(true);
     } else {
+      setDarkTheme(false);
     }
-  }, [user]);
+  }, [props.user]);
 
   const handleEditorChange = (e, editor) => {
     if (updateContent) {
