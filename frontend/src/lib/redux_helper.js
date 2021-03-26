@@ -12,6 +12,7 @@ import {
   provider,
 } from "../firebase";
 import { auth } from "../firebase";
+import { useRouteMatch } from "react-router";
 
 const fetchUser = (uid) => (dispatch) => {
   getUserInfo(uid).then((data) => {
@@ -53,7 +54,8 @@ const changeAvatar = (uid, avatar) => (dispatch) => {
 };
 
 const signInWithPopup = () => {
-  auth.signInWithPopup(provider);
+  const userAuth = auth.signInWithPopup(provider);
+  return userAuth;
 };
 
 export const mapDispatchToProps = (dispatch) => {
