@@ -11,7 +11,7 @@ const AddModulePage = () => {
   const submit = (module) => {
     addmodule(currentUser.username, module)
       .then(() => {
-        console.log('successfully added module');
+        console.log('Successfully Added Module');
       })
       .catch((error) => {
         console.error(error);
