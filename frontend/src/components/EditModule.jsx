@@ -207,7 +207,7 @@ const EditModule = (props) => {
             title: moduleTitle,
             module_id,
             tags,
-            content: editorContent,
+            content: editorContent ? editorContent : null,
             roadmap: null,
             media_type: mediaTypeArr,
             type: 'regular',

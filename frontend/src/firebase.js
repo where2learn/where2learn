@@ -121,13 +121,32 @@ export const uploadImage = (rawImage) => {
   });
 };
 
-export const addmodule = (username, module) => {
+export const addmodule = async (username, module) => {
   console.log(username);
   console.log(module);
   const full_module_id = `${username}\\${module.module_id}`;
+  const tags = module.tags;
   const new_module = { ...module, num_star: 0, author: username };
-
-  return firestore.collection('modules').doc(full_module_id).set(new_module);
+  const batch = firestore.batch();
+  const moduleRef = firestore.collection('modules').doc(full_module_id);
+  batch.set(moduleRef, new_module);
+  for (let i = 0; i < tags.length; i++) {
+    const tag = tags[i];
+    const tagRef = firestore.collection('tags').doc(tag);
+    const doc = await tagRef.get();
+    if (doc.exists) {
+      batch.update(tagRef, {
+        count: firebase.firestore.FieldValue.increment(1),
+      });
+    } else {
+      batch.set(tagRef, { count: 1, value: tag });
+    }
+  }
+  try {
+    return await batch.commit();
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const editModule = (username, module) => {
