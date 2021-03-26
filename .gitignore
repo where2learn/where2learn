@@ -3,3 +3,4 @@ dev/serviceAccountKey.json
 .vscode
 *.log
 package-lock.json
+.DS_Store
