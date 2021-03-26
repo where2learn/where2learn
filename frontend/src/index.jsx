@@ -7,13 +7,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { configStore } from "./redux/configStore";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
-import { auth } from "./firebase";
+import { auth, generateUserDocument } from "./firebase";
 import { authInfoSuccess } from "./redux/actions/authActions";
 
 const [store, persistor] = configStore();
 
 auth.onAuthStateChanged((user) => {
   store.dispatch(authInfoSuccess(user));
+  generateUserDocument(user);
   ReactDOM.render(
     <Provider store={store}>
       <AuthProvider>

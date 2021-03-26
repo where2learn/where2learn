@@ -52,6 +52,10 @@ const changeAvatar = (uid, avatar) => (dispatch) => {
   dispatch(updateAvatarAction(avatar));
 };
 
+const signInWithPopup = () => {
+  auth.signInWithPopup(provider);
+};
+
 export const mapDispatchToProps = (dispatch) => {
   return {
     loadUser: (uid) => fetchUser(uid)(dispatch),
@@ -59,7 +63,7 @@ export const mapDispatchToProps = (dispatch) => {
     login: (email, password) => login(email, password)(dispatch),
     updateAvatar: (uid, avatar) => changeAvatar(uid, avatar)(dispatch),
     logout: () => signOutUser(),
-    signInWithGoogle: () => auth.signInWithPopup(provider),
+    signInWithGoogle: () => signInWithPopup(),
     signup: (email, password) => signup(email, password)(dispatch),
     // updateEmail: (email) => updateEmail(email)(dispatch),
     // updatePassword: (password) => updatePassword(password)(dispatch),
