@@ -126,7 +126,13 @@ const DisplayModule = (props) => {
               </Typography>
             </Breadcrumbs>
 
+            <Typography component='strong' color='textPrimary'>
+              {module && module.description
+                ? module.description
+                : 'No Description'}
+            </Typography>
             <div
+              style={{ marginTop: '3rem' }}
               dangerouslySetInnerHTML={{
                 __html: module && module.content ? module.content : '',
               }}

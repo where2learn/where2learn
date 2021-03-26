@@ -58,9 +58,6 @@ const App = (props) => {
       console.log(props.currentUser);
       realtimeUpdateTheme(props.currentUser.uid, setDBTheme);
     }
-    // const theme = await getTheme(currentUser, setDBTheme);
-    // console.log(theme);
-    // setDBTheme(theme);
   }, []);
 
   const useStyles = makeStyles({
