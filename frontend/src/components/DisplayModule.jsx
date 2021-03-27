@@ -139,16 +139,18 @@ const DisplayModule = (props) => {
             />
           </Paper>
           <div className={classes.bottomBtn}>
-            {props.user && props.user.username === module.author && (
-              <IconButton
-                onClick={() => {
-                  const url = `/module/edit/${props.match.params.username}/${props.match.params.module_id}`;
-                  history.push(url);
-                }}
-              >
-                <EditIcon />
-              </IconButton>
-            )}
+            {props.auth &&
+              props.auth.user &&
+              props.auth.user.username === module.author && (
+                <IconButton
+                  onClick={() => {
+                    const url = `/module/edit/${props.match.params.username}/${props.match.params.module_id}`;
+                    history.push(url);
+                  }}
+                >
+                  <EditIcon />
+                </IconButton>
+              )}
 
             <IconButton onClick={toggleStar}>
               <StyledBadge

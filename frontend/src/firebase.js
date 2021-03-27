@@ -3,7 +3,6 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
 import { constructStarId } from './firestore_data';
-import { dark } from '@material-ui/core/styles/createPalette';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -77,7 +76,7 @@ const getUserDocument = async (uid) => {
 };
 
 // Module Related
-export const getModules = async () => {
+export const getModules = async (limit) => {
   const snapshot = await firebase
     .firestore()
     .collection('modules')
@@ -156,6 +155,7 @@ export const addmodule = async (username, module) => {
 };
 
 export const editModule = (username, module) => {
+  console.log(firebase.firestore.FieldValue.serverTimestamp());
   console.log(module);
   const full_module_id = `${username}\\${module.module_id}`;
   console.log(full_module_id);

@@ -46,8 +46,10 @@ const Main = () => {
   const [modules, setModules] = useState([]);
   const [tags, setTags] = useState([]);
   const [page, setPage] = useState('modules');
+  const [keyword, setKeyword] = useState('');
+  const [searchTimeout, setSearchtimeOut] = useState(null);
+  const searchTimeoutRef = useRef(null);
   const tagInputRef = useRef();
-  const keywordInputRef = useRef();
   const classes = useStyles();
 
   const initAllModules = async () => {
@@ -55,12 +57,20 @@ const Main = () => {
   };
 
   useEffect(() => {
-    setTags(['react', 'vue']);
     initAllModules();
     tagInputRef.current.onChange = (e) => {
       console.log(e.target);
     };
   }, []);
+
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    searchTimeoutRef.current = setTimeout(() => {
+      console.log(keyword);
+    }, 1000);
+  }, [keyword]);
 
   const handleDeleteTagChip = (tagToDelete) => () => {
     console.log();
@@ -118,7 +128,7 @@ const Main = () => {
                 <TextField
                   fullWidth
                   id='keyword-search-box'
-                  inputRef={keywordInputRef}
+                  onChange={(e) => setKeyword(e.target.value)}
                   label='Search By Keywords'
                   variant='outlined'
                 />
