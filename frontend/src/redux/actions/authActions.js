@@ -4,7 +4,7 @@ import {
   SIGN_OUT_USER,
   AUTH_INFO_SUCCESS,
   UPDATE_AVATAR,
-} from "./actionType";
+} from './actionType';
 
 export function loadUser(user) {
   return {

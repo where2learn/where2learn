@@ -1,4 +1,4 @@
-import { LOAD_MODULES, EMPTY_MODULES } from "../actions/actionType";
+import { LOAD_MODULES, EMPTY_MODULES } from '../actions/actionType';
 
 const moduleReducer = (state = { modules: [] }, action) => {
   switch (action.type) {

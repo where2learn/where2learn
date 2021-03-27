@@ -4,7 +4,7 @@ import {
   SIGN_OUT_USER,
   AUTH_INFO_SUCCESS,
   UPDATE_AVATAR,
-} from "../actions/actionType";
+} from '../actions/actionType';
 
 const auth = (state = { user: {}, currentUser: {} }, action) => {
   switch (action.type) {

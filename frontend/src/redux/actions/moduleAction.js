@@ -1,5 +1,5 @@
-import { LOAD_MODULES } from "./actionType";
-import { EMPTY_MODULES } from "./actionType";
+import { LOAD_MODULES } from './actionType';
+import { EMPTY_MODULES } from './actionType';
 
 export function loadModules(modules) {
   return {

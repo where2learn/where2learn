@@ -1,9 +1,9 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
-import "firebase/storage";
-import { constructStarId } from "./firestore_data";
-import { dark } from "@material-ui/core/styles/createPalette";
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+import 'firebase/storage';
+import { constructStarId } from './firestore_data';
+import { dark } from '@material-ui/core/styles/createPalette';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -18,16 +18,16 @@ firebase
   .firestore()
   .enablePersistence()
   .catch((err) => {
-    if (err.code === "failed-precondition") {
+    if (err.code === 'failed-precondition') {
       // Multiple tabs open, persistence can only be enabled
       // in one tab at a a time.
       // ...
-      console.log("enable persistence failed: failed-precondition");
-    } else if (err.code === "unimplemented") {
+      console.log('enable persistence failed: failed-precondition');
+    } else if (err.code === 'unimplemented') {
       // The current browser does not support all of the
       // features required to enable persistence
       // ...
-      console.log("enable persistence failed: unimplemented");
+      console.log('enable persistence failed: unimplemented');
     }
   });
 
@@ -50,13 +50,13 @@ export const generateUserDocument = async (user, additionalData) => {
     try {
       await userRef.set({
         email: email,
-        theme: "light",
+        theme: 'light',
         credit: 0,
         username: uid,
         ...additionalData,
       });
     } catch (error) {
-      console.error("Error creating user document", error);
+      console.error('Error creating user document', error);
     }
   }
   return getUserDocument(user.uid);
@@ -72,7 +72,7 @@ const getUserDocument = async (uid) => {
       ...userDocument.data(),
     };
   } catch (error) {
-    console.error("Error fetching user", error);
+    console.error('Error fetching user', error);
   }
 };
 
@@ -80,20 +80,20 @@ const getUserDocument = async (uid) => {
 export const getModules = async () => {
   const snapshot = await firebase
     .firestore()
-    .collection("modules")
-    .orderBy("num_star", "desc")
+    .collection('modules')
+    .orderBy('num_star', 'desc')
     .get();
   return snapshot.docs.map((doc) => doc.data());
 };
 
 export const getModuleRefById = (id) => {
-  return firestore.collection("modules").doc(id);
+  return firestore.collection('modules').doc(id);
 };
 
 export const getModuleById = (id) => {
   console.log(id);
   return firestore
-    .collection("modules")
+    .collection('modules')
     .doc(id)
     .get()
     .then((doc) => {
@@ -101,12 +101,12 @@ export const getModuleById = (id) => {
         return doc.data();
       } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+        console.log('No such document!');
         return undefined;
       }
     })
     .catch((error) => {
-      console.log("Error getting document:", error);
+      console.log('Error getting document:', error);
       return undefined;
     });
 };
@@ -119,9 +119,9 @@ export const incrementModuleStar = (full_module_id, amount) => {
 
 export const uploadImage = (rawImage) => {
   var storageRef = firebase.storage().ref();
-  var imgRef = storageRef.child("/users/pictures/resized/mountains.jpg");
+  var imgRef = storageRef.child('/users/pictures/resized/mountains.jpg');
   return imgRef.put(rawImage).then(async (snapshot) => {
-    console.log("Uploaded a blob or file!");
+    console.log('Uploaded a blob or file!');
     const url = await imgRef.getDownloadURL();
     return url;
   });
@@ -134,11 +134,11 @@ export const addmodule = async (username, module) => {
   const tags = module.tags;
   const new_module = { ...module, num_star: 0, author: username };
   const batch = firestore.batch();
-  const moduleRef = firestore.collection("modules").doc(full_module_id);
+  const moduleRef = firestore.collection('modules').doc(full_module_id);
   batch.set(moduleRef, new_module);
   for (let i = 0; i < tags.length; i++) {
     const tag = tags[i];
-    const tagRef = firestore.collection("tags").doc(tag);
+    const tagRef = firestore.collection('tags').doc(tag);
     const doc = await tagRef.get();
     if (doc.exists) {
       batch.update(tagRef, {
@@ -161,12 +161,12 @@ export const editModule = (username, module) => {
   console.log(full_module_id);
   const new_module = { ...module };
   delete new_module.module_id;
-  return firestore.collection("modules").doc(full_module_id).update(new_module);
+  return firestore.collection('modules').doc(full_module_id).update(new_module);
 };
 
 // ========== User Profile Page ===============
 export const getUserInfo = async (uid) => {
-  const userRef = firestore.doc("/users/" + uid);
+  const userRef = firestore.doc('/users/' + uid);
   const snapshot = await userRef.get();
 
   return snapshot.data();
@@ -175,8 +175,8 @@ export const getUserInfo = async (uid) => {
 export const getModulesByUsername = async (username) => {
   if (username) {
     const moduleRef = firestore
-      .collection("/modules")
-      .where("author", "==", username);
+      .collection('/modules')
+      .where('author', '==', username);
     const moduleQueries = await moduleRef.get();
     const modules = moduleQueries.docs.map((doc) => doc.data());
     return modules;
@@ -189,8 +189,8 @@ export const getStarModules = async (username) => {
   var stars = [];
   if (username) {
     const starRef = firestore
-      .collection("stars")
-      .where("username", "==", username);
+      .collection('stars')
+      .where('username', '==', username);
     const starQueries = await starRef.get();
     stars = starQueries.docs.map((star) => star.data().module);
   }
@@ -199,8 +199,8 @@ export const getStarModules = async (username) => {
   // find two ways to achieve this
   if (stars.length !== 0) {
     const modules = await firestore
-      .collection("/modules")
-      .where(firebase.firestore.FieldPath.documentId(), "in", stars)
+      .collection('/modules')
+      .where(firebase.firestore.FieldPath.documentId(), 'in', stars)
       .get();
     return modules.docs.map((doc) => doc.data());
   } else {
@@ -211,15 +211,15 @@ export const getStarModules = async (username) => {
 };
 
 export const updateAvatar = async (uid, newAvatar) => {
-  const userRef = firestore.doc("users/" + uid);
+  const userRef = firestore.doc('users/' + uid);
   userRef
-    .update("avatar", newAvatar)
+    .update('avatar', newAvatar)
     .then(() => {
       return userRef.get();
     })
     .then((doc) => {
-      console.log("upload successfully!");
-      console.log("New Avatar address: " + doc.get("avatar"));
+      console.log('upload successfully!');
+      console.log('New Avatar address: ' + doc.get('avatar'));
     });
 };
 
@@ -238,7 +238,7 @@ export const realtimeUpdateTheme = (uid, callback) => {
 
 export const realtimeUpdateModule = (full_module_id, callback) => {
   const unsubscribe = firestore
-    .collection("modules")
+    .collection('modules')
     .doc(full_module_id)
     .onSnapshot((doc) => {
       callback(doc.data());
@@ -251,7 +251,7 @@ export const realtimeUpdateModule = (full_module_id, callback) => {
 export const starModule = async (username, full_module_id, unstar = false) => {
   const batch = firestore.batch();
   const starRef = firestore
-    .collection("stars")
+    .collection('stars')
     .doc(constructStarId(username, full_module_id));
   if (unstar) {
     batch.delete(starRef);
@@ -272,7 +272,7 @@ export const starModule = async (username, full_module_id, unstar = false) => {
 
 export const userHasStarModule = async (username, full_module_id) => {
   const snapshot = await firestore
-    .collection("stars")
+    .collection('stars')
     .doc(constructStarId(username, full_module_id))
     .get();
   return snapshot.exists;
