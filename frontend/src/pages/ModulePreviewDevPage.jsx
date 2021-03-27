@@ -1,19 +1,19 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import ModulePreview from "../components/ModulePreview";
-import ModulePreviewHTB from "../components/ModulePreviewHTB";
-import Box from "@material-ui/core/Box";
-import Tag from "../components/Tag";
-import Chip from "@material-ui/core/Chip";
-import { Container } from "@material-ui/core";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import ModulePreview from '../components/ModulePreview';
+import ModulePreviewHTB from '../components/ModulePreviewHTB';
+import Box from '@material-ui/core/Box';
+import Tag from '../components/Tag';
+import Chip from '@material-ui/core/Chip';
+import { Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   tag: {
-    backgroundColor: "rgba(0, 255, 21, 0.2)",
-    color: "rgb(0, 255, 21)",
-    borderRadius: "3px",
-    "&:hover": {
-      background: "rgba(76, 209, 55, 0.2)",
+    backgroundColor: 'rgba(0, 255, 21, 0.2)',
+    color: 'rgb(0, 255, 21)',
+    borderRadius: '3px',
+    '&:hover': {
+      background: 'rgba(76, 209, 55, 0.2)',
     },
     padding: 0,
   },

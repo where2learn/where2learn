@@ -21,11 +21,13 @@ import Brightness7Icon from '@material-ui/icons/Brightness7';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { useSnackbar } from 'notistack';
 import Tooltip from '@material-ui/core/Tooltip';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Fab from '@material-ui/core/Fab';
+
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
 import { updateUserTheme } from '../firebase';
 
@@ -126,18 +128,23 @@ const NavDrawer = (props) => {
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
-  const { currentUser, logout } = useAuth();
-  const [darkTheme, setDarkTheme] = React.useState(currentUser.theme == 'dark');
+  const [darkTheme, setDarkTheme] = React.useState(
+    props.auth.user ? props.auth.user.theme === 'dark' : true
+  );
   const { enqueueSnackbar } = useSnackbar();
   const smScreenMatch = useMediaQuery(theme.breakpoints.down('sm'));
 
   // toggle theme
   useEffect(() => {
+    // console.log(props.auth.currentUser);
     enqueueSnackbar(`Theme Switched to "${darkTheme ? 'DARK' : 'LIGHT'}"`, {
       variant: 'info',
     });
-    updateUserTheme(currentUser.uid, darkTheme ? 'dark' : 'light');
-  }, [darkTheme, enqueueSnackbar]);
+    if (props.auth.currentUser) {
+      updateUserTheme(props.auth.currentUser.uid, darkTheme ? 'dark' : 'light');
+      props.loadUser(props.auth.currentUser.uid);
+    }
+  }, [darkTheme, enqueueSnackbar, props.auth.currentUser]);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -145,7 +152,7 @@ const NavDrawer = (props) => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await props.logout();
       enqueueSnackbar('Logged Out', { variant: 'success' });
       history.push('/login');
     } catch {
@@ -225,7 +232,7 @@ const NavDrawer = (props) => {
           <ListItemText primary='Toggle Theme' />
         </ListItem>
 
-        {currentUser ? (
+        {props.auth.currentUser ? (
           <>
             <ListItem
               onClick={handleLogout}
@@ -358,4 +365,4 @@ const NavDrawer = (props) => {
   );
 };
 
-export default NavDrawer;
+export default connect(mapStateToProps, mapDispatchToProps)(NavDrawer);

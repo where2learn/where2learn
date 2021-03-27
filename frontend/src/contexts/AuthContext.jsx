@@ -35,16 +35,17 @@ export function AuthProvider({ children }) {
     return currentUser.updatePassword(password);
   }
 
-  function signInWithGoogle() {
+  async function signInWithGoogle() {
     console.log("here");
-    return auth.signInWithPopup(provider);
+    const authUser = auth.signInWithPopup(provider);
+    return authUser;
   }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (userAuth) => {
-      const user = await generateUserDocument(userAuth);
-      setCurrentUser(user);
+    const unsubscribe = auth.onAuthStateChanged((userAuth) => {
+      setCurrentUser(userAuth);
       setLoading(false);
+      generateUserDocument(userAuth);
     });
 
     return unsubscribe;

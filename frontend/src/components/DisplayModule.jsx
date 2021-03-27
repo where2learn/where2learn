@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import { getModuleById } from '../firebase';
-import Container from '@material-ui/core/Container';
-import { Editor as TinyEditor } from '@tinymce/tinymce-react';
 import Paper from '@material-ui/core/Paper';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { withStyles } from '@material-ui/core/styles';
-import Zoom from '@material-ui/core/Zoom';
-import Fab from '@material-ui/core/Fab';
 import StarIcon from '@material-ui/icons/Star';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import EditIcon from '@material-ui/icons/Edit';
 import Badge from '@material-ui/core/Badge';
+import {
+  starModule,
+  realtimeUpdateModule,
+  userHasStarModule,
+} from '../firebase';
+import { constructFullModuleId } from '../firestore_data';
 
-import hljs from 'highlight.js';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
 const useStyles = makeStyles((theme) => ({
   paperBG: {
@@ -42,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
     marginBottom: theme.spacing(2),
   },
-  starBtn: {
+  bottomBtn: {
     marginTop: '1rem',
     float: 'right',
   },
@@ -59,30 +62,50 @@ const StyledBadge = withStyles((theme) => ({
 
 const DisplayModule = (props) => {
   const [module, setModule] = useState(null);
+  const [fullModuleId, setFullModuleId] = useState('');
   const [star, setStar] = useState(false);
   const classes = useStyles();
-  useEffect(async () => {
-    console.log(props.match.params.id);
-    const data = await getModuleById(props.match.params.id);
-    setModule(data);
-    console.log(data);
-  }, []);
+  const history = useHistory();
+  // const { currentUser } = useAuth();
 
   useEffect(() => {
-    document.addEventListener('DOMContentLoaded', (event) => {
-      document.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightBlock(block);
-      });
-    });
-  }, []);
+    const id = constructFullModuleId(
+      props.match.params.username,
+      props.match.params.module_id
+    );
+    const unsubscribe = realtimeUpdateModule(id, setModule);
+    return unsubscribe;
+  }, [props.match.params.username, props.match.params.module_id]);
 
-  const toggleStar = (e) => {
-    setStar(!star);
+  useEffect(() => {
+    setFullModuleId(
+      constructFullModuleId(
+        props.match.params.username,
+        props.match.params.module_id
+      )
+    );
+
+    (async () => {
+      if (module) {
+        setStar(await userHasStarModule(module.author, fullModuleId));
+      }
+    })();
+  }, [
+    module,
+    fullModuleId,
+    props.match.params.username,
+    props.match.params.module_id,
+  ]);
+
+  const toggleStar = async (e) => {
+    if (module && module.author && fullModuleId) {
+      await starModule(module.author, fullModuleId, star);
+    }
   };
 
   return (
     <React.Fragment>
-      {module !== null && module.content ? (
+      {module && module.content ? (
         <React.Fragment>
           <Paper className={classes.paperBG} elevation={3}>
             {module && (
@@ -103,24 +126,41 @@ const DisplayModule = (props) => {
               </Typography>
             </Breadcrumbs>
 
+            <Typography component='strong' color='textPrimary'>
+              {module && module.description
+                ? module.description
+                : 'No Description'}
+            </Typography>
             <div
+              style={{ marginTop: '3rem' }}
               dangerouslySetInnerHTML={{
                 __html: module && module.content ? module.content : '',
               }}
             />
           </Paper>
-          <IconButton className={classes.starBtn} onClick={toggleStar}>
-            <StyledBadge
-              showZero
-              badgeContent={
-                module && module.num_star ? module.num_star + star : 0
-              }
-              color='primary'
-              max={999}
-            >
-              {star ? <StarIcon /> : <StarBorderIcon />}
-            </StyledBadge>
-          </IconButton>
+          <div className={classes.bottomBtn}>
+            {props.auth.user && props.auth.user.username === module.author && (
+              <IconButton
+                onClick={() => {
+                  const url = `/module/edit/${props.match.params.username}/${props.match.params.module_id}`;
+                  history.push(url);
+                }}
+              >
+                <EditIcon />
+              </IconButton>
+            )}
+
+            <IconButton onClick={toggleStar}>
+              <StyledBadge
+                showZero
+                badgeContent={module && module.num_star ? module.num_star : 0}
+                color='primary'
+                max={999}
+              >
+                {star ? <StarIcon /> : <StarBorderIcon />}
+              </StyledBadge>
+            </IconButton>
+          </div>
         </React.Fragment>
       ) : (
         <h1>404 Module Not Found</h1>
@@ -129,4 +169,7 @@ const DisplayModule = (props) => {
   );
 };
 
-export default withRouter(DisplayModule);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(DisplayModule));
