@@ -29,8 +29,15 @@ const fetchModules = (username) => (dispatch) => {
 };
 
 const login = (email, password) => (dispatch) => {
-  const user = auth.signInWithEmailAndPassword(email, password);
-  dispatch(authUser(user));
+  return auth
+    .signInWithEmailAndPassword(email, password)
+    .then((result) => {
+      console.log(result);
+      dispatch(authUser(result));
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 
 const signup = (email, password) => (dispatch) => {
