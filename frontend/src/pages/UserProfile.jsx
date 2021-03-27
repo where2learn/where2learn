@@ -24,8 +24,8 @@ import {
   getModulesByUsername,
   getStarModules,
   updateAvatar,
-} from "../firebase";
-import ModuleList from "../components/ModuleList";
+} from '../firebase';
+import ModuleList from '../components/ModuleList';
 import {
   Button,
   Dialog,
@@ -40,23 +40,23 @@ import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    textAlign: "left",
+    textAlign: 'left',
     color: theme.palette.text.secondary,
     marginBottom: theme.spacing(1),
   },
   root: {
-    width: "100%",
+    width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
   centerImage: {
-    display: "flex",
-    marginLeft: "auto",
-    marginRight: "auto",
-    justifyContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   centerText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 20,
   },
   blueGrey: {
@@ -72,8 +72,8 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(16),
   },
   info: {
-    marginRight: "30px",
-    marginLeft: "10px",
+    marginRight: '30px',
+    marginLeft: '10px',
   },
 }));
 
@@ -114,17 +114,13 @@ const UserProfile = (props) => {
     }, 0);
     return star;
   };
-
-  // useEffect(async () => {
-  //   (async () => {
-  //     await props.loadUser(props.auth.currentUser.uid);
-  //     await props.loadModules(props.auth.user.username);
-  //     setNumStars(getStarCounts(props.modules));
-  //     getStarModules(props.auth.user.username).then((modules) => {
-  //       setStars(modules);
-  //     });
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      if (props.auth.currentUser && props.auth.user) {
+        await props.loadModules(props.auth.user.username);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (previousState) {
@@ -171,23 +167,23 @@ const UserProfile = (props) => {
           md={3}
           lg={3}
           xl={2}
-          style={{ marginRight: "100px" }}
+          style={{ marginRight: '100px' }}
         >
           <Avatar
-            variant="square"
+            variant='square'
             className={[
               classes.blueGrey,
               classes.large,
               classes.centerImage,
-            ].join(" ")}
+            ].join(' ')}
             onMouseEnter={() => {
-              const avatar = document.getElementById("avatar");
+              const avatar = document.getElementById('avatar');
               if (avatar) {
                 avatar.style.opacity = 0.5;
               }
             }}
             onMouseLeave={() => {
-              const avatar = document.getElementById("avatar");
+              const avatar = document.getElementById('avatar');
               if (avatar) {
                 avatar.style.opacity = 1;
               }
@@ -198,29 +194,29 @@ const UserProfile = (props) => {
               <img
                 src={props.auth.user.avatar}
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
                 }}
-                id="avatar"
+                id='avatar'
               />
             ) : (
-              "JT"
+              'JT'
             )}
           </Avatar>
-          <Dialog open={open} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Change Your Avatar</DialogTitle>
+          <Dialog open={open} aria-labelledby='form-dialog-title'>
+            <DialogTitle id='form-dialog-title'>Change Your Avatar</DialogTitle>
             <DialogContent>
               <DialogContentText>
                 Please make sure your avatar link is accessible
               </DialogContentText>
               <Input
                 autoFocus
-                margin="dense"
-                id="name"
-                label="Avatar Resource:"
+                margin='dense'
+                id='name'
+                label='Avatar Resource:'
                 fullWidth
-                color="primary"
+                color='primary'
               />
             </DialogContent>
             <DialogActions>
@@ -230,10 +226,10 @@ const UserProfile = (props) => {
           </Dialog>
           <br />
           <br />
-          <Paper rounded="true" elevation3="true" className={classes.paper}>
+          <Paper rounded='true' elevation3='true' className={classes.paper}>
             <Box
-              component="span"
-              display="block"
+              component='span'
+              display='block'
               className={classes.centerText}
             >
               {props.auth.user ? props.auth.user.username : 'NULL'}
@@ -246,12 +242,12 @@ const UserProfile = (props) => {
                     <Settings />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="Setting" />
+                <ListItemText primary='Setting' />
               </ListItem>
             </List>
             <br />
-            <Box component="div">
-              <Box component="span" className={classes.info}>
+            <Box component='div'>
+              <Box component='span' className={classes.info}>
                 <StarHalf /> {numStars}
               </Box>
               <Box component='span' className={classes.info}>
@@ -259,7 +255,7 @@ const UserProfile = (props) => {
               </Box>
             </Box>
           </Paper>
-          <Paper rounded="true" elevation3="true" className={classes.paper}>
+          <Paper rounded='true' elevation3='true' className={classes.paper}>
             <List className={classes.root}>
               <ListItem button onClick={toggleState}>
                 <ListItemAvatar>
@@ -267,25 +263,25 @@ const UserProfile = (props) => {
                     <ImageIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="Modules" />
+                <ListItemText primary='Modules' />
               </ListItem>
-              <Divider variant="inset" component="li" />
+              <Divider variant='inset' component='li' />
               <ListItem button onClick={toggleState}>
                 <ListItemAvatar>
                   <Avatar>
                     <WorkIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="Stars" />
+                <ListItemText primary='Stars' />
               </ListItem>
-              <Divider variant="inset" component="li" />
+              <Divider variant='inset' component='li' />
               <ListItem button onClick={toggleState}>
                 <ListItemAvatar>
                   <Avatar>
                     <BeachAccessIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="Favorite" />
+                <ListItemText primary='Favorite' />
               </ListItem>
             </List>
           </Paper>
@@ -297,7 +293,7 @@ const UserProfile = (props) => {
           md={6}
           lg={7}
           xl={8}
-          style={{ border: "solid" }}
+          style={{ border: 'solid' }}
         >
           {getCurrentState()}
         </Grid>

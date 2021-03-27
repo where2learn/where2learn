@@ -16,16 +16,16 @@ const ModuleEditor = (props) => {
   const [darkTheme, setDarkTheme] = useState(false);
 
   useEffect(() => {
-    console.log(props.user);
+    console.log(props.auth.user);
     if (
-      props.user.theme == 'dark' ||
+      props.auth.user.theme == 'dark' ||
       window.matchMedia('(prefers-color-scheme: dark)').matches
     ) {
       setDarkTheme(true);
     } else {
       setDarkTheme(false);
     }
-  }, [props.user]);
+  }, [props.auth.user]);
 
   const handleEditorChange = (e, editor) => {
     if (updateContent) {
