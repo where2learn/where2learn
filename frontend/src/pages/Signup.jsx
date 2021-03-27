@@ -1,27 +1,27 @@
-import React, { useRef, useState } from "react";
-import { Form } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import { Container, Box, TextField, Avatar } from "@material-ui/core";
-import NavDrawer from "../components/NavDrawer";
-import { useSnackbar } from "notistack";
-import { generateUserDocument } from "../firebase";
-import { connect } from "react-redux";
-import { mapStateToProps, mapDispatchToProps } from "../lib/redux_helper";
+import React, { useRef, useState } from 'react';
+import { Form } from 'react-bootstrap';
+import { Link, useHistory } from 'react-router-dom';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import { Container, Box, TextField, Avatar } from '@material-ui/core';
+import NavDrawer from '../components/NavDrawer';
+import { useSnackbar } from 'notistack';
+import { generateUserDocument } from '../firebase';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
 const getCardMinWidth = () => {
   const windowInnerWidth = window.innerWidth;
   if (windowInnerWidth < 800) {
-    return "100%";
+    return '100%';
   } else if (windowInnerWidth < 1200) {
-    return "50%";
+    return '50%';
   } else {
-    return "40%";
+    return '40%';
   }
 };
 
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     minWidth: getCardMinWidth(),
     backgroundColor: theme.palette.background.paper,
-    padding: "1em 2em 2em 2em",
+    padding: '1em 2em 2em 2em',
   },
 }));
 
@@ -47,7 +47,7 @@ const Signup = (props) => {
     e.preventDefault();
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      enqueueSnackbar("Passwords do not match", { variant: "error" });
+      enqueueSnackbar('Passwords do not match', { variant: 'error' });
     }
 
     try {
@@ -57,10 +57,10 @@ const Signup = (props) => {
         passwordRef.current.value
       );
       generateUserDocument(user);
-      enqueueSnackbar("Account Created", { variant: "success" });
-      history.push("/");
+      enqueueSnackbar('Account Created', { variant: 'success' });
+      history.push('/');
     } catch {
-      enqueueSnackbar("Failed to create an account", { variant: "error" });
+      enqueueSnackbar('Failed to create an account', { variant: 'error' });
     }
     setLoading(false);
   }
@@ -71,10 +71,10 @@ const Signup = (props) => {
     try {
       setLoading(true);
       await props.signInWithGoogle();
-      enqueueSnackbar("Logged In", { variant: "success" });
-      history.push("/");
+      enqueueSnackbar('Logged In', { variant: 'success' });
+      history.push('/');
     } catch {
-      enqueueSnackbar("Failed to log in", { variant: "error" });
+      enqueueSnackbar('Failed to log in', { variant: 'error' });
     }
     setLoading(false);
   }
@@ -92,9 +92,9 @@ const Signup = (props) => {
             <Form onSubmit={handleSubmit}>
               <CardContent>
                 <Typography
-                  variant="h3"
-                  component="h3"
-                  style={{ textAlign: "center" }}
+                  variant='h3'
+                  component='h3'
+                  style={{ textAlign: 'center' }}
                 >
                   Sign Up
                 </Typography>

@@ -53,10 +53,10 @@ const App = (props) => {
   });
 
   useEffect(() => {
-    if (props.currentUser && props.currentUser.uid) {
-      props.loadUser(props.currentUser.uid);
-      console.log(props.currentUser);
-      realtimeUpdateTheme(props.currentUser.uid, setDBTheme);
+    if (props.auth.currentUser && props.auth.currentUser.uid) {
+      props.loadUser(props.auth.currentUser.uid);
+      console.log(props.auth.currentUser);
+      realtimeUpdateTheme(props.auth.currentUser.uid, setDBTheme);
     }
   }, []);
 
@@ -81,23 +81,23 @@ const App = (props) => {
                 exact
                 component={Main}
                 path='/'
-                authed={props.currentUser}
+                authed={props.auth.currentUser}
               />
               <PrivateRoute
                 component={Dashboard}
                 exact
                 path='/dashboard'
-                authed={props.currentUser}
+                authed={props.auth.currentUser}
               />
               <PrivateRoute
                 path='/update-profile'
                 component={UpdateProfile}
-                authed={props.currentUser}
+                authed={props.auth.currentUser}
               />
               <PrivateRoute
                 path='/user-profile'
                 component={UserProfile}
-                authed={props.currentUser}
+                authed={props.auth.currentUser}
               />
               <Route path='/roadmap-vis' component={Roadmap} />
               <Route path='/signup' component={Signup} />

@@ -28,7 +28,7 @@ const EditModulePage = (props) => {
   }, [props.match.params.module_id, props.match.params.username]);
 
   const onSubmit = (module) => {
-    editModule(props.user.username, module)
+    editModule(props.auth.user.username, module)
       .then(() => {
         console.log('successfully edited module');
       })

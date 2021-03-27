@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: Component, authed, ...rest }) => {
   // const { currentUser } = useAuth();
@@ -8,7 +8,7 @@ const PrivateRoute = ({ component: Component, authed, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        return authed ? <Component {...props} /> : <Redirect to="/login" />;
+        return authed ? <Component {...props} /> : <Redirect to='/login' />;
       }}
     ></Route>
   );

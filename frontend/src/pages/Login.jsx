@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
@@ -12,6 +12,7 @@ import NavDrawer from '../components/NavDrawer';
 import { useSnackbar } from 'notistack';
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
+import { auth, generateUserDocument } from '../firebase';
 
 const getCardMinWidth = () => {
   const windowInnerWidth = window.innerWidth;
