@@ -140,10 +140,11 @@ const NavDrawer = (props) => {
     enqueueSnackbar(`Theme Switched to "${darkTheme ? 'DARK' : 'LIGHT'}"`, {
       variant: 'info',
     });
-    if (props.auth.currentUser) {
-      updateUserTheme(props.auth.currentUser.uid, darkTheme ? 'dark' : 'light');
+    if (props.currentUser) {
+      updateUserTheme(props.currentUser.uid, darkTheme ? 'dark' : 'light');
+      props.loadUser(props.currentUser.uid);
     }
-  }, [darkTheme, enqueueSnackbar]);
+  }, [darkTheme, enqueueSnackbar, props.currentUser]);
 
   const toggleDrawer = () => {
     setOpen(!open);

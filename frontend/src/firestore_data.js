@@ -13,6 +13,7 @@ export const constructModuleObject = ({
   media_type,
   type,
   mode,
+  description,
 }) => {
   const data = {
     title,
@@ -22,6 +23,7 @@ export const constructModuleObject = ({
     roadmap,
     media_type,
     type,
+    description,
   };
   if (mode === 'add') {
     return data;

@@ -64,7 +64,7 @@ const ForgotPassword = (props) => {
 
   return (
     <NavDrawer>
-      <Container maxWidth='sm'>
+      <Container maxWidth="sm">
         <Box
           display='flex'
           justifyContent='center'
@@ -74,36 +74,36 @@ const ForgotPassword = (props) => {
         >
           <Card className={classes.card}>
             <CardContent>
-              <h2 className='text-center mb-4'>Password Reset</h2>
-              {message && <Alert severity='success'>{message}</Alert>}
+              <h2 className="text-center mb-4">Password Reset</h2>
+              {message && <Alert severity="success">{message}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <TextField
                   fullWidth
                   inputRef={emailRef}
-                  margin='normal'
-                  label='Email'
-                  type='email'
+                  margin="normal"
+                  label="Email"
+                  type="email"
                   required
                 />
                 <br />
                 <br />
                 <Button
                   disabled={loading}
-                  color='primary'
-                  variant='contained'
+                  color="primary"
+                  variant="contained"
                   fullWidth
-                  type='submit'
+                  type="submit"
                 >
                   Reset Password
                 </Button>
               </Form>
-              <div className='w-100 text-center mt-3'>
-                <Link to='/login'>Login</Link>
+              <div className="w-100 text-center mt-3">
+                <Link to="/login">Login</Link>
               </div>
             </CardContent>
             <CardActions>
-              <div className='w-100 text-center mt-2'>
-                Need an account? <Link to='/signup'>Sign Up</Link>
+              <div className="w-100 text-center mt-2">
+                Need an account? <Link to="/signup">Sign Up</Link>
               </div>
             </CardActions>
           </Card>

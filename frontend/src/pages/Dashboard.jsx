@@ -55,7 +55,7 @@ const Dashboard = (props) => {
 
   return (
     <NavDrawer>
-      <Container maxWidth='sm'>
+      <Container maxWidth="sm">
         <Box
           display='flex'
           justifyContent='center'
@@ -63,7 +63,7 @@ const Dashboard = (props) => {
           maxHeight='100vh'
           bgcolor='background.default'
         >
-          <Card className={classes.card} color='secondary'>
+          <Card className={classes.card} color="secondary">
             <CardContent>
               <Typography
                 variant='h4'
@@ -79,8 +79,8 @@ const Dashboard = (props) => {
               <br />
               <Button
                 fullWidth
-                color='primary'
-                variant='contained'
+                color="primary"
+                variant="contained"
                 onClick={() => {
                   history.push('/update-profile');
                 }}
@@ -90,15 +90,15 @@ const Dashboard = (props) => {
             </CardContent>
             <CardActions classes={{ root: classes.cardaction }}>
               <Box
-                display='flex'
-                justifyContent='center'
+                display="flex"
+                justifyContent="center"
                 m={1}
                 p={1}
-                bgcolor='background.paper'
+                bgcolor="background.paper"
               >
                 <Button
-                  color='secondary'
-                  variant='contained'
+                  color="secondary"
+                  variant="contained"
                   onClick={handleLogout}
                 >
                   Log Out

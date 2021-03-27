@@ -21,8 +21,8 @@ const AddModulePage = (props) => {
   };
   return (
     <NavDrawer>
-      <Container maxWidth='md'>
-        <EditModule title='Add A Module' mode='add' onSubmit={submit} />
+      <Container maxWidth="md">
+        <EditModule title="Add A Module" mode="add" onSubmit={submit} />
       </Container>
     </NavDrawer>
   );

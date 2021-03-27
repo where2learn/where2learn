@@ -53,14 +53,11 @@ const App = (props) => {
   });
 
   useEffect(() => {
-    if (props.auth.currentUser && props.auth.currentUser.uid) {
-      props.loadUser(props.auth.currentUser.uid);
-      console.log(props.auth.currentUser);
-      realtimeUpdateTheme(props.auth.currentUser.uid, setDBTheme);
+    if (props.currentUser && props.currentUser.uid) {
+      props.loadUser(props.currentUser.uid);
+      console.log(props.currentUser);
+      realtimeUpdateTheme(props.currentUser.uid, setDBTheme);
     }
-    // const theme = await getTheme(currentUser, setDBTheme);
-    // console.log(theme);
-    // setDBTheme(theme);
   }, []);
 
   const useStyles = makeStyles({

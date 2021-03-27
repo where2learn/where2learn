@@ -80,7 +80,7 @@ const UpdateProfile = (props) => {
 
   return (
     <NavDrawer>
-      <Container maxWidth='sm'>
+      <Container maxWidth="sm">
         <Box
           display='flex'
           justifyContent='center'
@@ -98,44 +98,44 @@ const UpdateProfile = (props) => {
               >
                 Update Profile
               </Typography>
-              {error && <Alert severity='error'>{error}</Alert>}
+              {error && <Alert severity="error">{error}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <div>
                   <TextField
                     fullWidth
                     inputRef={emailRef}
-                    margin='normal'
-                    label='Email'
-                    type='email'
+                    margin="normal"
+                    label="Email"
+                    type="email"
                   />
                 </div>
                 <div>
                   <TextField
                     fullWidth
-                    margin='normal'
+                    margin="normal"
                     inputRef={passwordRef}
-                    label='Password'
-                    placeholder='Leave blank to keep the same'
-                    type='password'
+                    label="Password"
+                    placeholder="Leave blank to keep the same"
+                    type="password"
                   />
                 </div>
 
                 <div>
                   <TextField
                     fullWidth
-                    margin='normal'
+                    margin="normal"
                     inputRef={passwordConfirmRef}
-                    label='Password Confirmation'
-                    placeholder='Leave blank to keep the same'
-                    type='password'
+                    label="Password Confirmation"
+                    placeholder="Leave blank to keep the same"
+                    type="password"
                   />
                 </div>
                 <br />
                 <Button
                   disabled={loading}
-                  type='submit'
-                  color='primary'
-                  variant='contained'
+                  type="submit"
+                  color="primary"
+                  variant="contained"
                   fullWidth
                 >
                   Update
@@ -143,7 +143,7 @@ const UpdateProfile = (props) => {
               </Form>
             </CardContent>
             <CardActions classes={{ root: classes.cardaction }}>
-              <Link to='/'>Cancel</Link>
+              <Link to="/">Cancel</Link>
             </CardActions>
           </Card>
         </Box>

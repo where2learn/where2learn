@@ -15,8 +15,13 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    // maxWidth: 345,
+    width: 345,
+    // height: 245,
     backgroundColor: theme.palette.background.paper,
+  },
+  cardContent: {
+    height: 100,
   },
   media: {
     height: 140,
@@ -63,8 +68,13 @@ const ModulePreview = (props) => {
         }
         subheader={props.subheader}
       />
-      <CardContent>
-        <Typography variant='body2' color='textSecondary' component='p'>
+      <CardContent className={classes.cardContent}>
+        <Typography
+          // noWrap={true}
+          variant='body2'
+          color='textSecondary'
+          component='p'
+        >
           {props.description}
         </Typography>
       </CardContent>
