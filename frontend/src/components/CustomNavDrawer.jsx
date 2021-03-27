@@ -1,43 +1,43 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
-import Paper from "@material-ui/core/Paper";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import HomeIcon from "@material-ui/icons/Home";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import Divider from "@material-ui/core/Divider";
-import Tooltip from "@material-ui/core/Tooltip";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import HomeIcon from '@material-ui/icons/Home';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Divider from '@material-ui/core/Divider';
+import Tooltip from '@material-ui/core/Tooltip';
 
-import "../style/CustomNavDrawer.scss";
+import '../style/CustomNavDrawer.scss';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
-    height: "100vh",
+    height: '100vh',
     flexShrink: 0,
-    whiteSpace: "nowrap",
-    transition: "width 600ms ease",
-    overflow: "hidden",
+    whiteSpace: 'nowrap',
+    transition: 'width 600ms ease',
+    overflow: 'hidden',
   },
   toggleBtn: {
-    marginTop: "auto",
+    marginTop: 'auto',
   },
   barBottom: {
-    marginTop: "auto",
+    marginTop: 'auto',
   },
   drawerOpen: {
-    width: "100%",
-    marginRight: "2rem",
+    width: '100%',
+    marginRight: '2rem',
   },
   drawerClose: {
-    width: "3.5rem",
+    width: '3.5rem',
   },
 }));
 
@@ -85,7 +85,7 @@ const CustomNavDrawerWrapper = (props) => {
           </ListItem>
         </List>
         <Divider />
-        <List style={{ marginTop: "auto" }}>
+        <List style={{ marginTop: 'auto' }}>
           <ListItem onClick={() => setOpen(!open)} button key='dashboard'>
             <ListItemIcon>
               <Tooltip title='Toggle Menu' placement='right'>
