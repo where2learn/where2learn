@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NavDrawer from "../components/NavDrawer";
 import { Box, Avatar, Paper, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -83,6 +83,16 @@ const UserProfile = (props) => {
   const [stars, setStars] = useState([]);
   const [numStars, setNumStars] = useState(0);
   const [open, setOpen] = useState(false);
+  // previous state
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+  const { auth, modules } = props;
+  const previousState = usePrevious({ auth: auth, modules: modules });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -106,24 +116,36 @@ const UserProfile = (props) => {
   };
 
   // useEffect(async () => {
-  //   await props.loadUser(props.auth.currentUser.uid);
-  //   await props.loadModules(props.auth.user.username);
-  //   setNumStars(getStarCounts(props.modules));
-  //   getStarModules(props.auth.user.username).then((modules) => {
-  //     setStars(modules);
-  //   });
+  //   (async () => {
+  //     await props.loadUser(props.auth.currentUser.uid);
+  //     await props.loadModules(props.auth.user.username);
+  //     setNumStars(getStarCounts(props.modules));
+  //     getStarModules(props.auth.user.username).then((modules) => {
+  //       setStars(modules);
+  //     });
+  //   })();
   // }, []);
 
-  useEffect(async () => {
-    if (props.auth.currentUser && props.auth.user) {
-      await props.loadModules(props.auth.user.username);
-      await props.loadUser(props.auth.currentUser.uid);
-      setNumStars(getStarCounts(props.modules));
-      getStarModules(props.auth.user.username).then((modules) => {
-        setStars(modules);
-      });
+  useEffect(() => {
+    if (previousState) {
+      if (
+        JSON.stringify(previousState.auth) !== JSON.stringify(props.auth) ||
+        JSON.stringify(previousState.modules) !== JSON.stringify(props.modules)
+      ) {
+        console.log("here");
+        if (props.auth.currentUser && props.auth.user) {
+          (async () => {
+            await props.loadUser(props.auth.currentUser.uid);
+            await props.loadModules(props.auth.user.username);
+            setNumStars(getStarCounts(props.modules));
+            getStarModules(props.auth.user.username).then((modules) => {
+              setStars(modules);
+            });
+          })();
+        }
+      }
     }
-  }, []);
+  }, [props]);
 
   const getCurrentState = () => {
     if (state === "Modules") {
