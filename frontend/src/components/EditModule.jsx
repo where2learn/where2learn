@@ -16,8 +16,8 @@ import Chip from '@material-ui/core/Chip';
 import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
 import { constructModuleObject } from '../firestore_data';
-
-const maxDescriptionLength = 160;
+import { maxDescriptionDisplayLength } from '../constants';
+import { convertTagsObj2Array, convertTagsArray2Obj } from '../firestore_data';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -61,6 +61,7 @@ const EditModule = (props) => {
   const [moduleId, setModuleId] = useState(props.module_id || '');
   const [tagInput, setTagInput] = useState('');
   const [descriptionErrIndicator, setDescriptionErrIndicator] = useState(false);
+  const [tags, setTags] = useState(props.tags || []);
   const [descriptionInput, setDescriptionInput] = useState(
     props.description || ''
   );
@@ -70,7 +71,6 @@ const EditModule = (props) => {
     image: false,
     audio: false,
   });
-  const [tags, setTags] = useState(props.tags || []);
   const [editorContent, setEditorContent] = useState(props.initialValue || '');
 
   const [helperText, setHelperText] = useState({
@@ -87,9 +87,13 @@ const EditModule = (props) => {
   // initialize value from props to local state, TODO: experiment wether these can be removed
   useEffect(() => {
     setEditorContent(props.initialValue);
-    setTags(props.tags || []);
+    if (props.tags) {
+      const convertedTagsArray = convertTagsObj2Array(props.tags);
+      setTags([...new Set([...tags, ...convertedTagsArray])]);
+    }
     setModuleTitle(props.module_title || '');
     setModuleId(props.module_id);
+    setDescriptionInput(props.description);
   }, [props.initialValue, props.tags, props.module_title, props.module_id]);
 
   const [inlineEditorSwitch, setInlineEditorSwitch] = useState(false);
@@ -100,13 +104,6 @@ const EditModule = (props) => {
     const regex = /^([a-zA-Z\d-_\s]+)?$/g;
     return title.match(regex) ? true : false;
   };
-
-  // update editor component to parent component
-  useEffect(() => {
-    // if (props.updateContent) {
-    //   props.updateContent(editorContent);
-    // }
-  }, [editorContent, props]);
 
   const updateProjectTitle = (e) => {
     if (validProjectTitle(e.target.value)) {
@@ -131,7 +128,7 @@ const EditModule = (props) => {
 
   const updateTags = (e) => {
     e.preventDefault();
-    setTags([...tags, tagInput]);
+    setTags([...new Set([...tags, tagInput.toLowerCase()])]);
     setTagInput('');
   };
 
@@ -170,7 +167,7 @@ const EditModule = (props) => {
   // update description helper text
   useEffect(() => {
     if (descriptionInput !== null && descriptionInput !== undefined) {
-      const helperText_ = `Max Description Length: ${descriptionInput.length}/${maxDescriptionLength}`;
+      const helperText_ = `Max Description Length: ${descriptionInput.length}/${maxDescriptionDisplayLength}`;
       setHelperText((helperText) => ({
         ...helperText,
         description: helperText_,
@@ -194,11 +191,14 @@ const EditModule = (props) => {
       newHelperTexts.tags = 'Cannot Be Empty';
       err = true;
     }
-    if (descriptionInput.length === 0) {
+    if (!descriptionInput || descriptionInput.length === 0) {
       newHelperTexts.description = 'Cannot Be Empty';
       setDescriptionErrIndicator(true);
     }
-    if (descriptionInput.length > maxDescriptionLength) {
+    if (
+      !descriptionInput ||
+      descriptionInput.length > maxDescriptionDisplayLength
+    ) {
       setDescriptionErrIndicator(true);
     }
     setHelperText({ ...helperText, ...newHelperTexts });
@@ -226,11 +226,13 @@ const EditModule = (props) => {
         } else {
           console.error("mode doesn't exist");
         }
+        console.log(tags);
+        console.log(convertTagsArray2Obj(tags));
         props.onSubmit(
           constructModuleObject({
             title: moduleTitle,
             module_id,
-            tags,
+            tags: convertTagsArray2Obj(tags),
             content: editorContent ? editorContent : null,
             roadmap: null,
             media_type: mediaTypeArr,
@@ -289,30 +291,14 @@ const EditModule = (props) => {
           label='Module Title'
           id='module-title'
           fullWidth
+          value={moduleTitle}
           onChange={updateProjectTitle}
           variant='outlined'
           autoFocus
           helperText={helperText.title || null}
           error={Boolean(helperText.title)}
         />
-        <TextField
-          className={classes.textField}
-          inputProps={{ spellCheck: 'false' }}
-          label='Description'
-          id='module-description'
-          fullWidth
-          multiline
-          error={descriptionErrIndicator}
-          value={descriptionInput}
-          onChange={(e) => {
-            if (e.target.value.length <= maxDescriptionLength) {
-              setDescriptionInput(e.target.value);
-            }
-          }}
-          variant='outlined'
-          helperText={helperText.description || null}
-          // helperText='hi'
-        />
+
         {props.mode !== 'edit' && (
           <TextField
             className={classes.textField}
@@ -328,6 +314,24 @@ const EditModule = (props) => {
             error={Boolean(helperText.module_id)}
           />
         )}
+        <TextField
+          className={classes.textField}
+          inputProps={{ spellCheck: 'false' }}
+          label='Description'
+          id='module-description'
+          fullWidth
+          multiline
+          error={descriptionErrIndicator}
+          value={descriptionInput}
+          onChange={(e) => {
+            if (e.target.value.length <= maxDescriptionDisplayLength) {
+              setDescriptionInput(e.target.value);
+            }
+          }}
+          variant='outlined'
+          helperText={helperText.description || null}
+          // helperText='hi'
+        />
         <form onSubmit={updateTags}>
           <TextField
             className={classes.textField}

@@ -81,7 +81,23 @@ export const getModules = async (limit) => {
     .firestore()
     .collection('modules')
     .orderBy('num_star', 'desc')
+    // .orderBy('updated_at', 'desc')
+    .limit(limit)
     .get();
+  return snapshot.docs.map((doc) => doc.data());
+};
+
+export const getModuleComplete = async (limit, page, tags) => {
+  console.log('limit', limit);
+  console.log('page', page);
+  console.log('tags', tags);
+  let query = firestore.collection('modules');
+  for (const tag of tags) {
+    console.log(tag);
+    query = query.where(`tags.${tag}`, '==', true);
+  }
+  // query = query.orderBy('num_star', 'desc');
+  const snapshot = await query.get();
   return snapshot.docs.map((doc) => doc.data());
 };
 

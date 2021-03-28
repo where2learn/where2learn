@@ -12,12 +12,13 @@ import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import EditIcon from '@material-ui/icons/Edit';
 import Badge from '@material-ui/core/Badge';
+import Chip from '@material-ui/core/Chip';
 import {
   starModule,
   realtimeUpdateModule,
   userHasStarModule,
 } from '../firebase';
-import { constructFullModuleId } from '../firestore_data';
+import { constructFullModuleId, convertTagsObj2Array } from '../firestore_data';
 
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
@@ -49,6 +50,14 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '1rem',
     float: 'right',
   },
+  tags: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+  },
 }));
 
 const StyledBadge = withStyles((theme) => ({
@@ -63,6 +72,7 @@ const StyledBadge = withStyles((theme) => ({
 const DisplayModule = (props) => {
   const [module, setModule] = useState(null);
   const [fullModuleId, setFullModuleId] = useState('');
+  const [tags, setTags] = useState([]);
   const [star, setStar] = useState(false);
   const classes = useStyles();
   const history = useHistory();
@@ -90,6 +100,11 @@ const DisplayModule = (props) => {
         setStar(await userHasStarModule(module.author, fullModuleId));
       }
     })();
+    console.log(module);
+    // update tags
+    if (module) {
+      setTags(convertTagsObj2Array(module.tags));
+    }
   }, [
     module,
     fullModuleId,
@@ -113,6 +128,13 @@ const DisplayModule = (props) => {
                 {module && module.title}
               </Typography>
             )}
+            <div className={classes.tags}>
+              {tags.map((tag, index) => {
+                console.log(tag);
+                return <Chip key={index} label={tag} />;
+              })}
+            </div>
+
             <Breadcrumbs className={classes.breadcrumbs}>
               <Typography color='textPrimary' className={classes.link}>
                 <AccountCircleIcon
