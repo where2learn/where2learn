@@ -19,7 +19,6 @@ import DisplayModulePage from './pages/DisplayModulePage';
 import Roadmap from './pages/Roadmap';
 import { grey } from '@material-ui/core/colors';
 import { realtimeUpdateTheme } from './firebase';
-import CustomizedDialogs from './pages/TestPopUp';
 
 import {
   createMuiTheme,
