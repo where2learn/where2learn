@@ -132,9 +132,10 @@ const UserProfile = (props) => {
         if (props.auth.currentUser && props.auth.user) {
           (async () => {
             await props.loadUser(props.auth.currentUser.uid);
-            await props.loadModules(props.auth.user.username);
-            setNumStars(getStarCounts(props.modules));
-            getStarModules(props.auth.user.username).then((modules) => {
+            props.loadModules(props.auth.user.username).then((modules) => {
+              setNumStars(getStarCounts(modules));
+            });
+            props.loadStarModules(props.auth.user.username).then((modules) => {
               setStars(modules);
             });
           })();
