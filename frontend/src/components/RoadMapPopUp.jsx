@@ -64,6 +64,7 @@ const DialogActions = withStyles((theme) => ({
 const RoadMapPopUp = (props) => {
   const classes = useStyles();
   const keywordInputRef = useRef();
+  const [matchModules, setMatchModules] = useState([]);
 
   const handleClose = () => {
     props.setOpen(false);
@@ -80,7 +81,7 @@ const RoadMapPopUp = (props) => {
           width: '500px',
         }}
       >
-        {props.modules.map((module) => {
+        {matchModules.map((module) => {
           return (
             <ListItem button divider disabled role='listitem'>
               <ListItemText
@@ -91,6 +92,24 @@ const RoadMapPopUp = (props) => {
           );
         })}
       </List>
+    );
+  };
+
+  const containKeyWord = (value, module) => {
+    console.log(module.module_id.includes(value));
+    if (module.module_id.toLowerCase().includes(value)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const filterModules = () => {
+    const modules = props.modules;
+    setMatchModules(
+      modules.filter((module) =>
+        containKeyWord(keywordInputRef.current.value, module)
+      )
     );
   };
 
@@ -111,6 +130,7 @@ const RoadMapPopUp = (props) => {
             inputRef={keywordInputRef}
             label='Search By Keywords'
             variant='outlined'
+            onChange={filterModules}
           />
         </Paper>
         <Box>{generateAllStarredList()}</Box>

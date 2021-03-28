@@ -247,12 +247,12 @@ const Roadmap = () => {
           <RoadMapPopUp
             setOpen={setOpen}
             modules={[
-              { module_id: 'hello_you', author: 'nobody' },
-              { module_id: 'hello_you', author: 'nobody' },
-              { module_id: 'hello_you', author: 'nobody' },
-              { module_id: 'hello_you', author: 'nobody' },
-              { module_id: 'hello_you', author: 'nobody' },
-              { module_id: 'hello_you', author: 'nobody' },
+              { module_id: 'jiataoxiang', author: 'nobody' },
+              { module_id: 'jiatao handsome', author: 'nobody' },
+              { module_id: 'hhhhh', author: 'nobody' },
+              { module_id: 'Jiat', author: 'nobody' },
+              { module_id: 'helyou', author: 'nobody' },
+              { module_id: 'hhhhhlo_you', author: 'nobody' },
             ]}
           />
         ) : null}
