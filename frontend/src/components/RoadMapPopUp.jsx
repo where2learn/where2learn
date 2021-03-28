@@ -64,7 +64,7 @@ const DialogActions = withStyles((theme) => ({
 const RoadMapPopUp = (props) => {
   const classes = useStyles();
   const keywordInputRef = useRef();
-  const [matchModules, setMatchModules] = useState([]);
+  const [matchModules, setMatchModules] = useState(props.modules);
   const [selectedModule, setSelectedModule] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
 

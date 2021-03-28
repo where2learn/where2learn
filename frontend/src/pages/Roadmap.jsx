@@ -68,6 +68,7 @@ const Roadmap = () => {
 
   useEffect(() => {
     console.log(selectedModule);
+    // add Children
   }, [selectedModule]);
 
   //group modules in same level in same array
