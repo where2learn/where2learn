@@ -65,6 +65,27 @@ const RoadMapPopUp = (props) => {
   const classes = useStyles();
   const keywordInputRef = useRef();
   const [matchModules, setMatchModules] = useState([]);
+  const [selectedModule, setSelectedModule] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
+  const handleSelect = (e, index) => {
+    e.preventDefault();
+    setSelectedIndex(index);
+    const children = e.target.parentNode.children;
+    const module_id = children[0].innerText;
+    const author = children[1].innerText;
+
+    setSelectedModule(
+      matchModules.filter(
+        (module) => module.module_id === module_id && module.author === author
+      )
+    );
+  };
+
+  const submitSelectedModule = () => {
+    props.setSelectedModule(selectedModule);
+    props.setOpen(false);
+  };
 
   const handleClose = () => {
     props.setOpen(false);
@@ -81,9 +102,15 @@ const RoadMapPopUp = (props) => {
           width: '500px',
         }}
       >
-        {matchModules.map((module) => {
+        {matchModules.map((module, index) => {
           return (
-            <ListItem button divider disabled role='listitem'>
+            <ListItem
+              button
+              divider
+              role='listitem'
+              selected={selectedIndex === index}
+              onClick={(event) => handleSelect(event, index)}
+            >
               <ListItemText
                 primary={module.module_id}
                 secondary={module.author}
@@ -137,7 +164,7 @@ const RoadMapPopUp = (props) => {
         <DialogActions>
           <Button
             // autoFocus
-            onClick={handleClose}
+            onClick={submitSelectedModule}
             color='secondary'
             variant={'outlined'}
           >

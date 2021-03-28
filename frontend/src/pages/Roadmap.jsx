@@ -60,14 +60,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Roadmap = () => {
   const [open, setOpen] = useState(false);
+  const [selectedModule, setSelectedModule] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  useEffect(() => {
+    console.log(selectedModule);
+  }, [selectedModule]);
 
   //group modules in same level in same array
   //key is level, value is array
@@ -246,6 +247,7 @@ const Roadmap = () => {
         {open ? (
           <RoadMapPopUp
             setOpen={setOpen}
+            setSelectedModule={setSelectedModule}
             modules={[
               { module_id: 'jiataoxiang', author: 'nobody' },
               { module_id: 'jiatao handsome', author: 'nobody' },
