@@ -46,6 +46,7 @@ const EditModulePage = (props) => {
           tags={module && module.tags ? module.tags : []}
           module_id={module && module.module_id ? module.module_id : ''}
           module_title={module && module.title ? module.title : ''}
+          description={module && module.description ? module.description : ''}
           title='Edit A Module'
           content={content}
           updateContent={setContent}
