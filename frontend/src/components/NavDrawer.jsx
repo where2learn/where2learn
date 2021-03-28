@@ -175,7 +175,12 @@ const NavDrawer = (props) => {
   const MenuContent = () => (
     <React.Fragment>
       <List>
-        <ListItem button key='dashboard' className={classes.menuIconWrapper}>
+        <ListItem
+          button
+          key='dashboard'
+          className={classes.menuIconWrapper}
+          onClick={() => history.push('/user-profile')}
+        >
           <ListItemIcon className={classes.menuIcon}>
             <Tooltip title='Dashboard' placement='right'>
               <DashboardIcon />
