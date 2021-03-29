@@ -76,7 +76,12 @@ const SetUsernamePage = (props) => {
   }, [username]);
 
   React.useEffect(() => {
-    if (props.auth && props.auth.user && props.auth.user.username) {
+    if (
+      props.auth &&
+      props.auth.user &&
+      props.auth.user.username &&
+      props.auth.currentUser.uid !== props.auth.user.username
+    ) {
       history.push('/');
     }
   }, []);

@@ -1,14 +1,28 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
-const PrivateRoute = ({ component: Component, authed, ...rest }) => {
-  // const { currentUser } = useAuth();
-  // console.log(authed);
+const PrivateRoute = ({ component: Component, auth, ...rest }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const whereToGo = (props_) => {
+    if (auth && auth.user && auth.currentUser) {
+      if (auth.currentUser.uid === auth.user.username || !auth.user.username) {
+        return <Redirect to='/set-username' />;
+      } else {
+        return <Component {...props_} />;
+      }
+    } else {
+      enqueueSnackbar('Not Authenticated', { variant: 'error' });
+      return <Redirect to='/login' />;
+    }
+  };
+
   return (
     <Route
       {...rest}
       render={(props) => {
-        return authed ? <Component {...props} /> : <Redirect to='/login' />;
+        return whereToGo(props);
       }}
     ></Route>
   );

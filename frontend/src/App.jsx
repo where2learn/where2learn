@@ -76,43 +76,51 @@ const App = (props) => {
           <CssBaseline />
           <Paper className={classes.root} elevation={0} square>
             <Switch>
-              <PrivateRoute
-                exact
-                component={Main}
-                path='/'
-                authed={props.auth.currentUser}
-              />
+              <PrivateRoute exact component={Main} path='/' auth={props.auth} />
               <PrivateRoute
                 component={Dashboard}
                 exact
                 path='/dashboard'
-                authed={props.auth.currentUser}
+                auth={props.auth}
               />
               <PrivateRoute
                 path='/update-profile'
                 component={UpdateProfile}
-                authed={props.auth.currentUser}
+                auth={props.auth}
               />
               <PrivateRoute
                 path='/user-profile'
                 component={UserProfile}
-                authed={props.auth.currentUser}
+                auth={props.auth}
               />
-              <Route path='/set-username' component={SetUsernamePage} />
-              <Route path='/roadmap-vis' component={Roadmap} />
-              <Route path='/signup' component={Signup} />
-              <Route path='/module/add' component={AddModulePage} />
-              <Route path='/login' component={Login} />
-              <Route
+              <PrivateRoute
+                path='/set-username'
+                component={SetUsernamePage}
+                auth={props.auth}
+              />
+              <PrivateRoute
+                path='/module/add'
+                component={AddModulePage}
+                auth={props.auth}
+              />
+              <PrivateRoute
                 path='/module/display/:username/:module_id'
                 component={DisplayModulePage}
+                auth={props.auth}
               />
-              <Route path='/module/add' component={AddModulePage} />
-              <Route
+              <PrivateRoute
                 path='/module/edit/:username/:module_id'
                 component={EditModulePage}
+                auth={props.auth}
               />
-              <Route path='/forgot-password' component={ForgotPassword} />
+              <PrivateRoute
+                path='/forgot-password'
+                component={ForgotPassword}
+                auth={props.auth}
+              />
+              <Route path='/roadmap-vis' component={Roadmap} />
+              <Route path='/signup' component={Signup} />
+              <Route path='/login' component={Login} />
               {/* Everything Below is for developing and experimenting components instead of an actual page */}
               <Route path='/roadmap-vis' component={Roadmap} />
             </Switch>
