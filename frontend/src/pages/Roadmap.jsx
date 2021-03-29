@@ -10,6 +10,8 @@ import RoadmapTreeView from '../components/RoadmapTreeView';
 import RmTreeView from '../components/TreeView';
 import Container from '@material-ui/core/Container';
 import DisplayModule from '../components/DisplayModule';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
 // for each individual box, get diff width & margin in diff windowInnerWidth
 const getboxWidth = () => {
@@ -35,6 +37,10 @@ const getboxMargin = () => {
 };
 
 const useStyles = makeStyles((theme) => ({
+  hidden_box: {
+    backgroundColor: 'theme.palette.background.paper',
+  },
+
   box_group: {
     // bgcolor:"greys",
     display: 'flex',
@@ -56,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: '0',
     width: getboxWidth() + 'px',
     color: '#424242',
+    // color: 'theme.palette.background.paper',
   },
 
   add_button: {
@@ -67,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Roadmap = () => {
+const Roadmap = (props) => {
   const [open, setOpen] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
 
@@ -175,6 +182,10 @@ const Roadmap = () => {
   );
 
   useEffect(() => {
+    console.log(props);
+  }, []);
+
+  useEffect(() => {
     let level = findlevel(roadmapVis);
     let newLevelView = fullLevelView(roadmapVis, level);
     setFullLevelVis(newLevelView[1]);
@@ -199,8 +210,6 @@ const Roadmap = () => {
   //     levelVis[key].map((idx) => console.log(key, idx))
 
   // )
-  
-
 
   const minwidith = getboxWidth();
   const minMargin = getboxMargin();
@@ -208,66 +217,66 @@ const Roadmap = () => {
   return (
     // <div style={{ width: '100%' }}>
     // <div style={{ minWidth: '100vw', overflow: 'scroll' }}>
-    <div style={{ minWidth: '100vw'}}>
+    <div style={{ minWidth: '100vw' }}>
       <NavDrawer>
-      {/* <RoadmapTreeView /> */}
-      <Grid container className={classes.grid} spacing={2}>
-        <Grid item xs={12}>
-          <DisplayModule />
+        {/* <RoadmapTreeView /> */}
+        <Grid container className={classes.grid} spacing={2}>
+          <RmTreeView style={{ float: 'left' }} />
+          {/* <DisplayModule /> */}
+          <div style={{ position: 'absolute', left: '400px' }}>
+            <React.Fragment>
+              {Object.keys(fullLevelVis).map((key, index) => (
+                <Box key={index} className={classes.box_group}>
+                  {fullLevelVis[key].map((item) => {
+                    // console.log('number of child', key, fullLevelVis[key].length);
+                    if (item[0] === null) {
+                      return (
+                        <Box
+                          className={[
+                            classes.single_box,
+                            classes.hidden_box,
+                          ].join(' ')}
+                          style={{ width: minwidith }}
+                          padding={0}
+                          margin={minMargin}
+                          // bgcolor={'#424242'}
+                          zIndex='-999'
+                        >
+                          {item[0]} numchild: {item[1]}
+                        </Box>
+                      );
+                    } else {
+                      return (
+                        <Box
+                          key={item[0]}
+                          className={classes.single_box}
+                          style={{
+                            width:
+                              minwidith +
+                              (item[1] - 1) * (minwidith + 2 * minMargin),
+                          }}
+                          padding={0}
+                          margin={minMargin}
+                          bgcolor='grey.300'
+                        >
+                          Module {item[0]} numchild: {item[1]}
+                          <Box ml={3}></Box>
+                          <IconButton
+                            id={item[0]}
+                            className={classes.add_button}
+                            onClick={handleClickOpen}
+                          >
+                            <AddCircleIcon />
+                          </IconButton>
+                        </Box>
+                      );
+                    }
+                  })}
+                </Box>
+              ))}
+            </React.Fragment>
+          </div>
         </Grid>
-        <Grid item xs={12}>
-        <RmTreeView/>
-        </Grid>
-      </Grid>
-      
-        
-        {Object.keys(fullLevelVis).map((key, index) => (
-          <Box key={index} className={classes.box_group}>
-            {fullLevelVis[key].map((item) => {
-              // console.log('number of child', key, fullLevelVis[key].length);
-              if (item[0] === null) {
-                return (
-                  <Box
-                    className={classes.single_box}
-                    style={{ width: minwidith }}
-                    padding={0}
-                    margin={minMargin}
-                    bgcolor={"#424242"}
-                    zIndex='-999'
-                    
-                  >
-                    {item[0]} numchild: {item[1]}
-                    
-                  </Box>
-                );
-              } else {
-                return (
-                  <Box
-                    key={item[0]}
-                    className={classes.single_box}
-                    style={{
-                      width:
-                        minwidith + (item[1] - 1) * (minwidith + 2 * minMargin),
-                    }}
-                    padding={0}
-                    margin={minMargin}
-                    bgcolor='grey.300'
-                  >
-                    Module {item[0]} numchild: {item[1]}
-                    <Box ml={3}></Box>
-                    <IconButton
-                      id={item[0]}
-                      className={classes.add_button}
-                      onClick={handleClickOpen}
-                    >
-                      <AddCircleIcon />
-                    </IconButton>
-                  </Box>
-                );
-              }
-            })}
-          </Box>
-        ))}
         {open ? (
           <RoadMapPopUp
             setOpen={setOpen}
@@ -287,4 +296,4 @@ const Roadmap = () => {
   );
 };
 
-export default Roadmap;
+export default connect(mapStateToProps, mapDispatchToProps)(Roadmap);
