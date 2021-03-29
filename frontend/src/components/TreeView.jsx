@@ -97,12 +97,18 @@ export default function RmTreeView() {
     e.preventDefault();
     // console.log(e.target.parentNode.className);
     // console.log(e.target.parentNode.parentNode.className);
-    if (e.target.parentNode.className === 'editbutton') {
+    if (
+      e.target.parentNode.className ||
+      e.target.parentNode.parentNode.className === 'editbutton'
+    ) {
       console.log('hi');
       setOpen(true);
     }
 
-    if (e.target.parentNode.parentNode.className === 'deletebutton') {
+    if (
+      e.target.parentNode.parentNode.className ||
+      e.target.parentNode.parentNode.className === 'deletebutton'
+    ) {
       console.log('hi');
     }
   }
