@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import NavDrawer from '../components/NavDrawer';
 import RoadMapPopUp from '../components/RoadMapPopUp';
 import { propTypes } from 'react-bootstrap/esm/Image';
+import RoadmapTreeView from '../components/RoadmapTreeView';
+import RmTreeView from '../components/TreeView';
+import Container from '@material-ui/core/Container';
+import DisplayModule from '../components/DisplayModule';
 
 // for each individual box, get diff width & margin in diff windowInnerWidth
 const getboxWidth = () => {
@@ -42,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     // justifyContent:'center'
     minWidth: '100vw',
     minHeigh: '100vh',
+    marginLeft: '10rem',
   },
 
   single_box: {
@@ -55,6 +60,10 @@ const useStyles = makeStyles((theme) => ({
 
   add_button: {
     color: 'rgba(0, 0, 0, 0.54)',
+  },
+
+  grid: {
+    flexGrow: 1,
   },
 }));
 
@@ -186,12 +195,32 @@ const Roadmap = () => {
     // console.log('after click, RoadmapVis', roadmapVis);
   }
 
+  // Object.keys(levelVis).map((key, index) =>
+  //     levelVis[key].map((idx) => console.log(key, idx))
+
+  // )
+  
+
+
   const minwidith = getboxWidth();
   const minMargin = getboxMargin();
   // console.log('minwidith ', minwidith, 'minMargin', minMargin);
   return (
-    <div style={{ minWidth: '100vw', overflow: 'scroll' }}>
+    // <div style={{ width: '100%' }}>
+    // <div style={{ minWidth: '100vw', overflow: 'scroll' }}>
+    <div style={{ minWidth: '100vw'}}>
       <NavDrawer>
+      {/* <RoadmapTreeView /> */}
+      <Grid container className={classes.grid} spacing={2}>
+        <Grid item xs={12}>
+          <DisplayModule />
+        </Grid>
+        <Grid item xs={12}>
+        <RmTreeView/>
+        </Grid>
+      </Grid>
+      
+        
         {Object.keys(fullLevelVis).map((key, index) => (
           <Box key={index} className={classes.box_group}>
             {fullLevelVis[key].map((item) => {
@@ -202,19 +231,13 @@ const Roadmap = () => {
                     className={classes.single_box}
                     style={{ width: minwidith }}
                     padding={0}
-                    margin={minMargin + 100 + 'px'}
-                    bgcolor='grey.300'
+                    margin={minMargin}
+                    bgcolor={"#424242"}
                     zIndex='-999'
+                    
                   >
                     {item[0]} numchild: {item[1]}
-                    <Box ml={3}></Box>
-                    <IconButton
-                      id={item[0]}
-                      className={classes.add_button}
-                      onClick={addClick}
-                    >
-                      <AddCircleIcon />
-                    </IconButton>
+                    
                   </Box>
                 );
               } else {
@@ -227,7 +250,7 @@ const Roadmap = () => {
                         minwidith + (item[1] - 1) * (minwidith + 2 * minMargin),
                     }}
                     padding={0}
-                    margin={minMargin + 100}
+                    margin={minMargin}
                     bgcolor='grey.300'
                   >
                     Module {item[0]} numchild: {item[1]}
