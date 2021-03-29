@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import Editor from '../components/ModuleEditor';
-import NavDrawer from '../components/NavDrawer';
+import Editor from './ModuleEditor';
+import NavDrawer from './NavDrawer';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -16,6 +16,7 @@ import Chip from '@material-ui/core/Chip';
 import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
 import { constructModuleObject } from '../firestore_data';
+import RmTreeView from './TreeView';
 
 const maxDescriptionLength = 160;
 
@@ -266,22 +267,28 @@ const EditModule = (props) => {
               </Typography>
             </Breadcrumbs>
           </Grid>
-          <Grid item xs={3}>
-            <FormControlLabel
-              className='float-right'
-              control={
-                <Switch
-                  checked={inlineEditorSwitch}
-                  onChange={() => {
-                    setInlineEditorSwitch(!inlineEditorSwitch);
-                  }}
-                  name='inline-editor-switch'
-                  color='primary'
-                />
-              }
-              label='Inline Editor'
-            />
-          </Grid>
+          { !roadmapSwitch ? (
+            <Grid item xs={3}>
+              <FormControlLabel
+                className='float-right'
+                control={
+                  <Switch
+                    checked={inlineEditorSwitch}
+                    onChange={() => {
+                      setInlineEditorSwitch(!inlineEditorSwitch);
+                    }}
+                    name='inline-editor-switch'
+                    color='primary'
+                  />
+                }
+                label='Inline Editor'
+              />
+            </Grid>
+          ):(
+            null
+          )
+          }
+        
         </Grid>
         <TextField
           className={classes.textField}
@@ -356,30 +363,39 @@ const EditModule = (props) => {
           </Paper>
         )}
         <Divider />
-        <br />
-        {inlineEditorSwitch ? (
-          <div className={classes.editorBGWrapper}>
-            <Editor
-              key='inline-editor'
-              width='100%'
-              updateContent={setEditorContent}
-              height={400}
-              inline={true}
-              content={props.content}
-            />
-          </div>
-        ) : (
-          <div>
-            <Editor
-              key='normal-editor'
-              width='100%'
-              updateContent={setEditorContent}
-              height={400}
-              inline={false}
-              content={editorContent}
-            />
-          </div>
-        )}
+        <br /> 
+        {!roadmapSwitch ? (
+          <React.Fragment>
+          {inlineEditorSwitch ? (
+            <div className={classes.editorBGWrapper}>
+              <Editor
+                key='inline-editor'
+                width='100%'
+                updateContent={setEditorContent}
+                height={400}
+                inline={true}
+                content={props.content}
+              />
+            </div>
+          ) : (
+            <div>
+              <Editor
+                key='normal-editor'
+                width='100%'
+                updateContent={setEditorContent}
+                height={400}
+                inline={false}
+                content={editorContent}
+              />
+            </div>
+          )}
+          </React.Fragment>
+        ):(
+          <RmTreeView />
+
+        )
+        
+        }
         <br />
         <FormControlLabel
           // className='float-right'

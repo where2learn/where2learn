@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TreeView from '@material-ui/lab/TreeView';
@@ -15,6 +15,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
+import RoadMapPopUp from '../components/RoadMapPopUp';
 
 const useTreeItemStyles = makeStyles((theme) => ({
   root: {
@@ -77,68 +78,6 @@ const useTreeItemStyles = makeStyles((theme) => ({
   },
 }));
 
-function addClick(e) {
-  e.preventDefault();
-  console.log(e.target.className);
-  if (e.target.parentNode.parentNode.className === 'editbutton') {
-    console.log('hi');
-  }
-}
-function StyledTreeItem(props) {
-  const classes = useTreeItemStyles();
-  const { labelText, labelIcon: LabelIcon, labelInfo, ...other } = props;
-
-  return (
-    <TreeItem
-      label={
-        <div className={classes.labelRoot}>
-          <div className='editbutton'>
-            <DeleteIcon
-              color='inherit'
-              className={classes.labelIcon}
-              variant='contained'
-            />
-          </div>
-          <div className='deletebutton'>
-            <EditRoundedIcon
-              color='inherit'
-              className={classes.labelIcon}
-              variant='contained'
-            />
-          </div>
-          <Typography variant='body2' className={classes.labelText}>
-            {labelText}
-          </Typography>
-          <Typography variant='caption' color='inherit'>
-            {labelInfo}
-          </Typography>
-        </div>
-      }
-      style={{
-        '--tree-view-color': '#a250f5',
-        // "--tree-view-bg-color": bgColor
-      }}
-      classes={{
-        root: classes.root,
-        content: classes.content,
-        expanded: classes.expanded,
-        group: classes.group,
-        label: classes.label,
-      }}
-      {...other}
-      onLabelClick={addClick}
-    />
-  );
-}
-
-StyledTreeItem.propTypes = {
-  bgColor: PropTypes.string,
-  color: PropTypes.string,
-  labelIcon: PropTypes.elementType.isRequired,
-  labelInfo: PropTypes.string,
-  labelText: PropTypes.string.isRequired,
-};
-
 const useStyles = makeStyles({
   root: {
     minheight: '100vh',
@@ -147,55 +86,120 @@ const useStyles = makeStyles({
   },
 });
 
-const roadmaps = {
-  1: {
-    2: { 3: {}, 4: {} },
-    5: {},
-  },
-  6: {},
-  7: {
-    8: {
-      9: {},
-      10: {
-        11: { 12: {}, 13: {} },
+export default function RmTreeView() {
+  // ==== start of return compoenents ===
+
+  const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  const [selectedModule, setSelectedModule] = useState(null);
+
+  function handleClick(e) {
+    e.preventDefault();
+    // console.log(e.target.parentNode.className);
+    // console.log(e.target.parentNode.parentNode.className);
+    if (e.target.parentNode.className === 'editbutton') {
+      console.log('hi');
+      setOpen(true);
+    }
+
+    if (e.target.parentNode.parentNode.className === 'deletebutton') {
+      console.log('hi');
+    }
+  }
+  function StyledTreeItem(props) {
+    const classes = useTreeItemStyles();
+    const { labelText, labelIcon: LabelIcon, labelInfo, ...other } = props;
+
+    return (
+      <TreeItem
+        label={
+          <div className={classes.labelRoot}>
+            <div className='editbutton'>
+              <DeleteIcon
+                color='inherit'
+                className={classes.labelIcon}
+                variant='contained'
+              />
+            </div>
+            <div className='deletebutton'>
+              <EditRoundedIcon
+                color='inherit'
+                className={classes.labelIcon}
+                variant='contained'
+              />
+            </div>
+            <Typography variant='body2' className={classes.labelText}>
+              {labelText}
+            </Typography>
+            <Typography variant='caption' color='inherit'>
+              {labelInfo}
+            </Typography>
+          </div>
+        }
+        style={{
+          '--tree-view-color': '#a250f5',
+          // "--tree-view-bg-color": bgColor
+        }}
+        classes={{
+          root: classes.root,
+          content: classes.content,
+          expanded: classes.expanded,
+          group: classes.group,
+          label: classes.label,
+        }}
+        {...other}
+        onLabelClick={handleClick}
+      />
+    );
+  }
+
+  StyledTreeItem.propTypes = {
+    bgColor: PropTypes.string,
+    color: PropTypes.string,
+    labelIcon: PropTypes.elementType.isRequired,
+    labelInfo: PropTypes.string,
+    labelText: PropTypes.string.isRequired,
+  };
+
+
+
+  const roadmaps = {
+    1: {
+      2: { 3: {}, 4: {} },
+      5: {},
+    },
+    6: {},
+    7: {
+      8: {
+        9: {},
+        10: {
+          11: { 12: {}, 13: {} },
+        },
       },
     },
-  },
-};
+  };
 
-// console.log( Object.keys(levelVis).map((key, index) =>
-//       levelVis[key].map((idx) => console.log(key, idx))
+  // console.log( Object.keys(levelVis).map((key, index) =>
+  //       levelVis[key].map((idx) => console.log(key, idx))
 
-// ))
+  // ))
 
-const WholeTree = ({ data }) => (
-  <React.Fragment>
-    {Object.keys(data) &&
-      Object.keys(data).map((key, index) => {
-        console.log('key', key, 'ata[key]', data[key]);
-        return (
-          <StyledTreeItem nodeId={key} labelText={key} labelIcon={MailIcon}>
-            {data[key] && <WholeTree data={data[key]} />}
-          </StyledTreeItem>
-        );
-      })}
-  </React.Fragment>
-);
+  const WholeTree = ({ data }) => (
+    <React.Fragment>
+      {Object.keys(data) &&
+        Object.keys(data).map((key, index) => {
+          console.log('key', key, 'ata[key]', data[key]);
+          return (
+            <StyledTreeItem nodeId={key} labelText={key} labelIcon={MailIcon}>
+              {data[key] && <WholeTree data={data[key]} />}
+            </StyledTreeItem>
+          );
+        })}
+    </React.Fragment>
+  );
 
-// const WholeTree2 = ({ data }) => (
-//   <ul>
-//     {Object.keys(data) &&
-//       Object.keys(data).map((key, index) => (
-//         <li>
-//           {key}
-//           {data[key] && <Tree2 data={data[key]} />}
-//         </li>
-//       ))}
-//   </ul>
-// );
 
-export default function RmTreeView() {
-  const classes = useStyles();
+
 
   return (
     <div className={classes.viewBar}>
@@ -207,65 +211,24 @@ export default function RmTreeView() {
         defaultEndIcon={<div style={{ width: '1000px' }} />}
       >
         <WholeTree data={roadmaps} />
-        <StyledTreeItem nodeId='1' labelText='All Mail' labelIcon={MailIcon} />
-        <StyledTreeItem nodeId='2' labelText='Trash' labelIcon={DeleteIcon} />
-        <StyledTreeItem nodeId='3' labelText='Categories' labelIcon={Label}>
-          <StyledTreeItem
-            nodeId='5'
-            labelText='Social'
-            labelIcon={EditRoundedIcon}
-            labelInfo='90'
-          />
-          <StyledTreeItem
-            nodeId='6'
-            labelText='Updates'
-            labelIcon={InfoIcon}
-            labelInfo='2,294'
-          />
-          <StyledTreeItem
-            nodeId='7'
-            labelText='Forums'
-            labelIcon={ForumIcon}
-            labelInfo='3,566'
-          />
-          <StyledTreeItem
-            nodeId='8'
-            labelText='Promotions'
-            labelIcon={LocalOfferIcon}
-            labelInfo='733'
-            bgColor='#e6f4ea'
-          />
-        </StyledTreeItem>
-        <StyledTreeItem nodeId='4' labelText='Categories' labelIcon={Label}>
-          <StyledTreeItem
-            nodeId='5'
-            labelText='Social'
-            labelIcon={SupervisorAccountIcon}
-            labelInfo='90'
-          />
-          <StyledTreeItem
-            nodeId='6'
-            labelText='Updates'
-            labelIcon={InfoIcon}
-            labelInfo='2,294'
-          />
-          <StyledTreeItem nodeId='7' labelText='Forums' labelIcon={ForumIcon} />
-          <StyledTreeItem
-            nodeId='8'
-            labelText='Promotions'
-            labelIcon={LocalOfferIcon}
-            labelInfo='733'
-          >
-            <StyledTreeItem
-              nodeId='2'
-              labelText='Promotions'
-              labelIcon={LocalOfferIcon}
-              labelInfo='733'
-            ></StyledTreeItem>
-          </StyledTreeItem>
-        </StyledTreeItem>
-        <StyledTreeItem nodeId='5' labelText='History' labelIcon={Label} />
       </TreeView>
+
+
+      
+      {open ? (
+          <RoadMapPopUp
+            setOpen={setOpen}
+            setSelectedModule={setSelectedModule}
+            modules={[
+              { module_id: 'jiataoxiang', author: 'nobody' },
+              { module_id: 'jiatao handsome', author: 'nobody' },
+              { module_id: 'hhhhh', author: 'nobody' },
+              { module_id: 'Jiat', author: 'nobody' },
+              { module_id: 'helyou', author: 'nobody' },
+              { module_id: 'hhhhhlo_you', author: 'nobody' },
+            ]}
+          />
+        ) : null}
     </div>
   );
 }
