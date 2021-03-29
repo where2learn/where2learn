@@ -56,6 +56,9 @@ const Signup = (props) => {
         emailRef.current.value,
         passwordRef.current.value
       );
+      console.log(user);
+      console.log('signup finished');
+      console.log(props.auth);
       generateUserDocument(user);
       enqueueSnackbar('Account Created', { variant: 'success' });
       history.push('/');
@@ -83,12 +86,12 @@ const Signup = (props) => {
     <NavDrawer>
       <Container>
         <Box
-          display="flex"
-          justifyContent="center"
+          display='flex'
+          justifyContent='center'
           mt={10}
-          bgcolor="background.default"
+          bgcolor='background.default'
         >
-          <Card className={classes.card} color="secondary">
+          <Card className={classes.card} color='secondary'>
             <Form onSubmit={handleSubmit}>
               <CardContent>
                 <Typography
@@ -102,35 +105,35 @@ const Signup = (props) => {
                   <TextField
                     fullWidth
                     inputRef={emailRef}
-                    margin="normal"
-                    label="Email"
-                    type="email"
+                    margin='normal'
+                    label='Email'
+                    type='email'
                   />
                 </div>
                 <div>
                   <TextField
                     fullWidth
-                    margin="normal"
+                    margin='normal'
                     inputRef={passwordRef}
-                    label="Password"
-                    type="password"
+                    label='Password'
+                    type='password'
                   />
                 </div>
                 <div>
                   <TextField
                     fullWidth
-                    margin="normal"
+                    margin='normal'
                     inputRef={passwordConfirmRef}
-                    label="Confirm Password"
-                    type="password"
+                    label='Confirm Password'
+                    type='password'
                   />
                 </div>
                 <br />
                 <Button
                   fullWidth
-                  type="submit"
-                  variant="contained"
-                  color="primary"
+                  type='submit'
+                  variant='contained'
+                  color='primary'
                   disabled={loading}
                 >
                   Sign Up
@@ -142,8 +145,8 @@ const Signup = (props) => {
                 <Typography>
                   <Button onClick={handleClick}>
                     <Avatar
-                      alt="Google Logo"
-                      src="../../../static/images/google.png"
+                      alt='Google Logo'
+                      src='../../../static/images/google.png'
                     />
                     <Box m={1} />
                     Sign in with Google
@@ -154,7 +157,7 @@ const Signup = (props) => {
             <Box mt={3}>
               <CardActions>
                 <Typography>
-                  Already have an account? <Link to="/login">Log In</Link>
+                  Already have an account? <Link to='/login'>Log In</Link>
                 </Typography>
               </CardActions>
             </Box>

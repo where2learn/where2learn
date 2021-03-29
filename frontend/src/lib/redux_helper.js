@@ -20,12 +20,15 @@ import {
   getStarModules,
 } from '../firebase';
 
-const fetchUser = (uid) => (dispatch) => {
-  return getUserInfo(uid).then((user) => {
-    // console.log(user);
+const fetchUser = (uid) => async (dispatch) => {
+  try {
+    const user = await getUserInfo(uid);
     dispatch(loadUser(user));
     return user;
-  });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 const fetchModules = (username) => (dispatch) => {
@@ -42,21 +45,38 @@ const fetchStarModules = (username) => (dispatch) => {
   });
 };
 
-const login = (email, password) => (dispatch) => {
-  return auth
-    .signInWithEmailAndPassword(email, password)
-    .then((result) => {
-      console.log(result);
-      dispatch(authUser(result));
-    })
-    .catch((err) => {
-      throw err;
-    });
+const login = (email, password) => async (dispatch) => {
+  try {
+    console.log('login begin');
+    const res = await auth.signInWithEmailAndPassword(email, password);
+    console.log(res.user);
+    console.log('before dispatch');
+    dispatch(authUser(res.user));
+    console.log('after dispatch');
+    await fetchUser(res.user.uid);
+    console.log('fetchUser finished');
+    return res.user;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
-const signup = (email, password) => (dispatch) => {
-  const user = auth.createUserWithEmailAndPassword(email, password);
-  dispatch(authUser(user));
+const signup = (email, password) => async (dispatch) => {
+  try {
+    console.log(email, password);
+    const res = await auth.createUserWithEmailAndPassword(email, password);
+    console.log(res.user);
+    console.log('before dispatch');
+    dispatch(authUser(res.user));
+    console.log('after dispatch');
+    await fetchUser(res.user.uid);
+    console.log('fetch user finished');
+    return res.user;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const resetPassword = (email) => {

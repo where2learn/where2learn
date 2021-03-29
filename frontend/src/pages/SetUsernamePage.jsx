@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import NavDrawer from '../components/NavDrawer';
 import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
@@ -84,10 +85,20 @@ const SetUsernamePage = (props) => {
     ) {
       history.push('/');
     }
-  }, []);
+  }, [props.auth]);
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleCancel = async (e) => {
+    try {
+      await props.logout();
+      enqueueSnackbar('Logged Out', { variant: 'success' });
+      history.push('/login');
+    } catch {
+      enqueueSnackbar("Couldn't Log Out", { variant: 'error' });
+    }
   };
 
   const submit = async (e) => {
@@ -119,7 +130,7 @@ const SetUsernamePage = (props) => {
   };
 
   return (
-    <div>
+    <NavDrawer>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -145,7 +156,7 @@ const SetUsernamePage = (props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='primary'>
+          <Button onClick={handleCancel} color='primary'>
             Cancel
           </Button>
           <Button
@@ -159,7 +170,7 @@ const SetUsernamePage = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </NavDrawer>
   );
 };
 

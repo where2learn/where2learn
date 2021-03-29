@@ -2,13 +2,18 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
-const PrivateRoute = ({ component: Component, auth, ...rest }) => {
+const PrivateRoute = ({ component: Component, auth, path, ...rest }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const whereToGo = (props_) => {
+    console.log(auth);
     if (auth && auth.user && auth.currentUser) {
       if (auth.currentUser.uid === auth.user.username || !auth.user.username) {
-        return <Redirect to='/set-username' />;
+        if (path === '/set-username') {
+          return <Component {...props_} />;
+        } else {
+          return <Redirect to='/set-username' />;
+        }
       } else {
         return <Component {...props_} />;
       }

@@ -200,10 +200,14 @@ export const editModule = (username, module) => {
 
 // ========== User Profile Page ===============
 export const getUserInfo = async (uid) => {
-  const userRef = firestore.doc('/users/' + uid);
-  const snapshot = await userRef.get();
-
-  return snapshot.data();
+  try {
+    const userRef = firestore.doc('/users/' + uid);
+    const snapshot = await userRef.get();
+    return snapshot.data();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const getModulesByUsername = async (username) => {
