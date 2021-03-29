@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid, rgbToHex } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -12,6 +12,10 @@ import Container from '@material-ui/core/Container';
 import DisplayModule from '../components/DisplayModule';
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
+
+import Popover from '@material-ui/core/Popover';
+import Typography from '@material-ui/core/Typography';
+import { Help } from '@material-ui/icons';
 
 // for each individual box, get diff width & margin in diff windowInnerWidth
 const getboxWidth = () => {
@@ -37,8 +41,12 @@ const getboxMargin = () => {
 };
 
 const useStyles = makeStyles((theme) => ({
+  typography: {
+    padding: theme.spacing(2),
+  },
+
   hidden_box: {
-    backgroundColor: 'theme.palette.background.paper',
+    backgroundColor: theme.palette.background.default,
   },
 
   box_group: {
@@ -47,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'nowrap',
     // padding: "1px",
     margin: '50px',
-    bgcolor: 'theme.palette.background.paper',
+    backgroundColor: theme.palette.background.default,
     overflow: 'visible',
     // justifyContent:'center'
     minWidth: '100vw',
@@ -61,8 +69,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: '0',
     flexShrink: '0',
     width: getboxWidth() + 'px',
-    color: '#424242',
-    // color: 'theme.palette.background.paper',
+    // color: '#424242',
+    color: theme.palette.background.default,
   },
 
   add_button: {
@@ -77,6 +85,15 @@ const useStyles = makeStyles((theme) => ({
 const Roadmap = (props) => {
   const [open, setOpen] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handlePopOver = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopOverClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -222,8 +239,29 @@ const Roadmap = (props) => {
         {/* <RoadmapTreeView /> */}
         <Grid container className={classes.grid} spacing={2}>
           <RmTreeView style={{ float: 'left' }} />
-          {/* <DisplayModule /> */}
-          <div style={{ position: 'absolute', left: '400px' }}>
+
+          <div style={{ position: 'absolute', left: '300px' }}>
+            <IconButton aria-label='help' onClick={handlePopOver}>
+              <Help />
+            </IconButton>
+            <Popover
+              id={Boolean(anchorEl) ? 'simple-popover' : undefined}
+              open={Boolean(anchorEl)}
+              anchorEl={anchorEl}
+              onClose={handlePopOverClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+            >
+              <Typography className={classes.typography}>
+                <DisplayModule />
+              </Typography>
+            </Popover>
             <React.Fragment>
               {Object.keys(fullLevelVis).map((key, index) => (
                 <Box key={index} className={classes.box_group}>
