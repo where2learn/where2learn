@@ -106,6 +106,7 @@ export default function RmTreeView() {
       console.log('hi');
     }
   }
+
   function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, ...other } = props;
@@ -114,18 +115,19 @@ export default function RmTreeView() {
       <TreeItem
         label={
           <div className={classes.labelRoot}>
-            <div className='editbutton'>
+            <div className='deletebutton'>
               <DeleteIcon
                 color='inherit'
                 className={classes.labelIcon}
                 variant='contained'
               />
             </div>
-            <div className='deletebutton'>
+            <div className='editbutton'>
               <EditRoundedIcon
                 color='inherit'
                 className={classes.labelIcon}
                 variant='contained'
+                // onClick={handleClick}
               />
             </div>
             <Typography variant='body2' className={classes.labelText}>
@@ -160,8 +162,6 @@ export default function RmTreeView() {
     labelInfo: PropTypes.string,
     labelText: PropTypes.string.isRequired,
   };
-
-
 
   const roadmaps = {
     1: {
@@ -198,9 +198,6 @@ export default function RmTreeView() {
     </React.Fragment>
   );
 
-
-
-
   return (
     <div className={classes.viewBar}>
       <TreeView
@@ -213,22 +210,20 @@ export default function RmTreeView() {
         <WholeTree data={roadmaps} />
       </TreeView>
 
-
-      
       {open ? (
-          <RoadMapPopUp
-            setOpen={setOpen}
-            setSelectedModule={setSelectedModule}
-            modules={[
-              { module_id: 'jiataoxiang', author: 'nobody' },
-              { module_id: 'jiatao handsome', author: 'nobody' },
-              { module_id: 'hhhhh', author: 'nobody' },
-              { module_id: 'Jiat', author: 'nobody' },
-              { module_id: 'helyou', author: 'nobody' },
-              { module_id: 'hhhhhlo_you', author: 'nobody' },
-            ]}
-          />
-        ) : null}
+        <RoadMapPopUp
+          setOpen={setOpen}
+          setSelectedModule={setSelectedModule}
+          modules={[
+            { module_id: 'jiataoxiang', author: 'nobody' },
+            { module_id: 'jiatao handsome', author: 'nobody' },
+            { module_id: 'hhhhh', author: 'nobody' },
+            { module_id: 'Jiat', author: 'nobody' },
+            { module_id: 'helyou', author: 'nobody' },
+            { module_id: 'hhhhhlo_you', author: 'nobody' },
+          ]}
+        />
+      ) : null}
     </div>
   );
 }
