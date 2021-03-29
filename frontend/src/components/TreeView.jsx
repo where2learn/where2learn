@@ -114,14 +114,14 @@ export default function RmTreeView() {
       <TreeItem
         label={
           <div className={classes.labelRoot}>
-            <div className='editbutton'>
+            <div className='deletebutton'>
               <DeleteIcon
                 color='inherit'
                 className={classes.labelIcon}
                 variant='contained'
               />
             </div>
-            <div className='deletebutton'>
+            <div className='editbutton'>
               <EditRoundedIcon
                 color='inherit'
                 className={classes.labelIcon}
