@@ -5,7 +5,6 @@ import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import MailIcon from '@material-ui/icons/Mail';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Label from '@material-ui/icons/Label';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import InfoIcon from '@material-ui/icons/Info';
@@ -15,7 +14,9 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RoadMapPopUp from '../components/RoadMapPopUp';
+import Button from '@material-ui/core/Button';
 
 const useTreeItemStyles = makeStyles((theme) => ({
   root: {
@@ -86,80 +87,17 @@ const useStyles = makeStyles({
   },
 });
 
+
+
+// start of return module
 export default function RmTreeView() {
   // ==== start of return compoenents ===
 
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
 
-  function handleClick(e) {
-    e.preventDefault();
-    // console.log(e.target.parentNode.className);
-    // console.log(e.target.parentNode.parentNode.className);
-    if (
-      e.target.parentNode.className ||
-      e.target.parentNode.parentNode.className === 'editbutton'
-    ) {
-      console.log('hi');
-      setOpen(true);
-    }
 
-    if (
-      e.target.parentNode.parentNode.className ||
-      e.target.parentNode.parentNode.className === 'deletebutton'
-    ) {
-      console.log('hi');
-    }
-  }
-
-  function StyledTreeItem(props) {
-    const classes = useTreeItemStyles();
-    const { labelText, labelIcon: LabelIcon, labelInfo, ...other } = props;
-
-    return (
-      <TreeItem
-        label={
-          <div className={classes.labelRoot}>
-            <div className='deletebutton'>
-              <DeleteIcon
-                color='inherit'
-                className={classes.labelIcon}
-                variant='contained'
-              />
-            </div>
-            <div className='editbutton'>
-              <EditRoundedIcon
-                color='inherit'
-                className={classes.labelIcon}
-                variant='contained'
-                // onClick={handleClick}
-              />
-            </div>
-            <Typography variant='body2' className={classes.labelText}>
-              {labelText}
-            </Typography>
-            <Typography variant='caption' color='inherit'>
-              {labelInfo}
-            </Typography>
-          </div>
-        }
-        style={{
-          '--tree-view-color': '#a250f5',
-          // "--tree-view-bg-color": bgColor
-        }}
-        classes={{
-          root: classes.root,
-          content: classes.content,
-          expanded: classes.expanded,
-          group: classes.group,
-          label: classes.label,
-        }}
-        {...other}
-        onLabelClick={handleClick}
-      />
-    );
-  }
 
   StyledTreeItem.propTypes = {
     bgColor: PropTypes.string,
@@ -190,6 +128,89 @@ export default function RmTreeView() {
 
   // ))
 
+  const findParent
+
+  function handleClick(e) {
+    e.preventDefault();
+    // console.log(e.target.parentNode.className);
+    // console.log(e.target.parentNode.parentNode.className);
+    if (
+      e.target.parentNode.className ||
+      e.target.parentNode.parentNode.className === 'editbutton'
+    ) {
+
+
+      console.log(e.target);
+      setEditOpen(true);
+    }
+
+    if (
+      e.target.parentNode.parentNode.className ||
+      e.target.parentNode.parentNode.className === 'deletebutton'
+    ) {
+      console.log('hi');
+    }
+  }
+
+  function StyledTreeItem(props) {
+    const classes = useTreeItemStyles();
+    const { labelText, labelIcon: LabelIcon, labelInfo, ...other } = props;
+
+    return (
+      <TreeItem
+        label={
+          <div className={classes.labelRoot}>
+            <div className='deletebutton'>
+              <DeleteRoundedIcon
+                color='inherit'
+                className={classes.labelIcon}
+                variant='contained'
+              />
+            </div>
+            <div className='editbutton'>
+              <EditRoundedIcon
+                color='inherit'
+                className={classes.labelIcon}
+                variant='contained'
+                // onClick={handleClick}
+              />
+            </div>
+            <div className='addbutton'>
+              <AddCircleIcon 
+                color='inherit'
+                className={classes.labelIcon}
+                variant='contained'
+                // onClick={handleClick}
+              />
+            </div>
+            
+            <Typography variant='body2' className={classes.labelText}>
+              {labelText}
+            </Typography>
+            <Typography variant='caption' color='inherit'>
+              {labelInfo}
+            </Typography>
+          </div>
+        }
+        style={{
+          '--tree-view-color': '#a250f5',
+          // "--tree-view-bg-color": bgColor
+        }}
+        classes={{
+          root: classes.root,
+          content: classes.content,
+          expanded: classes.expanded,
+          group: classes.group,
+          label: classes.label,
+        }}
+        {...other}
+        onLabelClick={handleClick}
+      />
+    );
+  }
+
+
+
   const WholeTree = ({ data }) => (
     <React.Fragment>
       {Object.keys(data) &&
@@ -206,6 +227,9 @@ export default function RmTreeView() {
 
   return (
     <div className={classes.viewBar}>
+      <Button variant="contained" color="primary">
+        Add start module
+      </Button>
       <TreeView
         className={classes.root}
         defaultExpanded={['3']}
@@ -216,10 +240,10 @@ export default function RmTreeView() {
         <WholeTree data={roadmaps} />
       </TreeView>
 
-      {open ? (
+      {editOpen ? (
         <RoadMapPopUp
-          setOpen={setOpen}
-          setSelectedModule={setSelectedModule}
+          setOpen={setEditOpen}
+          setSelectedModule={setESelectedModule}
           modules={[
             { module_id: 'jiataoxiang', author: 'nobody' },
             { module_id: 'jiatao handsome', author: 'nobody' },
