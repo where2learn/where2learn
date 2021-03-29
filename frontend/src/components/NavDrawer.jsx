@@ -32,7 +32,6 @@ import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 import { updateUserTheme } from '../firebase';
 
 const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
