@@ -52,6 +52,11 @@ const App = (props) => {
   });
 
   useEffect(() => {
+    console.log('Theme Changed');
+    console.log(dbTheme);
+  }, [dbTheme]);
+
+  useEffect(() => {
     if (props.auth.currentUser && props.auth.currentUser.uid) {
       props.loadUser(props.auth.currentUser.uid);
       console.log(props.auth.currentUser);
