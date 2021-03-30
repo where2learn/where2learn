@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Main = () => {
   const [modules, setModules] = useState([]);
+  const [roadMaps, setRoadMaps] = useState([]);
   const [tags, setTags] = useState([]);
   const [page, setPage] = useState('modules');
   const tagInputRef = useRef();
@@ -51,7 +52,10 @@ const Main = () => {
   const classes = useStyles();
 
   const initAllModules = async () => {
-    setModules(await getModules());
+    const allModules = await getModules();
+    // console.log(allModules);
+    setModules(allModules.filter((module) => module.roadmap === null));
+    setRoadMaps(allModules.filter((module) => module.roadmap !== null));
   };
 
   useEffect(() => {
@@ -77,7 +81,7 @@ const Main = () => {
     if (page === 'modules') {
       return <ModuleList modules={modules} />;
     } else if (page === 'roadmaps') {
-      return <ModuleList modules={modules} />;
+      return <ModuleList modules={roadMaps} />;
     } else {
       return null;
     }
