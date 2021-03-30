@@ -94,7 +94,7 @@ export default function RmTreeView() {
   const [mode, setMode] = useState(null);
   const [child, setChild] = useState(null);
   const [parent, setParent] = useState(null);
-  const [deleteConfirm, setDeleteConfirm] = useState(true);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   //dummy variable nee
   const [totalItems, setTotalItems] = useState(13);
 
@@ -115,47 +115,47 @@ export default function RmTreeView() {
     },
   });
 
-  // //useeffect for detele; comment it out if you don't want to use deletepopup window
-  //   useEffect(() =>{
-  //     if (deleteConfirm){
-  //       if (parent == null){
-  //         delete roadmap[child];
-
-  //       }
-  //       else {
-  //         //when delete, get its parent, and itself
-  //         console.log("")
-  //         let newRoadmapVis = changeChild(roadmap, parent, child, "delete")
-  //         setRoadmap(newRoadmapVis);
-  //       }
-  //       // setDeleteConfirm(false)
-  //     }
-
-  //   },[deleteConfirm, choseModule]);
+  //useeffect for detele; comment it out if you don't want to use deletepopup window
+  useEffect(() => {
+    if (deleteConfirm) {
+      if (parent == null) {
+        delete roadmap[child];
+      } else {
+        //when delete, get its parent, and itself
+        console.log('');
+        let newRoadmapVis = changeChild(roadmap, parent, child, 'delete');
+        setRoadmap(newRoadmapVis);
+      }
+      setDeleteConfirm(false);
+    }
+  }, [deleteConfirm]);
 
   //useeffect for add and edit
   useEffect(() => {
     console.log('useeffect for choseModule');
     console.log(choseModule);
     // add Children
-    if (mode === 'add') {
-      console.log('mode === add');
-      console.log('child, choseModule', child, choseModule);
-      let newroadmap = changeChild(roadmap, child, choseModule, 'add');
-      setRoadmap(newroadmap);
-    } else if (mode === 'addroot') {
-      roadmap[choseModule] = {};
-      setRoadmap(roadmap);
-    } else if (mode === 'edit') {
-      if (parent == null) {
-        let cp_module = JSON.parse(JSON.stringify(roadmap[child]));
-        delete roadmap[child];
-        roadmap[choseModule] = cp_module;
-        setRoadmap(roadmap);
-      } else {
-        let newroadmap = changeChild(roadmap, parent, child, 'edit');
+    if (choseModule) {
+      if (mode === 'add') {
+        console.log('mode === add');
+        console.log('child, choseModule', child, choseModule);
+        let newroadmap = changeChild(roadmap, child, choseModule, 'add');
         setRoadmap(newroadmap);
+      } else if (mode === 'addroot') {
+        roadmap[choseModule] = {};
+        setRoadmap(roadmap);
+      } else if (mode === 'edit') {
+        if (parent == null) {
+          let cp_module = JSON.parse(JSON.stringify(roadmap[child]));
+          delete roadmap[child];
+          roadmap[choseModule] = cp_module;
+          setRoadmap(roadmap);
+        } else {
+          let newroadmap = changeChild(roadmap, parent, child, 'edit');
+          setRoadmap(newroadmap);
+        }
       }
+      setChoseModule(null);
     }
   }, [choseModule]);
 
@@ -237,7 +237,7 @@ export default function RmTreeView() {
         e.target.parentNode.parentNode.className === 'deletebutton'
       ) {
         setMode('delete');
-        setDeleteOpen('true');
+        setDeleteOpen(true);
       } else if (
         e.target.parentNode.parentNode.className === 'addbutton' ||
         e.target.parentNode.parentNode.className === 'addbutton'
@@ -250,8 +250,8 @@ export default function RmTreeView() {
     }
 
     //dummy
-    setTotalItems(totalItems + 1);
-    setChoseModule(totalItems);
+    // setTotalItems(totalItems + 1);
+    // setChoseModule(totalItems);
   }
 
   function StyledTreeItem(props) {
@@ -370,14 +370,15 @@ export default function RmTreeView() {
             { module_id: 'helyou', author: 'nobody' },
             { module_id: 'hhhhhlo_you', author: 'nobody' },
           ]}
-          mode={mode}
+          // mode={mode}
         />
       ) : null}
 
+      {/* remember to pass in module */}
       {deleteOpen ? (
         <RoadMapDeletePOPUP
           setDeleteOpen={setDeleteOpen}
-          SetDeleteState={setDeleteConfirm}
+          setDeleteConfirm={setDeleteConfirm}
         />
       ) : null}
     </div>

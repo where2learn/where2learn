@@ -78,7 +78,7 @@ const RoadMapPopUp = (props) => {
     setSelectedModule(
       matchModules.filter(
         (module) => module.module_id === module_id && module.author === author
-      )
+      )[0]
     );
   };
 

@@ -21,7 +21,7 @@ export default function AlertDialogSlide(props) {
   };
 
   const handleConfirm = () => {
-    props.SetDeleteState(true);
+    props.setDeleteConfirm(true);
     props.setDeleteOpen(false);
   };
 
