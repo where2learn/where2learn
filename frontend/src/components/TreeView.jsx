@@ -82,9 +82,6 @@ const useStyles = makeStyles({
   },
 });
 
-
-
-
 // start of return module
 export default function RmTreeView() {
   // ==== start of return compoenents ===
@@ -94,12 +91,12 @@ export default function RmTreeView() {
   const [deletOpen, setDeleteOpen] = useState(false);
   const [choseModule, setChoseModule] = useState(null);
 
-  const [mode, setMode] = useState(null)
-  const [child, setChild] = useState(null)
-  const [parent, setParent] = useState(null)
-  const [deleteConfirm, setDeleteConfirm] = useState(true)
+  const [mode, setMode] = useState(null);
+  const [child, setChild] = useState(null);
+  const [parent, setParent] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(true);
   //dummy variable nee
-  const [totalItems, setTotalItems] = useState(13)
+  const [totalItems, setTotalItems] = useState(13);
 
   //TODO: needs to be deleted
   const [roadmap, setRoadmap] = useState({
@@ -118,81 +115,64 @@ export default function RmTreeView() {
     },
   });
 
+  //useeffect for detele; comment it out if you don't want to use deletepopup window
+  // useEffect(() =>{
+  //   if (deleteConfirm){
+  //     if (parent == null){
+  //       delete roadmap[child];
 
+  //     }
+  //     else {
+  //       //when delete, get its parent, and itself
+  //       console.log("")
+  //       let newRoadmapVis = changeChild(roadmap, parent, child, "delete")
+  //       setRoadmap(newRoadmapVis);
+  //     }
+  //     // setDeleteConfirm(false)
+  //   }
 
-
-//useeffect for detele; comment it out if you don't want to use deletepopup window
-  useEffect(() =>{
-    if (deleteConfirm){
-      if (parent == null){
-        delete roadmap[child];
-  
-      }
-      else {
-        //when delete, get its parent, and itself
-        console.log("")
-        let newRoadmapVis = changeChild(roadmap, parent, child, "delete")
-        setRoadmap(newRoadmapVis);
-      }
-      // setDeleteConfirm(false)
-    }
-  
-  },[deleteConfirm, choseModule]);
-
-
-
+  // },[deleteConfirm, choseModule]);
 
   //useeffect for add and edit
   useEffect(() => {
-    console.log("useeffect for choseModule")
+    console.log('useeffect for choseModule');
     console.log(choseModule);
     // add Children
-    if (mode === "add"){
-      console.log("mode === add")
-      console.log("child, choseModule", child, choseModule)
-      let newroadmap = changeChild(roadmap, child, choseModule, "add")
-      setRoadmap(newroadmap)
-
-      
-    }
-    else if (mode === "addroot" ){
-      roadmap[choseModule] = {}
-      setRoadmap(roadmap)
-
-    }
-    else if (mode ==="edit"){
-      if (parent == null){
+    if (mode === 'add') {
+      console.log('mode === add');
+      console.log('child, choseModule', child, choseModule);
+      let newroadmap = changeChild(roadmap, child, choseModule, 'add');
+      setRoadmap(newroadmap);
+    } else if (mode === 'addroot') {
+      roadmap[choseModule] = {};
+      setRoadmap(roadmap);
+    } else if (mode === 'edit') {
+      if (parent == null) {
         let cp_module = JSON.parse(JSON.stringify(roadmap[child]));
-        delete roadmap[child]
-        roadmap[choseModule] = cp_module
-        setRoadmap(roadmap)
-      }else{
-        let newroadmap = changeChild(roadmap, child, choseModule, "add")
-        setRoadmap(newroadmap)
+        delete roadmap[child];
+        roadmap[choseModule] = cp_module;
+        setRoadmap(roadmap);
+      } else {
+        let newroadmap = changeChild(roadmap, child, choseModule, 'add');
+        setRoadmap(newroadmap);
       }
     }
-  
   }, [choseModule]);
-
-
-
 
   const changeChild = (obj, parentId, childId, mode) => {
     for (let key in obj) {
       //might need to change if moduleId is string
       if (key === parentId) {
-        if (mode === "add"){
+        if (mode === 'add') {
           obj[key][childId] = {};
-        }
-        else if (mode === "edit") {
-          console.log("parentId, childId", parentId, childId)
-          console.log("obj", obj)
+        } else if (mode === 'edit') {
+          console.log('parentId, childId', parentId, childId);
+          console.log('obj', obj);
           let cp_module = JSON.parse(JSON.stringify(obj[parentId][childId]));
-          delete obj[parentId][childId]
-          obj[parentId][choseModule] = cp_module
-
-        }else {
-          delete obj[parentId][childId]
+          delete obj[parentId][childId];
+          obj[parentId][choseModule] = cp_module;
+        } else {
+          delete obj[parentId][childId];
         }
       }
 
@@ -200,15 +180,14 @@ export default function RmTreeView() {
         continue;
       }
       if (typeof obj[key] == 'object') {
-        changeChild(obj[key], parentId, childId,mode);
+        changeChild(obj[key], parentId, childId, mode);
       }
     }
 
     return obj;
   };
 
-
-  function findIds(e){
+  function findIds(e) {
     const check = ['editbutton', 'deletebutton', 'addbutton'];
     let child = e.target.parentNode;
     let parent = null;
@@ -224,69 +203,54 @@ export default function RmTreeView() {
     setChild(child.id);
     // console.log("child.id in roadmap", child.id in roadmap)
     // console.log("findId", child.id)
-    if (child.id in roadmap){
-      parent = null
+    if (child.id in roadmap) {
+      parent = null;
 
-      setParent(null)
-    }
-    else{
-      parent = child.parentNode
-      while (!parent.id){
-        parent = parent.parentNode
+      setParent(null);
+    } else {
+      parent = child.parentNode;
+      while (!parent.id) {
+        parent = parent.parentNode;
       }
-      setParent(parent.id)
-      
+      setParent(parent.id);
     }
-    
-    
   }
 
   function handleClick(e) {
     e.preventDefault();
-    if ( e.target.id === 'addrootbutton'||
-        e.target.parentNode.id === 'addrootbutton'
-    ){
-      setMode("addroot")
-      console.log("addroot")
-
-    }else{
+    if (
+      e.target.id === 'addrootbutton' ||
+      e.target.parentNode.id === 'addrootbutton'
+    ) {
+      setMode('addroot');
+      console.log('addroot');
+    } else {
       if (
         e.target.parentNode.className === 'editbutton' ||
         e.target.parentNode.parentNode.className === 'editbutton'
       ) {
-        setMode("edit")
+        setMode('edit');
         setAddEditOpen(true);
-        
-      }
-  
-      else if (
+      } else if (
         e.target.parentNode.parentNode.className === 'deletebutton' ||
         e.target.parentNode.parentNode.className === 'deletebutton'
       ) {
-      
-        setMode("delete")
-        setDeleteOpen("true")
-        
-      }
-
-      else if (
+        setMode('delete');
+        setDeleteOpen('true');
+      } else if (
         e.target.parentNode.parentNode.className === 'addbutton' ||
         e.target.parentNode.parentNode.className === 'addbutton'
       ) {
-        setMode("add")
+        setMode('add');
         setAddEditOpen(true);
         // console.log('add');
       }
       findIds(e);
-
     }
-    
-    
 
     //dummy
     setTotalItems(totalItems + 1);
-    setChoseModule(totalItems)
-
+    setChoseModule(totalItems);
   }
 
   function StyledTreeItem(props) {
@@ -357,7 +321,6 @@ export default function RmTreeView() {
     labelText: PropTypes.string.isRequired,
   };
 
-
   const WholeTree = ({ data }) => (
     <React.Fragment>
       {/* {console.log("newest roadmap", data)} */}
@@ -381,7 +344,12 @@ export default function RmTreeView() {
 
   return (
     <div className={classes.viewBar}>
-      <Button variant="contained" id='addrootbutton' color="primary" onClick={handleClick}>
+      <Button
+        variant='contained'
+        id='addrootbutton'
+        color='primary'
+        onClick={handleClick}
+      >
         Add start module
       </Button>
       <TreeView
