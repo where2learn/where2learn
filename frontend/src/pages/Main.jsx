@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import NavDrawer from '../components/NavDrawer';
-import { getModules } from '../firebase';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ModuleList from '../components/ModuleList';
@@ -13,6 +12,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
+import Pagination from '@material-ui/lab/Pagination';
+
+import { getModules, getModuleComplete } from '../firebase';
+import { searchResultLimit } from '../constants';
+
 import '../style/Main.scss';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,31 +44,55 @@ const useStyles = makeStyles((theme) => ({
     top: '20px',
     marginTop: '1rem',
   },
+  paginationContainer: { display: 'flex', justifyContent: 'center' },
 }));
 
 const Main = () => {
   const [modules, setModules] = useState([]);
   const [roadMaps, setRoadMaps] = useState([]);
   const [tags, setTags] = useState([]);
-  const [page, setPage] = useState('modules');
+  const [pageType, setPageType] = useState('modules');
+  const [page, setPage] = useState(1);
+  const [keyword, setKeyword] = useState('');
+  const tagTimeoutRef = useRef(null);
+  const searchTimeoutRef = useRef(null);
+  const [tagInputValue, setTagInputValue] = useState('');
   const tagInputRef = useRef();
-  const keywordInputRef = useRef();
   const classes = useStyles();
 
-  const initAllModules = async () => {
-    const allModules = await getModules();
-    // console.log(allModules);
-    setModules(allModules.filter((module) => module.roadmap === null));
-    setRoadMaps(allModules.filter((module) => module.roadmap !== null));
+  const updateModules = async () => {
+    const modules = await getModuleComplete(searchResultLimit, page - 1, tags);
+    setModules(modules);
   };
 
   useEffect(() => {
-    setTags(['react', 'vue']);
-    initAllModules();
-    tagInputRef.current.onChange = (e) => {
-      console.log(e.target);
-    };
-  }, []);
+    console.log(`page changed: ${page}`);
+    updateModules();
+  }, [page]);
+
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    searchTimeoutRef.current = setTimeout(() => {
+      console.log(keyword);
+      updateModules();
+    }, 1000);
+  }, [keyword]);
+
+  // useEffect(() => {
+  //   if (tagTimeoutRef.current) {
+  //     clearTimeout(tagTimeoutRef.current);
+  //   }
+  //   tagTimeoutRef.current = setTimeout(() => {
+  //     console.log(tagInputValue);
+  //     updateModules();
+  //   }, 1000);
+  // }, [tagInputValue]);
+
+  useEffect(() => {
+    updateModules();
+  }, [tags]);
 
   const handleDeleteTagChip = (tagToDelete) => () => {
     console.log();
@@ -73,15 +101,46 @@ const Main = () => {
 
   const handleTagSubmit = (e) => {
     e.preventDefault();
-    setTags(Array.from(new Set([tagInputRef.current.value, ...tags])));
+    setTags(
+      Array.from(new Set([tagInputRef.current.value.toLowerCase(), ...tags]))
+    );
     tagInputRef.current.value = '';
   };
 
   const getSubPage = () => {
-    if (page === 'modules') {
-      return <ModuleList modules={modules} />;
-    } else if (page === 'roadmaps') {
-      return <ModuleList modules={roadMaps} />;
+    if (pageType === 'modules') {
+      return (
+        <React.Fragment>
+          <ModuleList modules={modules} />
+          <div>
+            <Pagination
+              className={classes.paginationContainer}
+              page={page}
+              onChange={(event, newPage) => {
+                setPage(newPage);
+              }}
+              count={10}
+              showFirstButton
+              showLastButton
+            />
+          </div>
+        </React.Fragment>
+      );
+    } else if (pageType === 'roadmaps') {
+      return (
+        <React.Fragment>
+          {/* <ModuleList modules={modules} />
+          <Pagination
+            page={page}
+            onChangePage={(event, newPage) => {
+              setPage(newPage);
+            }}
+            count={10}
+            showFirstButton
+            showLastButton
+          /> */}
+        </React.Fragment>
+      );
     } else {
       return null;
     }
@@ -112,6 +171,9 @@ const Main = () => {
                   <TextField
                     fullWidth
                     id='tag-search-box'
+                    onChange={(e) => {
+                      setTagInputValue(e.target.value);
+                    }}
                     inputRef={tagInputRef}
                     label='Search By Tags'
                     variant='outlined'
@@ -122,20 +184,22 @@ const Main = () => {
                 <TextField
                   fullWidth
                   id='keyword-search-box'
-                  inputRef={keywordInputRef}
+                  onChange={(e) => {
+                    setKeyword(e.target.value);
+                  }}
                   label='Search By Keywords'
                   variant='outlined'
                 />
               </Paper>
               <Paper className={classes.menuPaper}>
                 <List component='nav'>
-                  <ListItem button onClick={() => setPage('modules')}>
+                  <ListItem button onClick={() => setPageType('modules')}>
                     <ListItemIcon>
                       <MenuBookIcon />
                     </ListItemIcon>
                     <ListItemText primary='Modules' />
                   </ListItem>
-                  <ListItem button onClick={() => setPage('roadmaps')}>
+                  <ListItem button onClick={() => setPageType('roadmaps')}>
                     <ListItemIcon>
                       <AccountTreeIcon />
                     </ListItemIcon>

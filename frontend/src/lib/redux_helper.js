@@ -5,26 +5,40 @@ import {
   updateAvatarAction,
 } from '../redux/actions/authActions';
 
-import { loadModules, clearModules } from '../redux/actions/moduleAction';
+import {
+  loadModules,
+  clearModules,
+  loadStarModules,
+} from '../redux/actions/moduleAction';
 
 import {
+  auth,
   getUserInfo,
   getModulesByUsername,
   updateAvatar,
   provider,
+  getStarModules,
 } from '../firebase';
 
-import { auth } from '../firebase';
-
 const fetchUser = (uid) => (dispatch) => {
-  getUserInfo(uid).then((data) => {
-    dispatch(loadUser(data));
+  return getUserInfo(uid).then((user) => {
+    // console.log(user);
+    dispatch(loadUser(user));
+    return user;
   });
 };
 
 const fetchModules = (username) => (dispatch) => {
-  getModulesByUsername(username).then((modules) => {
+  return getModulesByUsername(username).then((modules) => {
     dispatch(loadModules(modules));
+    return modules;
+  });
+};
+
+const fetchStarModules = (username) => (dispatch) => {
+  return getStarModules(username).then((starModules) => {
+    dispatch(loadStarModules(starModules));
+    return starModules;
   });
 };
 
@@ -74,6 +88,7 @@ export const mapDispatchToProps = (dispatch) => {
     logout: () => setStoreToNull(dispatch),
     signInWithGoogle: () => signInWithPopup(dispatch),
     signup: (email, password) => signup(email, password)(dispatch),
+    loadStarModules: (username) => fetchStarModules(username)(dispatch),
   };
 };
 
@@ -81,8 +96,7 @@ export const mapStateToProps = (state) => {
   // console.log(state);
   return {
     auth: state.auth,
-    // user: state.auth.user,
-    // currentUser: state.auth.currentUser,
     modules: state.moduleReducer.modules,
+    starModules: state.moduleReducer.starModules,
   };
 };

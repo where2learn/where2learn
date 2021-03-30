@@ -4,12 +4,15 @@
     flex-flow: row wrap;
     justify-content: space-evenly;
     .preview-container {
+      flex: 1 1 0px;
       padding: 1em 1em;
+      // flex-grow: 1;
       .module-preview-component {
         margin: auto;
       }
     }
   }
+
   @media all and (max-width: 1150px) {
     .module-container {
       /* When on medium sized screens, we center it by evenly distributing empty space around items */

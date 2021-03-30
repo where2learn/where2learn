@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 const UserProfile = (props) => {
   const classes = useStyles();
   const [state, setState] = useState('Modules');
-  const [stars, setStars] = useState([]);
+  // const [stars, setStars] = useState([]);
   const [numStars, setNumStars] = useState(0);
   const [open, setOpen] = useState(false);
   // previous state
@@ -132,11 +132,11 @@ const UserProfile = (props) => {
         if (props.auth.currentUser && props.auth.user) {
           (async () => {
             await props.loadUser(props.auth.currentUser.uid);
-            await props.loadModules(props.auth.user.username);
-            setNumStars(getStarCounts(props.modules));
-            getStarModules(props.auth.user.username).then((modules) => {
-              setStars(modules);
+            props.loadModules(props.auth.user.username).then((modules) => {
+              // console.log(modules);
+              setNumStars(getStarCounts(modules));
             });
+            props.loadStarModules(props.auth.user.username);
           })();
         }
       }
@@ -147,7 +147,7 @@ const UserProfile = (props) => {
     if (state === 'Modules') {
       return <ModuleList modules={props.modules} />;
     } else if (state === 'Stars') {
-      return <ModuleList modules={stars} />;
+      return <ModuleList modules={props.starModules} />;
     }
     return <ListItem> {state} </ListItem>;
   };

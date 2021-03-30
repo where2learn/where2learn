@@ -32,7 +32,6 @@ import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 import { updateUserTheme } from '../firebase';
 
 const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -175,7 +174,12 @@ const NavDrawer = (props) => {
   const MenuContent = () => (
     <React.Fragment>
       <List>
-        <ListItem button key='dashboard' className={classes.menuIconWrapper}>
+        <ListItem
+          button
+          key='dashboard'
+          className={classes.menuIconWrapper}
+          onClick={() => history.push('/user-profile')}
+        >
           <ListItemIcon className={classes.menuIcon}>
             <Tooltip title='Dashboard' placement='right'>
               <DashboardIcon />
