@@ -99,7 +99,10 @@ const App = (props) => {
                 component={UserProfile}
                 authed={props.auth.currentUser}
               />
-              <Route path='/roadmap-vis' component={Roadmap} />
+              <Route
+                path='/roadmap-vis/display/:username/:module_id'
+                component={Roadmap}
+              />
               <Route path='/signup' component={Signup} />
               <Route path='/module/add' component={AddModulePage} />
               <Route path='/login' component={Login} />

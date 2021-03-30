@@ -22,7 +22,7 @@ import {
 
 const fetchUser = (uid) => (dispatch) => {
   return getUserInfo(uid).then((user) => {
-    // console.log(user);
+    console.log(user);
     dispatch(loadUser(user));
     return user;
   });
@@ -46,8 +46,8 @@ const login = (email, password) => (dispatch) => {
   return auth
     .signInWithEmailAndPassword(email, password)
     .then((result) => {
-      console.log(result);
-      dispatch(authUser(result));
+      // console.log(result);
+      dispatch(authUser(result.user));
     })
     .catch((err) => {
       throw err;

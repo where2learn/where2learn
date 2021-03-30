@@ -62,7 +62,9 @@ const Main = () => {
 
   const updateModules = async () => {
     const modules = await getModuleComplete(searchResultLimit, page - 1, tags);
-    setModules(modules);
+    // setModules(modules);
+    setModules(modules.filter((module) => module.roadmap === null));
+    setRoadMaps(modules.filter((module) => module.roadmap !== null));
   };
 
   useEffect(() => {
@@ -129,7 +131,7 @@ const Main = () => {
     } else if (pageType === 'roadmaps') {
       return (
         <React.Fragment>
-          {/* <ModuleList modules={modules} />
+          <ModuleList modules={roadMaps} />
           <Pagination
             page={page}
             onChangePage={(event, newPage) => {
@@ -138,7 +140,7 @@ const Main = () => {
             count={10}
             showFirstButton
             showLastButton
-          /> */}
+          />
         </React.Fragment>
       );
     } else {

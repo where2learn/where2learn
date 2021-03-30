@@ -87,8 +87,6 @@ const useStyles = makeStyles({
   },
 });
 
-
-
 // start of return module
 export default function RmTreeView() {
   // ==== start of return compoenents ===
@@ -98,11 +96,9 @@ export default function RmTreeView() {
   const [deletOpen, setDeleteOpen] = useState(false);
   const [choseModule, setChoseModule] = useState(null);
 
-  const [mode, setMode] = useState(null)
-  const [child, setChild] = useState(null)
-  const [parent, setParent] = useState(null)
-  
-
+  const [mode, setMode] = useState(null);
+  const [child, setChild] = useState(null);
+  const [parent, setParent] = useState(null);
 
   //TODO: needs to be deleted
   const [roadmap, setRoadmap] = useState({
@@ -121,7 +117,6 @@ export default function RmTreeView() {
     },
   });
 
-
   StyledTreeItem.propTypes = {
     bgColor: PropTypes.string,
     color: PropTypes.string,
@@ -129,7 +124,6 @@ export default function RmTreeView() {
     labelInfo: PropTypes.string,
     labelText: PropTypes.string.isRequired,
   };
-
 
   // console.log( Object.keys(levelVis).map((key, index) =>
   //       levelVis[key].map((idx) => console.log(key, idx))
@@ -143,34 +137,42 @@ export default function RmTreeView() {
 
   //TODO: start module, go to pop up window: add one to the roadmaps
 
-
-  function findIds(e){
+  function findIds(e) {
     const check = ['editbutton', 'deletebutton', 'addbutton'];
     let snode = null;
     let child = null;
     let parent = null;
-    if (check.includes(e.target.parentNode.className)){
-        snode = e.target.parentNode.parentNode.nodeId;
+    if (check.includes(e.target.parentNode.className)) {
+      snode = e.target.parentNode.parentNode.nodeId;
     }
 
-    if (check.includes(e.target.parentNode.parentNode.className)){
+    if (check.includes(e.target.parentNode.parentNode.className)) {
       snode = e.target.parentNode.parentNode.parentNode.nodeId;
-  }
-
+    }
   }
 
   //TODO: child, parent, mode
   function handleClick(e) {
     e.preventDefault();
-    console.log("e.target.parentNode", e.target.parentNode);
-    console.log("e.target.parentNode.parentNode)",e.target.parentNode.parentNode);
-    console.log("6 item", e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode)
-    console.log("id6",e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id);
+    console.log('e.target.parentNode', e.target.parentNode);
+    console.log(
+      'e.target.parentNode.parentNode)',
+      e.target.parentNode.parentNode
+    );
+    console.log(
+      '6 item',
+      e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+    );
+    console.log(
+      'id6',
+      e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+        .id
+    );
     if (
       e.target.parentNode.className ||
       e.target.parentNode.parentNode.className === 'editbutton'
     ) {
-      setMode("edit")
+      setMode('edit');
       console.log(e.target);
       setEditOpen(true);
     }
@@ -179,7 +181,7 @@ export default function RmTreeView() {
       e.target.parentNode.parentNode.className ||
       e.target.parentNode.parentNode.className === 'deletebutton'
     ) {
-      setMode("delete")
+      setMode('delete');
       console.log('hi');
     }
 
@@ -187,10 +189,9 @@ export default function RmTreeView() {
       e.target.parentNode.parentNode.className ||
       e.target.parentNode.parentNode.className === 'addbutton'
     ) {
-      setMode("add")
+      setMode('add');
       console.log('hi');
     }
-
   }
 
   function StyledTreeItem(props) {
@@ -199,7 +200,7 @@ export default function RmTreeView() {
 
     return (
       <TreeItem
-        id = {id}
+        id={id}
         label={
           <div className={classes.labelRoot}>
             <div className='deletebutton'>
@@ -218,14 +219,14 @@ export default function RmTreeView() {
               />
             </div>
             <div className='addbutton'>
-              <AddCircleIcon 
+              <AddCircleIcon
                 color='inherit'
                 className={classes.labelIcon}
                 variant='contained'
                 // onClick={handleClick}
               />
             </div>
-            
+
             <Typography variant='body2' className={classes.labelText}>
               {labelText}
             </Typography>
@@ -251,8 +252,6 @@ export default function RmTreeView() {
     );
   }
 
-
-
   const WholeTree = ({ data }) => (
     <React.Fragment>
       {Object.keys(data) &&
@@ -260,7 +259,12 @@ export default function RmTreeView() {
           // console.log('key', key, 'ata[key]', data[key]);
           return (
             // <div id={key}>
-            <StyledTreeItem nodeId={key} id={key} labelText={key} labelIcon={MailIcon}>
+            <StyledTreeItem
+              nodeId={key}
+              id={key}
+              labelText={key}
+              labelIcon={MailIcon}
+            >
               {data[key] && <WholeTree data={data[key]} />}
             </StyledTreeItem>
             // </div>
@@ -271,7 +275,7 @@ export default function RmTreeView() {
 
   return (
     <div className={classes.viewBar}>
-      <Button variant="contained" color="primary">
+      <Button variant='contained' color='primary'>
         Add start module
       </Button>
       <TreeView
