@@ -95,19 +95,17 @@ export default function RmTreeView() {
 
   const classes = useStyles();
   const [editOpen, setEditOpen] = useState(false);
-  const [selectedModule, setSelectedModule] = useState(null);
+  const [deletOpen, setDeleteOpen] = useState(false);
+  const [choseModule, setChoseModule] = useState(null);
+
+  const [mode, setMode] = useState(null)
+  const [child, setChild] = useState(null)
+  const [parent, setParent] = useState(null)
+  
 
 
-
-  StyledTreeItem.propTypes = {
-    bgColor: PropTypes.string,
-    color: PropTypes.string,
-    labelIcon: PropTypes.elementType.isRequired,
-    labelInfo: PropTypes.string,
-    labelText: PropTypes.string.isRequired,
-  };
-
-  const roadmaps = {
+  //TODO: needs to be deleted
+  const [roadmap, setRoadmap] = useState({
     1: {
       2: { 3: {}, 4: {} },
       5: {},
@@ -121,25 +119,58 @@ export default function RmTreeView() {
         },
       },
     },
+  });
+
+
+  StyledTreeItem.propTypes = {
+    bgColor: PropTypes.string,
+    color: PropTypes.string,
+    labelIcon: PropTypes.elementType.isRequired,
+    labelInfo: PropTypes.string,
+    labelText: PropTypes.string.isRequired,
   };
+
 
   // console.log( Object.keys(levelVis).map((key, index) =>
   //       levelVis[key].map((idx) => console.log(key, idx))
 
   // ))
 
-  const findParent
+  useEffect(() => {
+    console.log(choseModule);
+    // add Children
+  }, [choseModule]);
 
+  //TODO: start module, go to pop up window: add one to the roadmaps
+
+
+  function findIds(e){
+    const check = ['editbutton', 'deletebutton', 'addbutton'];
+    let snode = null;
+    let child = null;
+    let parent = null;
+    if (check.includes(e.target.parentNode.className)){
+        snode = e.target.parentNode.parentNode.nodeId;
+    }
+
+    if (check.includes(e.target.parentNode.parentNode.className)){
+      snode = e.target.parentNode.parentNode.parentNode.nodeId;
+  }
+
+  }
+
+  //TODO: child, parent, mode
   function handleClick(e) {
     e.preventDefault();
-    // console.log(e.target.parentNode.className);
-    // console.log(e.target.parentNode.parentNode.className);
+    console.log("e.target.parentNode", e.target.parentNode);
+    console.log("e.target.parentNode.parentNode)",e.target.parentNode.parentNode);
+    console.log("6 item", e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode)
+    console.log("id6",e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id);
     if (
       e.target.parentNode.className ||
       e.target.parentNode.parentNode.className === 'editbutton'
     ) {
-
-
+      setMode("edit")
       console.log(e.target);
       setEditOpen(true);
     }
@@ -148,16 +179,27 @@ export default function RmTreeView() {
       e.target.parentNode.parentNode.className ||
       e.target.parentNode.parentNode.className === 'deletebutton'
     ) {
+      setMode("delete")
       console.log('hi');
     }
+
+    if (
+      e.target.parentNode.parentNode.className ||
+      e.target.parentNode.parentNode.className === 'addbutton'
+    ) {
+      setMode("add")
+      console.log('hi');
+    }
+
   }
 
   function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
-    const { labelText, labelIcon: LabelIcon, labelInfo, ...other } = props;
+    const { id, labelText, labelIcon: LabelIcon, labelInfo, ...other } = props;
 
     return (
       <TreeItem
+        id = {id}
         label={
           <div className={classes.labelRoot}>
             <div className='deletebutton'>
@@ -215,11 +257,13 @@ export default function RmTreeView() {
     <React.Fragment>
       {Object.keys(data) &&
         Object.keys(data).map((key, index) => {
-          console.log('key', key, 'ata[key]', data[key]);
+          // console.log('key', key, 'ata[key]', data[key]);
           return (
-            <StyledTreeItem nodeId={key} labelText={key} labelIcon={MailIcon}>
+            // <div id={key}>
+            <StyledTreeItem nodeId={key} id={key} labelText={key} labelIcon={MailIcon}>
               {data[key] && <WholeTree data={data[key]} />}
             </StyledTreeItem>
+            // </div>
           );
         })}
     </React.Fragment>
@@ -237,13 +281,13 @@ export default function RmTreeView() {
         defaultExpandIcon={<ArrowRightIcon />}
         defaultEndIcon={<div style={{ width: '1000px' }} />}
       >
-        <WholeTree data={roadmaps} />
+        <WholeTree data={roadmap} />
       </TreeView>
 
-      {editOpen ? (
+      {/* {editOpen ? (
         <RoadMapPopUp
           setOpen={setEditOpen}
-          setSelectedModule={setESelectedModule}
+          setSelectedModule={setChoseModule}
           modules={[
             { module_id: 'jiataoxiang', author: 'nobody' },
             { module_id: 'jiatao handsome', author: 'nobody' },
@@ -253,7 +297,7 @@ export default function RmTreeView() {
             { module_id: 'hhhhhlo_you', author: 'nobody' },
           ]}
         />
-      ) : null}
+      ) : null} */}
     </div>
   );
 }
