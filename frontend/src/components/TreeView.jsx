@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
-import MailIcon from '@material-ui/icons/Mail';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
@@ -12,6 +11,7 @@ import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RoadMapPopUp from '../components/RoadMapPopUp';
 import Button from '@material-ui/core/Button';
+import RoadMapDeletePOPUP from '../components/RoadMapDeletePopUp';
 
 const useTreeItemStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +33,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     borderTopRightRadius: theme.spacing(2),
     borderBottomRightRadius: theme.spacing(2),
-    paddingRight: theme.spacing(1),
+    paddingRight: "200px",
     fontWeight: theme.typography.fontWeightMedium,
     '$expanded > &': {
       fontWeight: theme.typography.fontWeightRegular,
@@ -88,7 +88,7 @@ export default function RmTreeView() {
 
   const classes = useStyles();
   const [addEditOpen, setAddEditOpen] = useState(false);
-  const [deletOpen, setDeleteOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [choseModule, setChoseModule] = useState(null);
 
   const [mode, setMode] = useState(null);
@@ -379,7 +379,6 @@ export default function RmTreeView() {
               nodeId={key}
               id={key}
               labelText={key}
-              labelIcon={MailIcon}
             >
               {data[key] && <WholeTree data={data[key]} />}
             </StyledTreeItem>
@@ -409,7 +408,7 @@ export default function RmTreeView() {
         <WholeTree data={roadmap} />
       </TreeView>
 
-      {/* {addEditOpen ? (
+      {addEditOpen ? (
         <RoadMapPopUp
           setOpen={setAddEditOpen}
           setSelectedModule={setChoseModule}
@@ -424,14 +423,14 @@ export default function RmTreeView() {
           mode={mode
           }
         />
-      ) : null} */}
+      ) : null}
 
-      {/* {deleteOpen ? (
+      {deleteOpen ? (
         <RoadMapDeletePOPUP
           setDeleteOpen={setDeleteOpen}
           SetDeleteState={setDeleteConfirm}
         />
-      ) : null} */}
+      ) : null}
     </div>
   );
 }

@@ -7,7 +7,8 @@ import NavDrawer from '../components/NavDrawer';
 import RoadMapPopUp from '../components/RoadMapPopUp';
 import { propTypes } from 'react-bootstrap/esm/Image';
 import RoadmapTreeView from '../components/RoadmapTreeView';
-import RmTreeView from '../components/TreeView';
+
+import TreeviewDisplay from '../components/TreeviewDisplay';
 import Container from '@material-ui/core/Container';
 import DisplayModule from '../components/DisplayModule';
 import { connect } from 'react-redux';
@@ -236,7 +237,7 @@ const Roadmap = (props) => {
       <NavDrawer>
         {/* <RoadmapTreeView /> */}
         <Grid container className={classes.grid} spacing={2}>
-          <RmTreeView style={{ float: 'left' }} />
+          <TreeviewDisplay style={{ float: 'left' }} />
 
           <div style={{ position: 'absolute', left: '300px' }}>
             <IconButton aria-label='help' onClick={handlePopOver}>
