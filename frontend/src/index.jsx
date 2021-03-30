@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { AuthProvider } from './contexts/AuthContext';
+import { SnackbarProvider } from 'notistack';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { configStore } from './redux/configStore';
@@ -17,13 +18,15 @@ auth.onAuthStateChanged((user) => {
   generateUserDocument(user);
   ReactDOM.render(
     <Provider store={store}>
-      <AuthProvider>
-        <PersistGate persistor={persistor}>
-          <React.StrictMode>
-            <App />
-          </React.StrictMode>
-        </PersistGate>
-      </AuthProvider>
+      <SnackbarProvider maxSnack={10}>
+        <AuthProvider>
+          <PersistGate persistor={persistor}>
+            <React.StrictMode>
+              <App />
+            </React.StrictMode>
+          </PersistGate>
+        </AuthProvider>
+      </SnackbarProvider>
     </Provider>,
     document.getElementById('root')
   );
