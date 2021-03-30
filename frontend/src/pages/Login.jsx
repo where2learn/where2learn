@@ -42,8 +42,18 @@ const Login = (props) => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const [loginState, setLoginState] = useState(false);
 
   const classes = useStyles();
+
+  useEffect(() => {
+    console.log(props.auth);
+    console.log(loginState);
+    if (props.auth.user && loginState) {
+      setLoginState(false);
+      history.push('/');
+    }
+  }, [loginState, props.auth.user]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -57,9 +67,11 @@ const Login = (props) => {
       );
       console.log(res);
       console.log('signin finished');
-      console.log(props.auth);
+      // console.log(props.auth);
       enqueueSnackbar('Logged In', { variant: 'success' });
-      history.push('/');
+      setLoginState(true);
+      console.log('setsate');
+      // history.push('/');
     } catch {
       enqueueSnackbar('Failed to log in', { variant: 'error' });
       setLoading(false);
@@ -73,7 +85,9 @@ const Login = (props) => {
       await props.signInWithGoogle();
       console.log('signin with google finished');
       enqueueSnackbar('Logged In', { variant: 'success' });
-      history.push('/');
+      setLoginState(true);
+
+      // history.push('/');
     } catch {
       enqueueSnackbar('Failed to log in', { variant: 'error' });
       setLoading(false);

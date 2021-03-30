@@ -23,6 +23,7 @@ import {
 const fetchUser = (uid) => async (dispatch) => {
   try {
     const user = await getUserInfo(uid);
+    // console.log(user);
     dispatch(loadUser(user));
     return user;
   } catch (error) {
@@ -88,10 +89,12 @@ const changeAvatar = (uid, avatar) => (dispatch) => {
   dispatch(updateAvatarAction(avatar));
 };
 
-const signInWithPopup = (dispatch) => {
-  const userAuth = auth.signInWithPopup(provider);
-  dispatch(authUser(userAuth));
-  return userAuth;
+const signInWithPopup = async (dispatch) => {
+  const userAuth = await auth.signInWithPopup(provider);
+  dispatch(authUser(userAuth.user));
+  console.log(userAuth.user);
+  await fetchUser(userAuth.user.uid);
+  return userAuth.user;
 };
 
 const setStoreToNull = (dispatch) => {

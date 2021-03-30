@@ -63,9 +63,11 @@ const App = (props) => {
   }, [dbTheme]);
 
   useEffect(() => {
+    console.log(props.auth);
     if (props.auth.currentUser && props.auth.currentUser.uid) {
+      console.log(props.auth.currentUser.uid);
       props.loadUser(props.auth.currentUser.uid);
-      console.log(props.auth.currentUser);
+      // console.log(props.auth);
       realtimeUpdateTheme(props.auth.currentUser.uid, setDBTheme);
     }
   }, []);

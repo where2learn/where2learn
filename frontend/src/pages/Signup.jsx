@@ -71,14 +71,14 @@ const Signup = (props) => {
   async function handleClick(e) {
     e.preventDefault();
     console.log(e.target);
-    try {
-      setLoading(true);
-      await props.signInWithGoogle();
-      enqueueSnackbar('Logged In', { variant: 'success' });
-      history.push('/');
-    } catch {
-      enqueueSnackbar('Failed to log in', { variant: 'error' });
-    }
+    // try {
+    //   setLoading(true);
+    //   await props.signInWithGoogle();
+    //   enqueueSnackbar('Logged In', { variant: 'success' });
+    //   history.push('/');
+    // } catch {
+    //   enqueueSnackbar('Failed to log in', { variant: 'error' });
+    // }
     setLoading(false);
   }
 
