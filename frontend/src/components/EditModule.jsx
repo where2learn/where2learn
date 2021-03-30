@@ -18,6 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { constructModuleObject } from '../firestore_data';
 import RmTreeView from './TreeView';
 
+
 const maxDescriptionLength = 160;
 
 const useStyles = makeStyles((theme) => ({
