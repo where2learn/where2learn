@@ -121,23 +121,24 @@ export default function RmTreeView() {
 
 
 
-//useeffect for detele; comment it out if you don't want to use deletepopup window
-  useEffect(() =>{
-    if (deleteConfirm){
-      if (parent == null){
-        delete roadmap[child];
+
+// //useeffect for detele; comment it out if you don't want to use deletepopup window
+//   useEffect(() =>{
+//     if (deleteConfirm){
+//       if (parent == null){
+//         delete roadmap[child];
   
-      }
-      else {
-        //when delete, get its parent, and itself
-        console.log("")
-        let newRoadmapVis = changeChild(roadmap, parent, child, "delete")
-        setRoadmap(newRoadmapVis);
-      }
-      // setDeleteConfirm(false)
-    }
+//       }
+//       else {
+//         //when delete, get its parent, and itself
+//         console.log("")
+//         let newRoadmapVis = changeChild(roadmap, parent, child, "delete")
+//         setRoadmap(newRoadmapVis);
+//       }
+//       // setDeleteConfirm(false)
+//     }
   
-  },[deleteConfirm, choseModule]);
+//   },[deleteConfirm, choseModule]);
 
 
 
@@ -167,7 +168,7 @@ export default function RmTreeView() {
         roadmap[choseModule] = cp_module
         setRoadmap(roadmap)
       }else{
-        let newroadmap = changeChild(roadmap, child, choseModule, "add")
+        let newroadmap = changeChild(roadmap, parent, child, "edit")
         setRoadmap(newroadmap)
       }
     }
@@ -186,7 +187,7 @@ export default function RmTreeView() {
         }
         else if (mode === "edit") {
           console.log("parentId, childId", parentId, childId)
-          console.log("obj", obj)
+          console.log("obj", obj[parentId])
           let cp_module = JSON.parse(JSON.stringify(obj[parentId][childId]));
           delete obj[parentId][childId]
           obj[parentId][choseModule] = cp_module
@@ -254,6 +255,8 @@ export default function RmTreeView() {
         e.target.parentNode.className === 'editbutton' ||
         e.target.parentNode.parentNode.className === 'editbutton'
       ) {
+
+        console.log("edit button")
         setMode("edit")
         setAddEditOpen(true);
         
