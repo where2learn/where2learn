@@ -358,7 +358,7 @@ export default function RmTreeView() {
         <WholeTree data={roadmap} />
       </TreeView>
 
-      {addEditOpen ? (
+      {/* {addEditOpen ? (
         <RoadMapPopUp
           setOpen={setAddEditOpen}
           setSelectedModule={setChoseModule}
@@ -380,7 +380,7 @@ export default function RmTreeView() {
           setDeleteOpen={setDeleteOpen}
           setDeleteConfirm={setDeleteConfirm}
         />
-      ) : null}
+      ) : null} */}
     </div>
   );
 }
