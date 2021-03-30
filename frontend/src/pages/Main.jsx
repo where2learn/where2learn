@@ -60,6 +60,8 @@ const Main = () => {
   const tagInputRef = useRef();
   const classes = useStyles();
 
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
   const updateModules = async () => {
     const modules = await getModuleComplete(searchResultLimit, page - 1, tags);
     // setModules(modules);
@@ -81,6 +83,14 @@ const Main = () => {
       updateModules();
     }, 1000);
   }, [keyword]);
+
+  useEffect(() => {
+    if (pageType === 'modules') {
+      setSelectedIndex(0);
+    } else if (pageType === 'roadmaps') {
+      setSelectedIndex(1);
+    }
+  }, [pageType]);
 
   // useEffect(() => {
   //   if (tagTimeoutRef.current) {
@@ -195,13 +205,21 @@ const Main = () => {
               </Paper>
               <Paper className={classes.menuPaper}>
                 <List component='nav'>
-                  <ListItem button onClick={() => setPageType('modules')}>
+                  <ListItem
+                    button
+                    selected={selectedIndex === 0}
+                    onClick={() => setPageType('modules')}
+                  >
                     <ListItemIcon>
                       <MenuBookIcon />
                     </ListItemIcon>
                     <ListItemText primary='Modules' />
                   </ListItem>
-                  <ListItem button onClick={() => setPageType('roadmaps')}>
+                  <ListItem
+                    button
+                    selected={selectedIndex === 1}
+                    onClick={() => setPageType('roadmaps')}
+                  >
                     <ListItemIcon>
                       <AccountTreeIcon />
                     </ListItemIcon>
