@@ -115,48 +115,23 @@ export default function RmTreeView() {
     },
   });
 
-  //useeffect for detele; comment it out if you don't want to use deletepopup window
-  // useEffect(() =>{
-  //   if (deleteConfirm){
-  //     if (parent == null){
-  //       delete roadmap[child];
+  // //useeffect for detele; comment it out if you don't want to use deletepopup window
+  //   useEffect(() =>{
+  //     if (deleteConfirm){
+  //       if (parent == null){
+  //         delete roadmap[child];
 
+  //       }
+  //       else {
+  //         //when delete, get its parent, and itself
+  //         console.log("")
+  //         let newRoadmapVis = changeChild(roadmap, parent, child, "delete")
+  //         setRoadmap(newRoadmapVis);
+  //       }
+  //       // setDeleteConfirm(false)
   //     }
-  //     else {
-  //       //when delete, get its parent, and itself
-  //       console.log("")
-  //       let newRoadmapVis = changeChild(roadmap, parent, child, "delete")
-  //       setRoadmap(newRoadmapVis);
-  //     }
-  //     // setDeleteConfirm(false)
-  //   }
 
-<<<<<<< HEAD
-  // },[deleteConfirm, choseModule]);
-=======
-
-
-// //useeffect for detele; comment it out if you don't want to use deletepopup window
-//   useEffect(() =>{
-//     if (deleteConfirm){
-//       if (parent == null){
-//         delete roadmap[child];
-  
-//       }
-//       else {
-//         //when delete, get its parent, and itself
-//         console.log("")
-//         let newRoadmapVis = changeChild(roadmap, parent, child, "delete")
-//         setRoadmap(newRoadmapVis);
-//       }
-//       // setDeleteConfirm(false)
-//     }
-  
-//   },[deleteConfirm, choseModule]);
-
-
-
->>>>>>> 3412e803123c47799b196b6484d4a6f2f0022e77
+  //   },[deleteConfirm, choseModule]);
 
   //useeffect for add and edit
   useEffect(() => {
@@ -174,21 +149,12 @@ export default function RmTreeView() {
     } else if (mode === 'edit') {
       if (parent == null) {
         let cp_module = JSON.parse(JSON.stringify(roadmap[child]));
-<<<<<<< HEAD
         delete roadmap[child];
         roadmap[choseModule] = cp_module;
         setRoadmap(roadmap);
       } else {
-        let newroadmap = changeChild(roadmap, child, choseModule, 'add');
+        let newroadmap = changeChild(roadmap, parent, child, 'edit');
         setRoadmap(newroadmap);
-=======
-        delete roadmap[child]
-        roadmap[choseModule] = cp_module
-        setRoadmap(roadmap)
-      }else{
-        let newroadmap = changeChild(roadmap, parent, child, "edit")
-        setRoadmap(newroadmap)
->>>>>>> 3412e803123c47799b196b6484d4a6f2f0022e77
       }
     }
   }, [choseModule]);
@@ -199,16 +165,9 @@ export default function RmTreeView() {
       if (key === parentId) {
         if (mode === 'add') {
           obj[key][childId] = {};
-<<<<<<< HEAD
         } else if (mode === 'edit') {
           console.log('parentId, childId', parentId, childId);
-          console.log('obj', obj);
-=======
-        }
-        else if (mode === "edit") {
-          console.log("parentId, childId", parentId, childId)
-          console.log("obj", obj[parentId])
->>>>>>> 3412e803123c47799b196b6484d4a6f2f0022e77
+          console.log('obj', obj[parentId]);
           let cp_module = JSON.parse(JSON.stringify(obj[parentId][childId]));
           delete obj[parentId][childId];
           obj[parentId][choseModule] = cp_module;
@@ -270,13 +229,8 @@ export default function RmTreeView() {
         e.target.parentNode.className === 'editbutton' ||
         e.target.parentNode.parentNode.className === 'editbutton'
       ) {
-<<<<<<< HEAD
+        console.log('edit button');
         setMode('edit');
-=======
-
-        console.log("edit button")
-        setMode("edit")
->>>>>>> 3412e803123c47799b196b6484d4a6f2f0022e77
         setAddEditOpen(true);
       } else if (
         e.target.parentNode.parentNode.className === 'deletebutton' ||
