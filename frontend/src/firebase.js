@@ -39,7 +39,7 @@ export default app;
 // console.log(firebase.firestore().Timestamp.now);
 export const generateUserDocument = async (user, additionalData) => {
   if (!user) return;
-  console.log(additionalData);
+  // console.log(additionalData);
   const userRef = firestore.doc(`users/${user.uid}`);
   const snapshot = await userRef.get();
 

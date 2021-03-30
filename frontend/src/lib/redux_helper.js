@@ -18,6 +18,7 @@ import {
   updateAvatar,
   provider,
   getStarModules,
+  generateUserDocument,
 } from '../firebase';
 
 const fetchUser = (uid) => async (dispatch) => {
@@ -68,10 +69,11 @@ const signup = (email, password) => async (dispatch) => {
     console.log(email, password);
     const res = await auth.createUserWithEmailAndPassword(email, password);
     console.log(res.user);
+    const user = await generateUserDocument(res.user);
     console.log('before dispatch');
     dispatch(authUser(res.user));
     console.log('after dispatch');
-    await fetchUser(res.user.uid);
+    dispatch(loadUser(user));
     console.log('fetch user finished');
     return res.user;
   } catch (error) {

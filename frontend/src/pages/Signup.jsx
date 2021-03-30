@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
@@ -43,6 +43,17 @@ const Signup = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
+  const [loginState, setLoginState] = useState(false);
+
+  useEffect(() => {
+    console.log(props.auth);
+    console.log(loginState);
+    if (props.auth.user && loginState) {
+      setLoginState(false);
+      history.push('/');
+    }
+  }, [loginState, props.auth.user]);
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -59,9 +70,9 @@ const Signup = (props) => {
       console.log(user);
       console.log('signup finished');
       console.log(props.auth);
-      generateUserDocument(user);
       enqueueSnackbar('Account Created', { variant: 'success' });
-      history.push('/');
+      setLoginState(true);
+      // history.push('/');
     } catch {
       enqueueSnackbar('Failed to create an account', { variant: 'error' });
     }
@@ -71,14 +82,15 @@ const Signup = (props) => {
   async function handleClick(e) {
     e.preventDefault();
     console.log(e.target);
-    // try {
-    //   setLoading(true);
-    //   await props.signInWithGoogle();
-    //   enqueueSnackbar('Logged In', { variant: 'success' });
-    //   history.push('/');
-    // } catch {
-    //   enqueueSnackbar('Failed to log in', { variant: 'error' });
-    // }
+    try {
+      setLoading(true);
+      await props.signInWithGoogle();
+      enqueueSnackbar('Logged In', { variant: 'success' });
+      setLoginState(true);
+      // history.push('/');
+    } catch {
+      enqueueSnackbar('Failed to log in', { variant: 'error' });
+    }
     setLoading(false);
   }
 
