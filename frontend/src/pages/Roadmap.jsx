@@ -15,7 +15,10 @@ import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
-import { Help } from '@material-ui/icons';
+import { ContactSupportTwoTone, Help } from '@material-ui/icons';
+import { constructFullModuleId, convertTagsObj2Array } from '../firestore_data';
+
+import { getModuleById } from '../firebase';
 
 // for each individual box, get diff width & margin in diff windowInnerWidth
 const getboxWidth = () => {
@@ -87,6 +90,11 @@ const Roadmap = (props) => {
   const [selectedModule, setSelectedModule] = useState(null);
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [roadmapVis, setRoadmapVis] = useState({});
+
+  const [totalItems, setTotalItems] = useState(13);
+  const [fullLevelVis, setFullLevelVis] = useState({});
+
   const handlePopOver = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -98,11 +106,6 @@ const Roadmap = (props) => {
   const handleClickOpen = () => {
     setOpen(true);
   };
-
-  useEffect(() => {
-    console.log(selectedModule);
-    // add Children
-  }, [selectedModule]);
 
   //group modules in same level in same array
   //key is level, value is array
@@ -142,6 +145,40 @@ const Roadmap = (props) => {
     return [total_num, levelArray];
   };
 
+  //find deepest level
+  const findlevel = (obj) => {
+    let max_level = 1;
+    for (let key in obj) {
+      if (Object.keys(obj[key]).length === 0) {
+        continue;
+      }
+      if (typeof obj[key] == 'object') {
+        max_level = Math.max(max_level, 1 + findlevel(obj[key]));
+      }
+    }
+
+    return max_level;
+  };
+
+  useEffect(() => {
+    // initial state
+    const id = constructFullModuleId(
+      props.match.params.username,
+      props.match.params.module_id
+    );
+    (async () => {
+      const module = await getModuleById(id);
+      setRoadmapVis(module.roadmap);
+      // setFullLevelVis(fullLevelView(roadmapVis, findlevel(roadmapVis))[1]);
+      // console.log(module);
+    })();
+  }, []);
+
+  useEffect(() => {
+    console.log(selectedModule);
+    // add Children
+  }, [selectedModule]);
+
   // add the child to the module id
   const addChild = (obj, parentId, newId) => {
     for (let key in obj) {
@@ -161,53 +198,14 @@ const Roadmap = (props) => {
     return obj;
   };
 
-  //find deepest level
-  const findlevel = (obj) => {
-    let max_level = 1;
-    for (let key in obj) {
-      if (Object.keys(obj[key]).length === 0) {
-        continue;
-      }
-      if (typeof obj[key] == 'object') {
-        max_level = Math.max(max_level, 1 + findlevel(obj[key]));
-      }
-    }
-
-    return max_level;
-  };
-
   const classes = useStyles();
-  const [roadmapVis, setRoadmapVis] = useState({
-    1: {
-      2: { 3: {}, 4: {} },
-      5: {},
-    },
-    6: {},
-    7: {
-      8: {
-        9: {},
-        10: {
-          11: { 12: {}, 13: {} },
-        },
-      },
-    },
-  });
-
-  const [totalItems, setTotalItems] = useState(13);
-  const [fullLevelVis, setFullLevelVis] = useState(
-    fullLevelView(roadmapVis, findlevel(roadmapVis))[1]
-  );
-
-  useEffect(() => {
-    console.log(props);
-  }, []);
 
   useEffect(() => {
     let level = findlevel(roadmapVis);
     let newLevelView = fullLevelView(roadmapVis, level);
     setFullLevelVis(newLevelView[1]);
     // console.log('fullLevelVis', fullLevelVis);
-  }, [roadmapVis, totalItems]);
+  }, [roadmapVis]);
 
   function addClick(e) {
     e.preventDefault();
@@ -264,7 +262,7 @@ const Roadmap = (props) => {
             </Popover>
             <React.Fragment>
               {Object.keys(fullLevelVis).map((key, index) => (
-                <Box key={index} className={classes.box_group}>
+                <Box key={key} className={classes.box_group}>
                   {fullLevelVis[key].map((item) => {
                     // console.log('number of child', key, fullLevelVis[key].length);
                     if (item[0] === null) {

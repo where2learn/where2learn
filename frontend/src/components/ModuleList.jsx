@@ -11,6 +11,17 @@ const ModuleList = (props) => {
       return description;
     }
   };
+
+  const getTitleLink = (module) => {
+    var titleLink = '';
+    if (module.roadmap === null) {
+      titleLink = `/module/display/${module.author}/${module.module_id}`;
+    } else {
+      titleLink = `/roadmap-vis/display/${module.author}/${module.module_id}`;
+    }
+    return titleLink;
+  };
+
   return (
     <div className='module-list'>
       <div className='module-container'>
@@ -21,7 +32,7 @@ const ModuleList = (props) => {
           return (
             <div key={index} className='preview-container'>
               <ModulePreview
-                title_link={`/module/display/${module.author}/${module.module_id}`}
+                title_link={getTitleLink(module)}
                 num_star={module.num_star}
                 cover_image='https://avatars.githubusercontent.com/u/33727687?s=460&u=7fd97fe40129bdebcfc0bbccc75657735969e5e5&v=4'
                 title={module.title}
