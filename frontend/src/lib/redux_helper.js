@@ -132,6 +132,9 @@ export const mapStateToProps = (state) => {
     auth: state.auth,
     modules: state.moduleReducer.modules,
     starModules: state.moduleReducer.starModules,
-    tags: state.tagReducer.tags,
+    dbTags: state.tagReducer.tags,
+    state: {
+      tags: state.tagReducer.tags,
+    },
   };
 };

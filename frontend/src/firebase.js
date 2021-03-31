@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
-import { constructStarId, constructFullModuleId } from './firestore_data';
+import { constructStarId, convertTagsObj2Array } from './firestore_data';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -172,15 +172,17 @@ export const uploadImage = (rawImage) => {
 
 export const addModule = async (username, module) => {
   const full_module_id = `${username}\\${module.module_id}`;
-  const tags = module.tags;
+  const tags = convertTagsObj2Array(module.tags);
   const new_module = { ...module, num_star: 0, author: username };
   const batch = firestore.batch();
   const moduleRef = firestore.collection('modules').doc(full_module_id);
   batch.set(moduleRef, new_module);
-  for (let i = 0; i < tags.length; i++) {
+  for (let i = 0; i < Object.keys(tags).length; i++) {
     const tag = tags[i];
     const tagRef = firestore.collection('tags').doc(tag);
     const doc = await tagRef.get();
+    console.log(doc);
+    console.log(doc.exists);
     if (doc.exists) {
       batch.update(tagRef, {
         count: firebase.firestore.FieldValue.increment(1),

@@ -92,7 +92,7 @@ const Main = (props) => {
       setTagSearchPopperOpen(false);
     });
     tagInputRef.current.addEventListener('focusin', (e) => {
-      setTagSearchPopperOpen(true);
+      handleTagSearchPopper(e);
     });
   }, []);
 
@@ -102,7 +102,7 @@ const Main = (props) => {
   }, [page]);
 
   useEffect(() => {
-    const filteredTags = props.tags.filter((tag) =>
+    const filteredTags = props.dbTags.filter((tag) =>
       tag.value.toLowerCase().includes(tagInputValue)
     );
     filteredTags.sort((a, b) => b.count - a.count);
@@ -189,7 +189,6 @@ const Main = (props) => {
   const handleTagSearchPopper = (event) => {
     setAnchorEl(event.currentTarget);
     setTagSearchPopperOpen((prev) => tagHints && tagHints.length > 0);
-    setTagSearchPopperOpen(true);
   };
 
   const handleTagSearchOnChange = (e) => {

@@ -501,7 +501,6 @@ const EditModule = (props) => {
             Submit
           </Button>
         </div>
-        {/* <div dangerouslySetInnerHTML={{ __html: editorContent }} /> */}
       </Container>
     </NavDrawer>
   );

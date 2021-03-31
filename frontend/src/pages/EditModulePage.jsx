@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import { getModuleById } from '../firebase';
 import Container from '@material-ui/core/Container';
 import NavDrawer from '../components/NavDrawer';
@@ -15,6 +15,7 @@ const EditModulePage = (props) => {
 
   const [module, setModule] = useState(null);
   const [content, setContent] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     (async () => {
@@ -31,6 +32,7 @@ const EditModulePage = (props) => {
     editModule(props.auth.user.username, module)
       .then(() => {
         console.log('successfully edited module');
+        history.push('/');
       })
       .catch((error) => {
         console.error(error);
