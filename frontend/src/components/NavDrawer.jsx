@@ -138,7 +138,6 @@ const NavDrawer = (props) => {
     // console.log(props.auth.currentUser);
     if (props.auth.currentUser) {
       updateUserTheme(props.auth.currentUser.uid, darkTheme ? 'dark' : 'light');
-      console.log(props.auth.currentUser);
       props.loadUser(props.auth.currentUser.uid);
     }
   }, [darkTheme, enqueueSnackbar, props.auth.currentUser]);

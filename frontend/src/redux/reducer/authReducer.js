@@ -25,7 +25,6 @@ const auth = (state = { user: {}, currentUser: {} }, action) => {
         currentUser: null,
       };
     case AUTH_INFO_SUCCESS:
-      console.log(action.currentUser);
       return {
         ...state,
         currentUser: action.currentUser,

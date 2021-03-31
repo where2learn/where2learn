@@ -198,11 +198,54 @@ export const addModule = async (username, module) => {
   }
 };
 
-export const editModule = (username, module) => {
+export const editModule = async (username, module) => {
   const full_module_id = `${username}\\${module.module_id}`;
   const new_module = { ...module };
-  delete new_module.module_id;
-  return firestore.collection('modules').doc(full_module_id).update(new_module);
+  const newTagsArray = convertTagsObj2Array(new_module.tags);
+  const moduleRef = firestore.collection('modules').doc(full_module_id);
+  try {
+    const doc = await moduleRef.get();
+    const originalModule = doc.data();
+    const originalTagsArray = convertTagsObj2Array(originalModule.tags);
+    const getSetDiff = (setA, setB) => {
+      let _difference = new Set(setA);
+      for (let elem of setB) {
+        _difference.delete(elem);
+      }
+      return _difference;
+    };
+
+    const newlyAddedTags = Array.from(
+      getSetDiff(new Set(newTagsArray), new Set(originalTagsArray))
+    );
+    const removedTags = Array.from(
+      getSetDiff(new Set(originalTagsArray), new Set(newTagsArray))
+    );
+    const batch = firestore.batch();
+    for (const tag of removedTags) {
+      const tagRef = firestore.collection('tags').doc(tag);
+      batch.update(tagRef, {
+        count: firebase.firestore.FieldValue.increment(-1),
+      });
+    }
+    for (const tag of newlyAddedTags) {
+      const tagRef = firestore.collection('tags').doc(tag);
+      const doc = await tagRef.get();
+      if (doc.exists) {
+        batch.update(tagRef, {
+          count: firebase.firestore.FieldValue.increment(1),
+        });
+      } else {
+        batch.set(tagRef, { count: 1, value: tag });
+      }
+    }
+    delete new_module.module_id;
+    batch.update(moduleRef, new_module);
+    await batch.commit();
+    console.log('success');
+  } catch (error) {
+    return error;
+  }
 };
 
 // ========== User Profile Page ===============

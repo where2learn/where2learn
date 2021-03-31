@@ -100,7 +100,6 @@ const DisplayModule = (props) => {
         setStar(await userHasStarModule(module.author, fullModuleId));
       }
     })();
-    console.log(module);
     // update tags
     if (module) {
       setTags(convertTagsObj2Array(module.tags));
@@ -130,7 +129,6 @@ const DisplayModule = (props) => {
             )}
             <div className={classes.tags}>
               {tags.map((tag, index) => {
-                console.log(tag);
                 return <Chip key={index} label={tag} />;
               })}
             </div>
