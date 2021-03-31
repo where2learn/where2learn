@@ -11,6 +11,8 @@ import {
   loadStarModules,
 } from '../redux/actions/moduleAction';
 
+import { loadTags } from '../redux/actions/tagAction';
+
 import {
   auth,
   getUserInfo,
@@ -19,6 +21,7 @@ import {
   provider,
   getStarModules,
   generateUserDocument,
+  getAllTagCounts,
 } from '../firebase';
 
 const fetchUser = (uid) => async (dispatch) => {
@@ -104,6 +107,11 @@ const setStoreToNull = (dispatch) => {
   dispatch(clearModules());
 };
 
+const fetchTags = async (dispatch) => {
+  const tags = await getAllTagCounts();
+  dispatch(loadTags(tags));
+};
+
 export const mapDispatchToProps = (dispatch) => {
   return {
     loadUser: (uid) => fetchUser(uid)(dispatch),
@@ -114,6 +122,7 @@ export const mapDispatchToProps = (dispatch) => {
     signInWithGoogle: () => signInWithPopup(dispatch),
     signup: (email, password) => signup(email, password)(dispatch),
     loadStarModules: (username) => fetchStarModules(username)(dispatch),
+    loadTags: () => fetchTags(dispatch),
   };
 };
 
@@ -123,5 +132,6 @@ export const mapStateToProps = (state) => {
     auth: state.auth,
     modules: state.moduleReducer.modules,
     starModules: state.moduleReducer.starModules,
+    tags: state.tagReducer.tags,
   };
 };

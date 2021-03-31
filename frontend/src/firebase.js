@@ -93,6 +93,13 @@ export const updateUsername = (uid, username) => {
   return firestore.collection('users').doc(uid).update({ username });
 };
 
+// TAGs
+
+export const getAllTagCounts = async () => {
+  const snapshot = await firebase.firestore().collection('tags').get();
+  return snapshot.docs.map((doc) => doc.data());
+};
+
 // Module Related
 export const getModules = async (limit) => {
   const snapshot = await firebase
