@@ -27,7 +27,11 @@ import {
 import { Paper } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { connect } from 'react-redux';
-import { mapStateToProps, mapDispatchToProps } from './lib/redux_helper';
+import {
+  mapStateToProps,
+  mapDispatchToProps,
+  resetPassword,
+} from './lib/redux_helper';
 
 const App = (props) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -131,16 +135,16 @@ const App = (props) => {
               component={ForgotPassword}
               auth={props.auth}
             />
+            <Route
+              path='/roadmap-vis/display/:username/:module_id'
+              component={Roadmap}
+            />
             <Route path='/signup' component={Signup} />
             <Route path='/login' component={Login} />
             {/* Everything Below is for developing and experimenting components instead of an actual page */}
           </Switch>
         </Paper>
       </ThemeProvider>
-              <Route
-                path='/module/display/:username/:module_id'
-                component={DisplayModulePage}
-              />
     </Router>
   );
 };

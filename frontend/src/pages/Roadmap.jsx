@@ -176,6 +176,7 @@ const Roadmap = (props) => {
 
   useEffect(() => {
     // initial state
+    console.log('here');
     setStarModule(props.starModules);
     const id = constructFullModuleId(
       props.match.params.username,
