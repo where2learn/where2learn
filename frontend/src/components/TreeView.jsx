@@ -12,6 +12,8 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RoadMapPopUp from '../components/RoadMapPopUp';
 import Button from '@material-ui/core/Button';
 import RoadMapDeletePOPUP from '../components/RoadMapDeletePopUp';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 
 const useTreeItemStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +35,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     borderTopRightRadius: theme.spacing(2),
     borderBottomRightRadius: theme.spacing(2),
-    paddingRight: '200px',
+    paddingRight: '750px',
     fontWeight: theme.typography.fontWeightMedium,
     '$expanded > &': {
       fontWeight: theme.typography.fontWeightRegular,
@@ -83,7 +85,7 @@ const useStyles = makeStyles({
 });
 
 // start of return module
-export default function RmTreeView() {
+const RmTreeView = (props) => {
   // ==== start of return compoenents ===
 
   const classes = useStyles();
@@ -379,7 +381,9 @@ export default function RmTreeView() {
           setDeleteOpen={setDeleteOpen}
           setDeleteConfirm={setDeleteConfirm}
         />
-      ) : null} */}
+      ) : null} 
     </div>
   );
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(RmTreeView);
