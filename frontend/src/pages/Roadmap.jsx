@@ -87,8 +87,6 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     flexGrow: 1,
   },
-
-
 }));
 
 const Roadmap = (props) => {
@@ -99,7 +97,7 @@ const Roadmap = (props) => {
   const [totalItems, setTotalItems] = useState(13);
   const [fullLevelVis, setFullLevelVis] = useState({});
   const history = useHistory();
-  const [starModule, setStarModule] = useState({})
+  const [starModule, setStarModule] = useState({});
 
   const handlePopOver = (event) => {
     setAnchorEl(event.currentTarget);
@@ -116,11 +114,11 @@ const Roadmap = (props) => {
       // console.log(Box.parentNode);
       Box = Box.parentNode;
     }
-    const identifier = Box.innerText.split(' ')[1];
+    const identifier = Box.id;
     const [username, module_id] = identifier.split('\\');
     const url = `/module/display/${username}/${module_id}`;
-    console.log(url);
-    // history.push(url);
+    // console.log(url);
+    history.push(url);
   };
 
   //group modules in same level in same array
@@ -189,7 +187,6 @@ const Roadmap = (props) => {
       setRoadmapVis(module.roadmap);
       // setFullLevelVis(fullLevelView(roadmapVis, findlevel(roadmapVis))[1]);
       // console.log(module);
-      
     })();
   }, []);
 
@@ -250,10 +247,7 @@ const Roadmap = (props) => {
       <NavDrawer>
         {/* <RoadmapTreeView /> */}
         <Grid container className={classes.grid} spacing={2}>
-          <TreeviewDisplay 
-            style={{ float: 'left' }}
-            roadmapVis={roadmapVis}
-            />
+          <TreeviewDisplay style={{ float: 'left' }} roadmapVis={roadmapVis} />
 
           <div style={{ position: 'absolute', left: '300px' }}>
             <IconButton aria-label='help' onClick={handlePopOver}>
@@ -314,7 +308,7 @@ const Roadmap = (props) => {
                     } else {
                       return (
                         <Box
-                          key={item[0]}
+                          id={item[0]}
                           className={classes.single_box}
                           style={{
                             width:
@@ -325,23 +319,30 @@ const Roadmap = (props) => {
                           margin={minMargin}
                           bgcolor='grey.300'
                         >
-                          
                           <ListItemText
-                          
-                            primary={<Typography style={{ color: 'black'}}>{"Module Id: " + item[0].split('\\')[1]}</Typography>}
-                            secondary={<Typography style={{ color: 'black', fontSize:"0.8em"}}>{"Author:  " + item[0].split('\\')[0]}</Typography>}
+                            primary={
+                              <Typography style={{ color: 'black' }}>
+                                {'Module Id: ' + item[0].split('\\')[1]}
+                              </Typography>
+                            }
+                            secondary={
+                              <Typography
+                                style={{ color: 'black', fontSize: '0.8em' }}
+                              >
+                                {'Author:  ' + item[0].split('\\')[0]}
+                              </Typography>
+                            }
                           />
 
-                        
                           {/* numchild: {item[1]} */}
                           <Box ml={3}></Box>
-                            <IconButton
-                              id={item[0]}
-                              className={classes.add_button}
-                              onClick={handleClickOpen}
-                            >
-                              <AddCircleIcon />
-                            </IconButton>
+                          <IconButton
+                            id={item[0]}
+                            className={classes.add_button}
+                            onClick={handleClickOpen}
+                          >
+                            <AddCircleIcon />
+                          </IconButton>
                         </Box>
                       );
                     }
