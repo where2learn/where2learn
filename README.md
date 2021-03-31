@@ -1,5 +1,7 @@
 # Where2Learn
 
+## Intro to the project
+
 This project is a web app intended to share knowledge.
 
 There are lots of great, free resources online. Unfortunately, students seeking knowledge may not know these "treasures". This app will be a collection of these great resources, saving students time from Googling endlessly.
@@ -7,6 +9,13 @@ There are lots of great, free resources online. Unfortunately, students seeking 
 **Where2Learn** is not only an app with only of links to resources like a Yellow Page. It also has a special function called "roadmap". Roadmap is a tree-like structure which each node is a resource. Student can learn what and where to learn in order to achieve a target from a roadmap. A roadmap specifies the recommended order to learn many sub-topics.
 
 Everyone registered on **Where2Learn** is welcomed to contribute. One can also "star" the resources provided by other people. Resources with the most stars will be listed at the top.
+
+## Offical Websites
+
+- [https://where2learn.info](https://where2learn.info) (production version)
+- [https://dev.where2learn.info](https://dev.where2learn.info) (development version)
+
+Since the app is in Alpha stage, the production website may not be always online. If production version isn't available, please use the development version for testing.
 
 ## Installation Instruction
 
