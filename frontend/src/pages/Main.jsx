@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Main = (props) => {
   const [modules, setModules] = useState([]);
+  const [roadMaps, setRoadMaps] = useState([]);
   const [tags, setTags] = useState([]);
   const [pageType, setPageType] = useState('modules');
   const [page, setPage] = useState(1);
@@ -82,9 +83,13 @@ const Main = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [tagSearchPopperOpen, setTagSearchPopperOpen] = React.useState(false);
 
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
   const updateModules = async () => {
     const modules = await getModuleComplete(searchResultLimit, page - 1, tags);
-    setModules(modules);
+    // setModules(modules);
+    setModules(modules.filter((module) => module.roadmap === null));
+    setRoadMaps(modules.filter((module) => module.roadmap !== null));
   };
 
   useEffect(() => {
@@ -119,6 +124,14 @@ const Main = (props) => {
       updateModules();
     }, 1000);
   }, [keyword]);
+
+  useEffect(() => {
+    if (pageType === 'modules') {
+      setSelectedIndex(0);
+    } else if (pageType === 'roadmaps') {
+      setSelectedIndex(1);
+    }
+  }, [pageType]);
 
   // useEffect(() => {
   //   if (tagTimeoutRef.current) {
@@ -169,7 +182,7 @@ const Main = (props) => {
     } else if (pageType === 'roadmaps') {
       return (
         <React.Fragment>
-          {/* <ModuleList modules={modules} />
+          <ModuleList modules={roadMaps} />
           <Pagination
             page={page}
             onChangePage={(event, newPage) => {
@@ -178,7 +191,7 @@ const Main = (props) => {
             count={10}
             showFirstButton
             showLastButton
-          /> */}
+          />
         </React.Fragment>
       );
     } else {
@@ -275,13 +288,21 @@ const Main = (props) => {
               </Paper>
               <Paper className={classes.menuPaper}>
                 <List component='nav'>
-                  <ListItem button onClick={() => setPageType('modules')}>
+                  <ListItem
+                    button
+                    selected={selectedIndex === 0}
+                    onClick={() => setPageType('modules')}
+                  >
                     <ListItemIcon>
                       <MenuBookIcon />
                     </ListItemIcon>
                     <ListItemText primary='Modules' />
                   </ListItem>
-                  <ListItem button onClick={() => setPageType('roadmaps')}>
+                  <ListItem
+                    button
+                    selected={selectedIndex === 1}
+                    onClick={() => setPageType('roadmaps')}
+                  >
                     <ListItemIcon>
                       <AccountTreeIcon />
                     </ListItemIcon>

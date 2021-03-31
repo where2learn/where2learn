@@ -53,6 +53,7 @@ const EditModulePage = (props) => {
           content={content}
           updateContent={setContent}
           onSubmit={onSubmit}
+          roadmap={module && module.roadmap ? module.roadmap: {}}
         />
       </Container>
     </NavDrawer>

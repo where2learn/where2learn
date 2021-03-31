@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import Editor from '../components/ModuleEditor';
-import NavDrawer from '../components/NavDrawer';
+import Editor from './ModuleEditor';
+import NavDrawer from './NavDrawer';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -26,6 +26,7 @@ import { moduleIdExists } from '../firebase';
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 import { useSnackbar } from 'notistack';
+import RmTreeView from './TreeView';
 const useStyles = makeStyles((theme) => ({
   textField: {
     margin: theme.spacing(1),
@@ -69,6 +70,7 @@ const EditModule = (props) => {
   const [tagInput, setTagInput] = useState('');
   const [descriptionErrIndicator, setDescriptionErrIndicator] = useState(false);
   const [tags, setTags] = useState(props.tags || []);
+  const [roadmap, setRoadMap] = useState(null);
   const [descriptionInput, setDescriptionInput] = useState(
     props.description || ''
   );
@@ -280,7 +282,7 @@ const EditModule = (props) => {
             module_id,
             tags: convertTagsArray2Obj(tags),
             content: editorContent ? editorContent : null,
-            roadmap: null,
+            roadmap: roadmap,
             media_type: mediaTypeArr,
             type: 'regular',
             mode: props.mode,
@@ -314,22 +316,24 @@ const EditModule = (props) => {
               </Typography>
             </Breadcrumbs>
           </Grid>
-          <Grid item xs={3}>
-            <FormControlLabel
-              className='float-right'
-              control={
-                <Switch
-                  checked={inlineEditorSwitch}
-                  onChange={() => {
-                    setInlineEditorSwitch(!inlineEditorSwitch);
-                  }}
-                  name='inline-editor-switch'
-                  color='primary'
-                />
-              }
-              label='Inline Editor'
-            />
-          </Grid>
+          {!roadmapSwitch ? (
+            <Grid item xs={3}>
+              <FormControlLabel
+                className='float-right'
+                control={
+                  <Switch
+                    checked={inlineEditorSwitch}
+                    onChange={() => {
+                      setInlineEditorSwitch(!inlineEditorSwitch);
+                    }}
+                    name='inline-editor-switch'
+                    color='primary'
+                  />
+                }
+                label='Inline Editor'
+              />
+            </Grid>
+          ) : null}
         </Grid>
         <TextField
           className={classes.textField}
@@ -407,28 +411,34 @@ const EditModule = (props) => {
         )}
         <Divider />
         <br />
-        {inlineEditorSwitch ? (
-          <div className={classes.editorBGWrapper}>
-            <Editor
-              key='inline-editor'
-              width='100%'
-              updateContent={setEditorContent}
-              height={400}
-              inline={true}
-              content={props.content}
-            />
-          </div>
+        {!roadmapSwitch ? (
+          <React.Fragment>
+            {inlineEditorSwitch ? (
+              <div className={classes.editorBGWrapper}>
+                <Editor
+                  key='inline-editor'
+                  width='100%'
+                  updateContent={setEditorContent}
+                  height={400}
+                  inline={true}
+                  content={props.content}
+                />
+              </div>
+            ) : (
+              <div>
+                <Editor
+                  key='normal-editor'
+                  width='100%'
+                  updateContent={setEditorContent}
+                  height={400}
+                  inline={false}
+                  content={editorContent}
+                />
+              </div>
+            )}
+          </React.Fragment>
         ) : (
-          <div>
-            <Editor
-              key='normal-editor'
-              width='100%'
-              updateContent={setEditorContent}
-              height={400}
-              inline={false}
-              content={editorContent}
-            />
-          </div>
+          <RmTreeView setRoadMap={setRoadMap} roadmap={props.roadmap}/>
         )}
         <br />
         <FormControlLabel

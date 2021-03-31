@@ -114,10 +114,16 @@ const UserProfile = (props) => {
     }, 0);
     return star;
   };
+
   useEffect(() => {
     (async () => {
-      if (props.auth.currentUser && props.auth.user) {
-        await props.loadModules(props.auth.user.username);
+      if (props.auth.currentUser) {
+        // console.log(props.auth.currentUser);
+        const user = await props.loadUser(props.auth.currentUser.uid);
+        // console.log(user);
+        const modules = await props.loadModules(user.username);
+        setNumStars(getStarCounts(modules));
+        await props.loadStarModules(user.username);
       }
     })();
   }, []);

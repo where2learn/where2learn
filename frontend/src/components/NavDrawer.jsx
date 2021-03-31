@@ -325,6 +325,7 @@ const NavDrawer = (props) => {
             </div>
           </SwipeableDrawer>
         </React.Fragment>
+ 
       ) : (
         <Drawer
           variant='permanent'
