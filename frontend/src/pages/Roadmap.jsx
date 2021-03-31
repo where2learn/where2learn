@@ -20,6 +20,7 @@ import { ContactSupportTwoTone, Help } from '@material-ui/icons';
 import { constructFullModuleId, convertTagsObj2Array } from '../firestore_data';
 
 import { getModuleById } from '../firebase';
+import { useHistory, withRouter } from 'react-router-dom';
 
 // for each individual box, get diff width & margin in diff windowInnerWidth
 const getboxWidth = () => {
@@ -87,14 +88,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Roadmap = (props) => {
-  const [open, setOpen] = useState(false);
-  const [selectedModule, setSelectedModule] = useState(null);
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [roadmapVis, setRoadmapVis] = useState({});
 
   const [totalItems, setTotalItems] = useState(13);
   const [fullLevelVis, setFullLevelVis] = useState({});
+  const history = useHistory();
 
   const handlePopOver = (event) => {
     setAnchorEl(event.currentTarget);
@@ -104,8 +103,18 @@ const Roadmap = (props) => {
     setAnchorEl(null);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (e) => {
+    // console.log(e.target);
+    var Box = e.target;
+    while (!Box.classList.contains(classes.single_box)) {
+      // console.log(Box.parentNode);
+      Box = Box.parentNode;
+    }
+    const identifier = Box.innerText.split(' ')[1];
+    const [username, module_id] = identifier.split('\\');
+    const url = `/module/display/${username}/${module_id}`;
+    console.log(url);
+    // history.push(url);
   };
 
   //group modules in same level in same array
@@ -174,11 +183,6 @@ const Roadmap = (props) => {
       // console.log(module);
     })();
   }, []);
-
-  useEffect(() => {
-    console.log(selectedModule);
-    // add Children
-  }, [selectedModule]);
 
   // add the child to the module id
   const addChild = (obj, parentId, newId) => {
@@ -314,23 +318,12 @@ const Roadmap = (props) => {
             </React.Fragment>
           </div>
         </Grid>
-        {open ? (
-          <RoadMapPopUp
-            setOpen={setOpen}
-            setSelectedModule={setSelectedModule}
-            modules={[
-              { module_id: 'jiataoxiang', author: 'nobody' },
-              { module_id: 'jiatao handsome', author: 'nobody' },
-              { module_id: 'hhhhh', author: 'nobody' },
-              { module_id: 'Jiat', author: 'nobody' },
-              { module_id: 'helyou', author: 'nobody' },
-              { module_id: 'hhhhhlo_you', author: 'nobody' },
-            ]}
-          />
-        ) : null}
       </NavDrawer>
     </div>
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Roadmap);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Roadmap));
