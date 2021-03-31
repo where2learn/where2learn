@@ -15,14 +15,18 @@ import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
-import { constructModuleObject } from '../firestore_data';
+import {
+  constructModuleObject,
+  convertTagsObj2Array,
+  constructFullModuleId,
+  convertTagsArray2Obj,
+} from '../firestore_data';
+import { maxDescriptionDisplayLength, searchTimeoutTime } from '../constants';
+import { moduleIdExists } from '../firebase';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
+import { useSnackbar } from 'notistack';
 import RmTreeView from './TreeView';
-import { maxDescriptionDisplayLength } from '../constants';
-import { convertTagsObj2Array, convertTagsArray2Obj } from '../firestore_data';
-import { propTypes } from 'react-bootstrap/esm/Image';
-
-const maxDescriptionLength = 160;
-
 const useStyles = makeStyles((theme) => ({
   textField: {
     margin: theme.spacing(1),
@@ -77,14 +81,14 @@ const EditModule = (props) => {
     audio: false,
   });
   const [editorContent, setEditorContent] = useState(props.initialValue || '');
-
+  const [moduleIdSearchTimeout, setModuleIdSearchTimeout] = useState(null);
   const [helperText, setHelperText] = useState({
     title: null,
     module_id: null,
     tags: null,
     description: null,
   });
-
+  const { enqueueSnackbar } = useSnackbar();
   const handleMediaTypeChange = (event) => {
     setMediaType({ ...mediaType, [event.target.name]: event.target.checked });
   };
@@ -155,11 +159,38 @@ const EditModule = (props) => {
     }
   }, [moduleTitle]);
 
+  const updateModuleIdStatus = () => {
+    setModuleIdSearchTimeout(
+      setTimeout(() => {
+        moduleIdExists(
+          constructFullModuleId(props.auth.user.username, moduleId)
+        )
+          .then((exists) => {
+            if (exists) {
+              setHelperText((helperText) => ({
+                ...helperText,
+                module_id: 'Module ID Exists, Try Another One',
+              }));
+            } else {
+              if (moduleId) {
+                setHelperText((helperText) => ({
+                  ...helperText,
+                  module_id: null,
+                }));
+              }
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }, searchTimeoutTime)
+    );
+  };
+
   // update module_id message for module_id
   useEffect(() => {
-    if (moduleId) {
-      setHelperText((helperText) => ({ ...helperText, module_id: null }));
-    }
+    clearTimeout(moduleIdSearchTimeout);
+    updateModuleIdStatus();
   }, [moduleId]);
 
   // update tag message for tags
@@ -181,40 +212,54 @@ const EditModule = (props) => {
     }
   }, [descriptionInput]);
 
-  const validateForSubmit = () => {
-    let err = false;
+  const validateForSubmit = async () => {
+    let errors = [];
     const newHelperTexts = {};
     if (!moduleTitle) {
       newHelperTexts.title = 'Cannot Be Empty';
-      err = true;
+      errors.push('Title Cannot Be Empty');
     }
     if (!moduleId && props.mode !== 'edit') {
       newHelperTexts.module_id = 'Cannot Be Empty';
-      err = true;
+      errors.push('Module ID Cannot Be Empty');
     }
     if (tags.length === 0) {
       newHelperTexts.tags = 'Cannot Be Empty';
-      err = true;
+      errors.push('Tags Cannot Be Empty');
     }
     if (!descriptionInput || descriptionInput.length === 0) {
       newHelperTexts.description = 'Cannot Be Empty';
+      errors.push('Description Cannot Be Empty');
       setDescriptionErrIndicator(true);
     }
     if (
       !descriptionInput ||
       descriptionInput.length > maxDescriptionDisplayLength
     ) {
+      errors.push(`Description Too Long, Max: ${maxDescriptionDisplayLength}`);
       setDescriptionErrIndicator(true);
     }
+    if (props.mode !== 'add') {
+      const module_id_exists = await moduleIdExists(
+        constructFullModuleId(props.auth.user.username, moduleId)
+      );
+      if (module_id_exists) {
+        errors.push('Module ID Exists, Try Another One');
+      }
+    }
     setHelperText({ ...helperText, ...newHelperTexts });
-    return err;
+    return errors;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const err = validateForSubmit();
-    if (err) {
-      console.error('error validating the data to submit');
+    const errors = await validateForSubmit();
+    if (errors.length > 0) {
+      console.error(errors);
+      enqueueSnackbar('Cannot Submit', { variant: 'error' });
+      for (const err of errors) {
+        enqueueSnackbar(err, { variant: 'error' });
+      }
     } else {
       const mediaTypeArr = [];
       for (const [key, value] of Object.entries(mediaType)) {
@@ -231,8 +276,6 @@ const EditModule = (props) => {
         } else {
           console.error("mode doesn't exist");
         }
-        console.log(tags);
-        console.log(convertTagsArray2Obj(tags));
         props.onSubmit(
           constructModuleObject({
             title: moduleTitle,
@@ -262,7 +305,7 @@ const EditModule = (props) => {
             <Breadcrumbs className={classes.breadcrumbs}>
               <Typography color='textPrimary' className={classes.link}>
                 <AccountCircleIcon className={classes.icon} />
-                Username
+                {props.auth.user.username}
               </Typography>
               <Typography color='textPrimary' className={classes.link}>
                 {props.mode === 'edit'
@@ -468,10 +511,9 @@ const EditModule = (props) => {
             Submit
           </Button>
         </div>
-        {/* <div dangerouslySetInnerHTML={{ __html: editorContent }} /> */}
       </Container>
     </NavDrawer>
   );
 };
 
-export default EditModule;
+export default connect(mapStateToProps, mapDispatchToProps)(EditModule);

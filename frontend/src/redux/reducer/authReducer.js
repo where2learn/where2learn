@@ -14,6 +14,7 @@ const auth = (state = { user: {}, currentUser: {} }, action) => {
         user: action.user,
       };
     case AUTH_USER:
+      console.log(action.currentUser);
       return {
         ...state,
         currentUser: action.currentUser,

@@ -7,18 +7,17 @@ import Dashboard from './pages/Dashboard';
 import PrivateRoute from './pages/PrivateRoute';
 import ForgotPassword from './pages/ForgotPassword';
 import UpdateProfile from './pages/UpdateProfile';
-import EditorDevPage from './pages/EditorDevPage';
-import ModulePreviewDevPage from './pages/ModulePreviewDevPage';
 import Main from './pages/Main';
-import { SnackbarProvider } from 'notistack';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AddModulePage from './pages/AddModulePage';
 import UserProfile from './pages/UserProfile';
 import EditModulePage from './pages/EditModulePage';
 import DisplayModulePage from './pages/DisplayModulePage';
+import SetUsernamePage from './pages/SetUsernamePage';
 import Roadmap from './pages/Roadmap';
 import { grey } from '@material-ui/core/colors';
 import { realtimeUpdateTheme } from './firebase';
+import { useSnackbar } from 'notistack';
 
 import {
   createMuiTheme,
@@ -33,6 +32,7 @@ import { mapStateToProps, mapDispatchToProps } from './lib/redux_helper';
 const App = (props) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [dbTheme, setDBTheme] = useState('light');
+  const { enqueueSnackbar } = useSnackbar();
   // const { currentUser } = useAuth();
   const darkTheme = createMuiTheme({
     palette: {
@@ -53,9 +53,22 @@ const App = (props) => {
   });
 
   useEffect(() => {
+    console.log('Theme Changed');
+    console.log(dbTheme);
+    if (props.auth && props.auth.user && dbTheme !== props.auth.user.theme) {
+      enqueueSnackbar(`Theme Switched to "${darkTheme ? 'DARK' : 'LIGHT'}"`, {
+        variant: 'info',
+      });
+    }
+  }, [dbTheme]);
+
+  useEffect(() => {
+    props.loadTags();
+    console.log(props.auth);
     if (props.auth.currentUser && props.auth.currentUser.uid) {
+      console.log(props.auth.currentUser.uid);
       props.loadUser(props.auth.currentUser.uid);
-      console.log(props.auth.currentUser);
+      // console.log(props.auth);
       realtimeUpdateTheme(props.auth.currentUser.uid, setDBTheme);
     }
   }, []);
@@ -72,61 +85,62 @@ const App = (props) => {
 
   return (
     <Router>
-      <SnackbarProvider maxSnack={10}>
-        <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
-          <Paper className={classes.root} elevation={0} square>
-            <Switch>
-              <PrivateRoute
-                exact
-                component={Main}
-                path='/'
-                authed={props.auth.currentUser}
-              />
-              <PrivateRoute
-                component={Dashboard}
-                exact
-                path='/dashboard'
-                authed={props.auth.currentUser}
-              />
-              <PrivateRoute
-                path='/update-profile'
-                component={UpdateProfile}
-                authed={props.auth.currentUser}
-              />
-              <PrivateRoute
-                path='/user-profile'
-                component={UserProfile}
-                authed={props.auth.currentUser}
-              />
-              <Route
-                path='/roadmap-vis/display/:username/:module_id'
-                component={Roadmap}
-              />
-              <Route path='/signup' component={Signup} />
-              <Route path='/module/add' component={AddModulePage} />
-              <Route path='/login' component={Login} />
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Paper className={classes.root} elevation={0} square>
+          <Switch>
+            <PrivateRoute exact component={Main} path='/' auth={props.auth} />
+            <PrivateRoute
+              component={Dashboard}
+              exact
+              path='/dashboard'
+              auth={props.auth}
+            />
+            <PrivateRoute
+              path='/update-profile'
+              component={UpdateProfile}
+              auth={props.auth}
+            />
+            <PrivateRoute
+              path='/user-profile'
+              component={UserProfile}
+              auth={props.auth}
+            />
+            <PrivateRoute
+              path='/set-username'
+              component={SetUsernamePage}
+              auth={props.auth}
+            />
+            <PrivateRoute
+              path='/module/add'
+              component={AddModulePage}
+              auth={props.auth}
+            />
+            <PrivateRoute
+              path='/module/display/:username/:module_id'
+              component={DisplayModulePage}
+              auth={props.auth}
+            />
+            <PrivateRoute
+              path='/module/edit/:username/:module_id'
+              component={EditModulePage}
+              auth={props.auth}
+            />
+            <PrivateRoute
+              path='/forgot-password'
+              component={ForgotPassword}
+              auth={props.auth}
+            />
+            <Route path='/signup' component={Signup} />
+            <Route path='/login' component={Login} />
+            {/* Everything Below is for developing and experimenting components instead of an actual page */}
+          </Switch>
+        </Paper>
+      </ThemeProvider>
               <Route
                 path='/module/display/:username/:module_id'
                 component={DisplayModulePage}
               />
-              <Route path='/module/add' component={AddModulePage} />
-              <Route
-                path='/module/edit/:username/:module_id'
-                component={EditModulePage}
-              />
-              <Route path='/forgot-password' component={ForgotPassword} />
-              {/* Everything Below is for developing and experimenting components instead of an actual page */}
-              <Route path='/editor' component={EditorDevPage} />
-              <Route
-                path='/module-preview-dev'
-                component={ModulePreviewDevPage}
-              />
-              <Route path='/roadmap-vis' component={Roadmap} />
-            </Switch>
-          </Paper>
-        </ThemeProvider>
-      </SnackbarProvider>
     </Router>
   );
 };

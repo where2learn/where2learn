@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
@@ -43,6 +43,17 @@ const Signup = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
+  const [loginState, setLoginState] = useState(false);
+
+  useEffect(() => {
+    console.log(props.auth);
+    console.log(loginState);
+    if (props.auth.user && loginState) {
+      setLoginState(false);
+      history.push('/');
+    }
+  }, [loginState, props.auth.user]);
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -56,9 +67,12 @@ const Signup = (props) => {
         emailRef.current.value,
         passwordRef.current.value
       );
-      generateUserDocument(user);
+      console.log(user);
+      console.log('signup finished');
+      console.log(props.auth);
       enqueueSnackbar('Account Created', { variant: 'success' });
-      history.push('/');
+      setLoginState(true);
+      // history.push('/');
     } catch {
       enqueueSnackbar('Failed to create an account', { variant: 'error' });
     }
@@ -72,7 +86,8 @@ const Signup = (props) => {
       setLoading(true);
       await props.signInWithGoogle();
       enqueueSnackbar('Logged In', { variant: 'success' });
-      history.push('/');
+      setLoginState(true);
+      // history.push('/');
     } catch {
       enqueueSnackbar('Failed to log in', { variant: 'error' });
     }
@@ -83,12 +98,12 @@ const Signup = (props) => {
     <NavDrawer>
       <Container>
         <Box
-          display="flex"
-          justifyContent="center"
+          display='flex'
+          justifyContent='center'
           mt={10}
-          bgcolor="background.default"
+          bgcolor='background.default'
         >
-          <Card className={classes.card} color="secondary">
+          <Card className={classes.card} color='secondary'>
             <Form onSubmit={handleSubmit}>
               <CardContent>
                 <Typography
@@ -102,35 +117,35 @@ const Signup = (props) => {
                   <TextField
                     fullWidth
                     inputRef={emailRef}
-                    margin="normal"
-                    label="Email"
-                    type="email"
+                    margin='normal'
+                    label='Email'
+                    type='email'
                   />
                 </div>
                 <div>
                   <TextField
                     fullWidth
-                    margin="normal"
+                    margin='normal'
                     inputRef={passwordRef}
-                    label="Password"
-                    type="password"
+                    label='Password'
+                    type='password'
                   />
                 </div>
                 <div>
                   <TextField
                     fullWidth
-                    margin="normal"
+                    margin='normal'
                     inputRef={passwordConfirmRef}
-                    label="Confirm Password"
-                    type="password"
+                    label='Confirm Password'
+                    type='password'
                   />
                 </div>
                 <br />
                 <Button
                   fullWidth
-                  type="submit"
-                  variant="contained"
-                  color="primary"
+                  type='submit'
+                  variant='contained'
+                  color='primary'
                   disabled={loading}
                 >
                   Sign Up
@@ -148,7 +163,7 @@ const Signup = (props) => {
             <Box mt={3}>
               <CardActions>
                 <Typography>
-                  Already have an account? <Link to="/login">Log In</Link>
+                  Already have an account? <Link to='/login'>Log In</Link>
                 </Typography>
               </CardActions>
             </Box>

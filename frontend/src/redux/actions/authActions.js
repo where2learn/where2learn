@@ -14,6 +14,7 @@ export function loadUser(user) {
 }
 
 export function authUser(currentUser) {
+  console.log('doing dispatch');
   return {
     type: AUTH_USER,
     currentUser: currentUser,
