@@ -1,5 +1,4 @@
-import { LOAD_MODULES } from './actionType';
-import { EMPTY_MODULES } from './actionType';
+import { LOAD_MODULES, EMPTY_MODULES, LOAD_STAR_MODULES } from './actionType';
 
 export function loadModules(modules) {
   return {
@@ -12,5 +11,12 @@ export function clearModules() {
   return {
     type: EMPTY_MODULES,
     modules: [],
+  };
+}
+
+export function loadStarModules(starModules) {
+  return {
+    type: LOAD_STAR_MODULES,
+    starModules: starModules,
   };
 }

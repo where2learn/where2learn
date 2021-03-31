@@ -5,44 +5,81 @@ import {
   updateAvatarAction,
 } from '../redux/actions/authActions';
 
-import { loadModules, clearModules } from '../redux/actions/moduleAction';
+import {
+  loadModules,
+  clearModules,
+  loadStarModules,
+} from '../redux/actions/moduleAction';
 
 import {
+  auth,
   getUserInfo,
   getModulesByUsername,
   updateAvatar,
   provider,
+  getStarModules,
+  generateUserDocument,
 } from '../firebase';
 
-import { auth } from '../firebase';
-
-const fetchUser = (uid) => (dispatch) => {
-  getUserInfo(uid).then((data) => {
-    dispatch(loadUser(data));
-  });
+const fetchUser = (uid) => async (dispatch) => {
+  try {
+    const user = await getUserInfo(uid);
+    // console.log(user);
+    dispatch(loadUser(user));
+    return user;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 const fetchModules = (username) => (dispatch) => {
-  getModulesByUsername(username).then((modules) => {
+  return getModulesByUsername(username).then((modules) => {
     dispatch(loadModules(modules));
+    return modules;
   });
 };
 
-const login = (email, password) => (dispatch) => {
-  return auth
-    .signInWithEmailAndPassword(email, password)
-    .then((result) => {
-      console.log(result);
-      dispatch(authUser(result));
-    })
-    .catch((err) => {
-      throw err;
-    });
+const fetchStarModules = (username) => (dispatch) => {
+  return getStarModules(username).then((starModules) => {
+    dispatch(loadStarModules(starModules));
+    return starModules;
+  });
 };
 
-const signup = (email, password) => (dispatch) => {
-  const user = auth.createUserWithEmailAndPassword(email, password);
-  dispatch(authUser(user));
+const login = (email, password) => async (dispatch) => {
+  try {
+    console.log('login begin');
+    const res = await auth.signInWithEmailAndPassword(email, password);
+    console.log(res.user);
+    console.log('before dispatch');
+    dispatch(authUser(res.user));
+    console.log('after dispatch');
+    await fetchUser(res.user.uid);
+    console.log('fetchUser finished');
+    return res.user;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const signup = (email, password) => async (dispatch) => {
+  try {
+    console.log(email, password);
+    const res = await auth.createUserWithEmailAndPassword(email, password);
+    console.log(res.user);
+    const user = await generateUserDocument(res.user);
+    console.log('before dispatch');
+    dispatch(authUser(res.user));
+    console.log('after dispatch');
+    dispatch(loadUser(user));
+    console.log('fetch user finished');
+    return res.user;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const resetPassword = (email) => {
@@ -54,10 +91,12 @@ const changeAvatar = (uid, avatar) => (dispatch) => {
   dispatch(updateAvatarAction(avatar));
 };
 
-const signInWithPopup = (dispatch) => {
-  const userAuth = auth.signInWithPopup(provider);
-  dispatch(authUser(userAuth));
-  return userAuth;
+const signInWithPopup = async (dispatch) => {
+  const userAuth = await auth.signInWithPopup(provider);
+  dispatch(authUser(userAuth.user));
+  console.log(userAuth.user);
+  await fetchUser(userAuth.user.uid);
+  return userAuth.user;
 };
 
 const setStoreToNull = (dispatch) => {
@@ -74,6 +113,7 @@ export const mapDispatchToProps = (dispatch) => {
     logout: () => setStoreToNull(dispatch),
     signInWithGoogle: () => signInWithPopup(dispatch),
     signup: (email, password) => signup(email, password)(dispatch),
+    loadStarModules: (username) => fetchStarModules(username)(dispatch),
   };
 };
 
@@ -81,8 +121,7 @@ export const mapStateToProps = (state) => {
   // console.log(state);
   return {
     auth: state.auth,
-    // user: state.auth.user,
-    // currentUser: state.auth.currentUser,
     modules: state.moduleReducer.modules,
+    starModules: state.moduleReducer.starModules,
   };
 };

@@ -39,7 +39,7 @@ export default app;
 // console.log(firebase.firestore().Timestamp.now);
 export const generateUserDocument = async (user, additionalData) => {
   if (!user) return;
-
+  // console.log(additionalData);
   const userRef = firestore.doc(`users/${user.uid}`);
   const snapshot = await userRef.get();
 
@@ -51,7 +51,8 @@ export const generateUserDocument = async (user, additionalData) => {
         email: email,
         theme: 'light',
         credit: 0,
-        username: uid,
+        username: null,
+        uid: uid,
         ...additionalData,
       });
     } catch (error) {
@@ -73,6 +74,23 @@ const getUserDocument = async (uid) => {
   } catch (error) {
     console.error('Error fetching user', error);
   }
+};
+
+export const usernameExists = async (username) => {
+  try {
+    const snapshot = await firestore
+      .collection('users')
+      .where('username', '==', username)
+      .get();
+    return snapshot.size > 0;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const updateUsername = (uid, username) => {
+  return firestore.collection('users').doc(uid).update({ username });
 };
 
 // Module Related
@@ -182,10 +200,14 @@ export const editModule = (username, module) => {
 
 // ========== User Profile Page ===============
 export const getUserInfo = async (uid) => {
-  const userRef = firestore.doc('/users/' + uid);
-  const snapshot = await userRef.get();
-
-  return snapshot.data();
+  try {
+    const userRef = firestore.doc('/users/' + uid);
+    const snapshot = await userRef.get();
+    return snapshot.data();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const getModulesByUsername = async (username) => {

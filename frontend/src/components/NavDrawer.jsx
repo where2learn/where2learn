@@ -32,7 +32,6 @@ import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
 import { updateUserTheme } from '../firebase';
 
 const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -137,11 +136,9 @@ const NavDrawer = (props) => {
   // toggle theme
   useEffect(() => {
     // console.log(props.auth.currentUser);
-    enqueueSnackbar(`Theme Switched to "${darkTheme ? 'DARK' : 'LIGHT'}"`, {
-      variant: 'info',
-    });
     if (props.auth.currentUser) {
       updateUserTheme(props.auth.currentUser.uid, darkTheme ? 'dark' : 'light');
+      console.log(props.auth.currentUser);
       props.loadUser(props.auth.currentUser.uid);
     }
   }, [darkTheme, enqueueSnackbar, props.auth.currentUser]);
@@ -175,7 +172,12 @@ const NavDrawer = (props) => {
   const MenuContent = () => (
     <React.Fragment>
       <List>
-        <ListItem button key='dashboard' className={classes.menuIconWrapper}>
+        <ListItem
+          button
+          key='dashboard'
+          className={classes.menuIconWrapper}
+          onClick={() => history.push('/user-profile')}
+        >
           <ListItemIcon className={classes.menuIcon}>
             <Tooltip title='Dashboard' placement='right'>
               <DashboardIcon />
