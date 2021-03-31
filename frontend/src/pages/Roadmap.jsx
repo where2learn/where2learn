@@ -22,6 +22,7 @@ import { constructFullModuleId, convertTagsObj2Array } from '../firestore_data';
 import { getModuleById } from '../firebase';
 import { useHistory, withRouter } from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
+import ListItemText from '@material-ui/core/ListItemText';
 
 // for each individual box, get diff width & margin in diff windowInnerWidth
 const getboxWidth = () => {
@@ -86,6 +87,8 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     flexGrow: 1,
   },
+
+
 }));
 
 const Roadmap = (props) => {
@@ -96,6 +99,7 @@ const Roadmap = (props) => {
   const [totalItems, setTotalItems] = useState(13);
   const [fullLevelVis, setFullLevelVis] = useState({});
   const history = useHistory();
+  const [starModule, setStarModule] = useState({})
 
   const handlePopOver = (event) => {
     setAnchorEl(event.currentTarget);
@@ -174,6 +178,7 @@ const Roadmap = (props) => {
 
   useEffect(() => {
     // initial state
+    setStarModule(props.starModules);
     const id = constructFullModuleId(
       props.match.params.username,
       props.match.params.module_id
@@ -184,6 +189,7 @@ const Roadmap = (props) => {
       setRoadmapVis(module.roadmap);
       // setFullLevelVis(fullLevelView(roadmapVis, findlevel(roadmapVis))[1]);
       // console.log(module);
+      
     })();
   }, []);
 
@@ -244,7 +250,10 @@ const Roadmap = (props) => {
       <NavDrawer>
         {/* <RoadmapTreeView /> */}
         <Grid container className={classes.grid} spacing={2}>
-          <TreeviewDisplay style={{ float: 'left' }} />
+          <TreeviewDisplay 
+            style={{ float: 'left' }}
+            roadmapVis={roadmapVis}
+            />
 
           <div style={{ position: 'absolute', left: '300px' }}>
             <IconButton aria-label='help' onClick={handlePopOver}>
@@ -285,6 +294,7 @@ const Roadmap = (props) => {
                 <Box key={key} className={classes.box_group}>
                   {fullLevelVis[key].map((item) => {
                     // console.log('number of child', key, fullLevelVis[key].length);
+                    // console.log("yoooooooooo", "starModule", starModule)
                     if (item[0] === null) {
                       return (
                         <Box
@@ -315,15 +325,23 @@ const Roadmap = (props) => {
                           margin={minMargin}
                           bgcolor='grey.300'
                         >
-                          Module {item[0]} numchild: {item[1]}
+                          
+                          <ListItemText
+                          
+                            primary={<Typography style={{ color: 'black'}}>{"Module Id: " + item[0].split('\\')[1]}</Typography>}
+                            secondary={<Typography style={{ color: 'black', fontSize:"0.8em"}}>{"Author:  " + item[0].split('\\')[0]}</Typography>}
+                          />
+
+                        
+                          {/* numchild: {item[1]} */}
                           <Box ml={3}></Box>
-                          <IconButton
-                            id={item[0]}
-                            className={classes.add_button}
-                            onClick={handleClickOpen}
-                          >
-                            <AddCircleIcon />
-                          </IconButton>
+                            <IconButton
+                              id={item[0]}
+                              className={classes.add_button}
+                              onClick={handleClickOpen}
+                            >
+                              <AddCircleIcon />
+                            </IconButton>
                         </Box>
                       );
                     }

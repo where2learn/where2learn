@@ -34,7 +34,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     borderTopRightRadius: theme.spacing(2),
     borderBottomRightRadius: theme.spacing(2),
-    paddingRight: "120px",
+    paddingRight: "240px",
     fontWeight: theme.typography.fontWeightMedium,
     '$expanded > &': {
       fontWeight: theme.typography.fontWeightRegular,
@@ -87,7 +87,7 @@ const useStyles = makeStyles({
 
 
 // start of return module
-export default function TreeViewDisplay() {
+const TreeViewDisplay = (props) => {
   // ==== start of return compoenents ===
 
   const classes = useStyles();
@@ -103,24 +103,30 @@ export default function TreeViewDisplay() {
   const [totalItems, setTotalItems] = useState(13)
 
   //TODO: needs to be deleted
-  const [roadmap, setRoadmap] = useState({
-    1: {
-      2: { 3: {}, 4: {} },
-      5: {},
-    },
-    6: {},
-    7: {
-      8: {
-        9: {},
-        10: {
-          11: { 12: {}, 13: {} },
-        },
-      },
-    },
-  });
+//   const [roadmap, setRoadmap] = useState({
+//     1: {
+//       2: { 3: {}, 4: {} },
+//       5: {},
+//     },
+//     6: {},
+//     7: {
+//       8: {
+//         9: {},
+//         10: {
+//           11: { 12: {}, 13: {} },
+//         },
+//       },
+//     },
+//   });
 
+const [roadmap, setRoadmap] = useState({});
 
+useEffect(() => {
+    let new_roadmap = props.roadmapVis;
+    console.log(new_roadmap)
+    setRoadmap(new_roadmap);
 
+}, []);
 
   function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
@@ -169,7 +175,7 @@ export default function TreeViewDisplay() {
   const WholeTree = ({ data }) => (
     <React.Fragment>
       {/* {console.log("newest roadmap", data)} */}
-      {Object.keys(data) &&
+      {data && Object.keys(data) &&
         Object.keys(data).map((key, index) => {
           return (
             // <div id={key}>
@@ -200,3 +206,5 @@ export default function TreeViewDisplay() {
     </div>
   );
 }
+
+export default TreeViewDisplay;
