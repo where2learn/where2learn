@@ -13,16 +13,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import Pagination from '@material-ui/lab/Pagination';
+import Button from '@material-ui/core/Button';
+import Popper from '@material-ui/core/Popper';
+import Typography from '@material-ui/core/Typography';
+import Fade from '@material-ui/core/Fade';
+import Badge from '@material-ui/core/Badge';
 
-import { getModules, getModuleComplete } from '../firebase';
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from '../lib/redux_helper';
+
+import { getModuleComplete } from '../firebase';
 import { searchResultLimit } from '../constants';
 
 import '../style/Main.scss';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   tagPaper: {
     padding: theme.spacing(1),
     textAlign: 'center',
@@ -45,19 +50,37 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '1rem',
   },
   paginationContainer: { display: 'flex', justifyContent: 'center' },
+  tagHintsBG: {
+    backgroundColor: theme.palette.bg.l5,
+    maxWidth: 500,
+    padding: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.8),
+    },
+  },
+  tagHintChip: {
+    backgroundColor: theme.palette.bg.l7,
+    color: theme.palette.bg.l1,
+  },
 }));
 
-const Main = () => {
+const Main = (props) => {
   const [modules, setModules] = useState([]);
   const [tags, setTags] = useState([]);
   const [pageType, setPageType] = useState('modules');
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState('');
-  const tagTimeoutRef = useRef(null);
   const searchTimeoutRef = useRef(null);
   const [tagInputValue, setTagInputValue] = useState('');
   const tagInputRef = useRef();
   const classes = useStyles();
+  const [tagHints, setTagHints] = useState([]);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [tagSearchPopperOpen, setTagSearchPopperOpen] = React.useState(false);
 
   const updateModules = async () => {
     const modules = await getModuleComplete(searchResultLimit, page - 1, tags);
@@ -65,9 +88,27 @@ const Main = () => {
   };
 
   useEffect(() => {
+    tagInputRef.current.addEventListener('focusout', (e) => {
+      setTagSearchPopperOpen(false);
+    });
+    tagInputRef.current.addEventListener('focusin', (e) => {
+      setTagSearchPopperOpen(true);
+    });
+  }, []);
+
+  useEffect(() => {
     console.log(`page changed: ${page}`);
     updateModules();
   }, [page]);
+
+  useEffect(() => {
+    const filteredTags = props.tags.filter((tag) =>
+      tag.value.toLowerCase().includes(tagInputValue)
+    );
+    filteredTags.sort((a, b) => b.count - a.count);
+
+    setTagHints(filteredTags);
+  }, [tagInputValue]);
 
   useEffect(() => {
     if (searchTimeoutRef.current) {
@@ -145,6 +186,17 @@ const Main = () => {
     }
   };
 
+  const handleTagSearchPopper = (event) => {
+    setAnchorEl(event.currentTarget);
+    setTagSearchPopperOpen((prev) => tagHints && tagHints.length > 0);
+    setTagSearchPopperOpen(true);
+  };
+
+  const handleTagSearchOnChange = (e) => {
+    setTagInputValue(e.target.value);
+    handleTagSearchPopper(e);
+  };
+
   return (
     <NavDrawer>
       <div className='main-page'>
@@ -170,15 +222,47 @@ const Main = () => {
                   <TextField
                     fullWidth
                     id='tag-search-box'
-                    onChange={(e) => {
-                      setTagInputValue(e.target.value);
-                    }}
+                    onChange={handleTagSearchOnChange}
                     inputRef={tagInputRef}
                     label='Search By Tags'
                     variant='outlined'
                   />
                 </form>
               </Paper>
+              {/* <Button onClick={handleClick('bottom-start')}>bottom</Button> */}
+              <Popper
+                open={tagSearchPopperOpen}
+                anchorEl={anchorEl}
+                placement='bottom-start'
+                transition
+              >
+                {({ TransitionProps }) => (
+                  <Fade {...TransitionProps} timeout={350}>
+                    <Paper className={classes.tagHintsBG}>
+                      {tagHints.map((tag, index) => (
+                        <Badge
+                          key={index}
+                          badgeContent={tag.count}
+                          color='primary'
+                        >
+                          <Chip
+                            className={classes.tagHintChip}
+                            size='small'
+                            label={tag.value}
+                            onClick={(e) => {
+                              setTags(
+                                Array.from(
+                                  new Set([tag.value.toLowerCase(), ...tags])
+                                )
+                              );
+                            }}
+                          />
+                        </Badge>
+                      ))}
+                    </Paper>
+                  </Fade>
+                )}
+              </Popper>
               <Paper className={classes.searchPaper}>
                 <TextField
                   fullWidth
@@ -217,4 +301,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

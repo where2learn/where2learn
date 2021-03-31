@@ -63,7 +63,7 @@ const App = (props) => {
   }, [dbTheme]);
 
   useEffect(() => {
-    // props.loadTags();
+    props.loadTags();
     console.log(props.auth);
     if (props.auth.currentUser && props.auth.currentUser.uid) {
       console.log(props.auth.currentUser.uid);

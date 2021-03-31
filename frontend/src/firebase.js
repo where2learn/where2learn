@@ -170,7 +170,7 @@ export const uploadImage = (rawImage) => {
   });
 };
 
-export const addmodule = async (username, module) => {
+export const addModule = async (username, module) => {
   const full_module_id = `${username}\\${module.module_id}`;
   const tags = module.tags;
   const new_module = { ...module, num_star: 0, author: username };
