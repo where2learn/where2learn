@@ -115,7 +115,7 @@ const RmTreeView = (props) => {
   //     },
   //   },
   // });
-  const [roadmap, setRoadmap] = useState(props.roadmap);
+  const [roadmap, setRoadmap] = useState(props.roadmap || {});
 
   useEffect(() => {
     props.setRoadMap(roadmap);
@@ -332,7 +332,7 @@ const RmTreeView = (props) => {
   const WholeTree = ({ data }) => (
     <React.Fragment>
       {/* {console.log("newest roadmap", data)} */}
-      {Object.keys(data) &&
+      {data && Object.keys(data) &&
         Object.keys(data).map((key, index) => {
           return (
             // <div id={key}>
