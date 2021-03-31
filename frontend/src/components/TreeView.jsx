@@ -97,6 +97,7 @@ const RmTreeView = (props) => {
   const [child, setChild] = useState(null);
   const [parent, setParent] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [starModules, setStarModules] = useState({})
 
 
   //TODO: needs to be deleted
@@ -116,6 +117,24 @@ const RmTreeView = (props) => {
   //   },
   // });
   const [roadmap, setRoadmap] = useState(props.roadmap || {});
+
+  useEffect(() => {
+    let need_fields= props.starModules.map((item) => {
+      return {
+        module_id: item.module_id,
+        author: item.author
+    
+      }
+    });
+    setStarModules(need_fields)
+    
+    
+  }, [props.starModules])
+
+
+
+
+
 
   useEffect(() => {
     props.setRoadMap(roadmap);
@@ -369,15 +388,17 @@ const RmTreeView = (props) => {
         <RoadMapPopUp
           setOpen={setAddEditOpen}
           setSelectedModule={setChoseModule}
-          modules={[
-            { module_id: 'jiataoxiang', author: 'nobody' },
-            { module_id: 'jiatao handsome', author: 'nobody' },
-            { module_id: 'hhhhh', author: 'nobody' },
-            { module_id: 'Jiat', author: 'nobody' },
-            { module_id: 'helyou', author: 'nobody' },
-            { module_id: 'hhhhhlo_you', author: 'nobody' },
-          ]}
-          // mode={mode}
+          // modules={[
+          //   { module_id: 'jiataoxiang', author: 'nobody', title:"sdsds" },
+          //   { module_id: 'jiatao handsome', author: 'nobody', title:"sdwewes"  },
+          //   { module_id: 'hhhhh', author: 'nobody', title:"ss"  },
+          //   { module_id: 'Jiat', author: 'nobody', title:"s11111s" },
+          //   { module_id: 'helyou', author: 'nobody' , title:"222222111s"},
+          //   { module_id: 'hhhhhlo_you', author: 'nobody' , title:"111s"},
+          // ]}
+
+          modules={starModules}
+          mode={mode}
         />
       ) : null}
 
