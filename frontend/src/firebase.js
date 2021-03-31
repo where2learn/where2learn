@@ -3,6 +3,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
 import { constructStarId, convertTagsObj2Array } from './firestore_data';
+import { v4 as uuidv4 } from 'uuid';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -36,10 +37,8 @@ export const auth = app.auth();
 
 export const firestore = firebase.firestore();
 export default app;
-// console.log(firebase.firestore().Timestamp.now);
 export const generateUserDocument = async (user, additionalData) => {
   if (!user) return;
-  // console.log(additionalData);
   const userRef = firestore.doc(`users/${user.uid}`);
   const snapshot = await userRef.get();
 
@@ -161,9 +160,13 @@ export const incrementModuleStar = (full_module_id, amount) => {
   });
 };
 
-export const uploadImage = (rawImage) => {
+export const uploadImage = (rawImage, username) => {
   var storageRef = firebase.storage().ref();
-  var imgRef = storageRef.child('/users/pictures/resized/mountains.jpg');
+  var imgRef = storageRef.child(
+    `/users/${username}/pictures/modules/${Number(new Date())}-${uuidv4()}-${
+      rawImage.name
+    }`
+  );
   return imgRef.put(rawImage).then(async (snapshot) => {
     const url = await imgRef.getDownloadURL();
     return url;
@@ -181,8 +184,6 @@ export const addModule = async (username, module) => {
     const tag = tags[i];
     const tagRef = firestore.collection('tags').doc(tag);
     const doc = await tagRef.get();
-    console.log(doc);
-    console.log(doc.exists);
     if (doc.exists) {
       batch.update(tagRef, {
         count: firebase.firestore.FieldValue.increment(1),
@@ -242,7 +243,6 @@ export const editModule = async (username, module) => {
     delete new_module.module_id;
     batch.update(moduleRef, new_module);
     await batch.commit();
-    console.log('success');
   } catch (error) {
     return error;
   }
@@ -283,7 +283,6 @@ export const getStarModules = async (username) => {
     stars = starQueries.docs.map((star) => star.data().module);
   }
 
-  // console.log(stars); // should get an array of module id
   // find two ways to achieve this
   if (stars.length !== 0) {
     const modules = await firestore

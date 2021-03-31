@@ -16,7 +16,6 @@ const ModuleEditor = (props) => {
   const [darkTheme, setDarkTheme] = useState(false);
 
   useEffect(() => {
-    console.log(props.auth.user);
     if (
       props.auth.user.theme == 'dark' ||
       window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -35,9 +34,17 @@ const ModuleEditor = (props) => {
 
   const image_upload_handler = async (blobInfo, success, failure, progress) => {
     try {
-      const url = await uploadImage(blobInfo.blob());
-      success(url);
-    } catch {
+      if (props.auth && props.auth.user && props.auth.user.username) {
+        const url = await uploadImage(
+          blobInfo.blob(),
+          props.auth.user.username
+        );
+        success(url);
+      } else {
+        throw new Error('authentication invalid');
+      }
+    } catch (err) {
+      console.error(err);
       failure({ remove: false });
     }
   };
