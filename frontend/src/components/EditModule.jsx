@@ -19,6 +19,7 @@ import { constructModuleObject } from '../firestore_data';
 import RmTreeView from './TreeView';
 import { maxDescriptionDisplayLength } from '../constants';
 import { convertTagsObj2Array, convertTagsArray2Obj } from '../firestore_data';
+import { propTypes } from 'react-bootstrap/esm/Image';
 
 const maxDescriptionLength = 160;
 
@@ -394,7 +395,7 @@ const EditModule = (props) => {
             )}
           </React.Fragment>
         ) : (
-          <RmTreeView setRoadMap={setRoadMap} />
+          <RmTreeView setRoadMap={setRoadMap} roadmap={props.roadmap}/>
         )}
         <br />
         <FormControlLabel

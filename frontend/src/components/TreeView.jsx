@@ -100,21 +100,26 @@ const RmTreeView = (props) => {
 
 
   //TODO: needs to be deleted
-  const [roadmap, setRoadmap] = useState({
-    1: {
-      2: { 3: {}, 4: {} },
-      5: {},
-    },
-    6: {},
-    7: {
-      8: {
-        9: {},
-        10: {
-          11: { 12: {}, 13: {} },
-        },
-      },
-    },
-  });
+  // const [roadmap, setRoadmap] = useState({
+  //   1: {
+  //     2: { 3: {}, 4: {} },
+  //     5: {},
+  //   },
+  //   6: {},
+  //   7: {
+  //     8: {
+  //       9: {},
+  //       10: {
+  //         11: { 12: {}, 13: {} },
+  //       },
+  //     },
+  //   },
+  // });
+  const [roadmap, setRoadmap] = useState(props.roadmap);
+
+  useEffect(() => {
+    props.setRoadMap(roadmap);
+  }, [roadmap]);
 
   //useeffect for detele; comment it out if you don't want to use deletepopup window
   useEffect(() => {
@@ -225,6 +230,7 @@ const RmTreeView = (props) => {
     ) {
       setMode('addroot');
       console.log('addroot');
+      setAddEditOpen(true);
     } else {
       if (
         e.target.parentNode.className === 'editbutton' ||
@@ -330,7 +336,7 @@ const RmTreeView = (props) => {
         Object.keys(data).map((key, index) => {
           return (
             // <div id={key}>
-            <StyledTreeItem nodeId={key} id={key} labelText={key}>
+            <StyledTreeItem nodeId={key} id={key} labelText={key.split("\\")[1] + " author:" + key.split("\\")[0] }>
               {data[key] && <WholeTree data={data[key]} />}
             </StyledTreeItem>
             // </div>

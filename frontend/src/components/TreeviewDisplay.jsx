@@ -34,7 +34,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     borderTopRightRadius: theme.spacing(2),
     borderBottomRightRadius: theme.spacing(2),
-    paddingRight: "240px",
+    paddingRight: "200px",
     fontWeight: theme.typography.fontWeightMedium,
     '$expanded > &': {
       fontWeight: theme.typography.fontWeightRegular,
