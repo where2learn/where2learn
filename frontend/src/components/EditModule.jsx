@@ -20,7 +20,6 @@ import RmTreeView from './TreeView';
 import { maxDescriptionDisplayLength } from '../constants';
 import { convertTagsObj2Array, convertTagsArray2Obj } from '../firestore_data';
 
-
 const maxDescriptionLength = 160;
 
 const useStyles = makeStyles((theme) => ({
@@ -66,6 +65,7 @@ const EditModule = (props) => {
   const [tagInput, setTagInput] = useState('');
   const [descriptionErrIndicator, setDescriptionErrIndicator] = useState(false);
   const [tags, setTags] = useState(props.tags || []);
+  const [roadmap, setRoadMap] = useState(null);
   const [descriptionInput, setDescriptionInput] = useState(
     props.description || ''
   );
@@ -238,7 +238,7 @@ const EditModule = (props) => {
             module_id,
             tags: convertTagsArray2Obj(tags),
             content: editorContent ? editorContent : null,
-            roadmap: null,
+            roadmap: roadmap,
             media_type: mediaTypeArr,
             type: 'regular',
             mode: props.mode,
@@ -272,7 +272,7 @@ const EditModule = (props) => {
               </Typography>
             </Breadcrumbs>
           </Grid>
-          { !roadmapSwitch ? (
+          {!roadmapSwitch ? (
             <Grid item xs={3}>
               <FormControlLabel
                 className='float-right'
@@ -289,11 +289,7 @@ const EditModule = (props) => {
                 label='Inline Editor'
               />
             </Grid>
-          ):(
-            null
-          )
-          }
-        
+          ) : null}
         </Grid>
         <TextField
           className={classes.textField}
@@ -370,39 +366,36 @@ const EditModule = (props) => {
           </Paper>
         )}
         <Divider />
-        <br /> 
+        <br />
         {!roadmapSwitch ? (
           <React.Fragment>
-          {inlineEditorSwitch ? (
-            <div className={classes.editorBGWrapper}>
-              <Editor
-                key='inline-editor'
-                width='100%'
-                updateContent={setEditorContent}
-                height={400}
-                inline={true}
-                content={props.content}
-              />
-            </div>
-          ) : (
-            <div>
-              <Editor
-                key='normal-editor'
-                width='100%'
-                updateContent={setEditorContent}
-                height={400}
-                inline={false}
-                content={editorContent}
-              />
-            </div>
-          )}
+            {inlineEditorSwitch ? (
+              <div className={classes.editorBGWrapper}>
+                <Editor
+                  key='inline-editor'
+                  width='100%'
+                  updateContent={setEditorContent}
+                  height={400}
+                  inline={true}
+                  content={props.content}
+                />
+              </div>
+            ) : (
+              <div>
+                <Editor
+                  key='normal-editor'
+                  width='100%'
+                  updateContent={setEditorContent}
+                  height={400}
+                  inline={false}
+                  content={editorContent}
+                />
+              </div>
+            )}
           </React.Fragment>
-        ):(
+        ) : (
           <RmTreeView />
-
-        )
-        
-        }
+        )}
         <br />
         <FormControlLabel
           // className='float-right'
