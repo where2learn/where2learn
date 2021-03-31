@@ -21,6 +21,7 @@ import { constructFullModuleId, convertTagsObj2Array } from '../firestore_data';
 
 import { getModuleById } from '../firebase';
 import { useHistory, withRouter } from 'react-router-dom';
+import EditIcon from '@material-ui/icons/Edit';
 
 // for each individual box, get diff width & margin in diff windowInnerWidth
 const getboxWidth = () => {
@@ -90,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
 const Roadmap = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [roadmapVis, setRoadmapVis] = useState({});
+  const [module, setModule] = useState({});
 
   const [totalItems, setTotalItems] = useState(13);
   const [fullLevelVis, setFullLevelVis] = useState({});
@@ -178,6 +180,7 @@ const Roadmap = (props) => {
     );
     (async () => {
       const module = await getModuleById(id);
+      setModule(module);
       setRoadmapVis(module.roadmap);
       // setFullLevelVis(fullLevelView(roadmapVis, findlevel(roadmapVis))[1]);
       // console.log(module);
@@ -265,6 +268,18 @@ const Roadmap = (props) => {
                 <DisplayModule />
               </Typography>
             </Popover>
+            {props.auth &&
+              props.auth.user &&
+              props.auth.user.username === module.author && (
+                <IconButton
+                  onClick={() => {
+                    const url = `/module/edit/${props.match.params.username}/${props.match.params.module_id}`;
+                    history.push(url);
+                  }}
+                >
+                  <EditIcon />
+                </IconButton>
+              )}
             <React.Fragment>
               {Object.keys(fullLevelVis).map((key, index) => (
                 <Box key={key} className={classes.box_group}>
