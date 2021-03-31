@@ -97,7 +97,9 @@ const DisplayModule = (props) => {
 
     (async () => {
       if (module) {
-        setStar(await userHasStarModule(module.author, fullModuleId));
+        setStar(
+          await userHasStarModule(props.auth.user.username, fullModuleId)
+        );
       }
     })();
     // update tags
@@ -112,8 +114,8 @@ const DisplayModule = (props) => {
   ]);
 
   const toggleStar = async (e) => {
-    if (module && module.author && fullModuleId) {
-      await starModule(module.author, fullModuleId, star);
+    if (module && fullModuleId) {
+      await starModule(props.auth.user.username, fullModuleId, star);
     }
   };
 
