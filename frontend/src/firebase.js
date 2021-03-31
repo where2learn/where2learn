@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
-import { constructStarId } from './firestore_data';
+import { constructStarId, constructFullModuleId } from './firestore_data';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -45,7 +45,6 @@ export const generateUserDocument = async (user, additionalData) => {
 
   if (!snapshot.exists) {
     const { email, uid } = user;
-    console.log(email);
     try {
       await userRef.set({
         email: email,
@@ -106,12 +105,8 @@ export const getModules = async (limit) => {
 };
 
 export const getModuleComplete = async (limit, page, tags) => {
-  console.log('limit', limit);
-  console.log('page', page);
-  console.log('tags', tags);
   let query = firestore.collection('modules');
   for (const tag of tags) {
-    console.log(tag);
     query = query.where(`tags.${tag}`, '==', true);
   }
   // query = query.orderBy('num_star', 'desc');
@@ -119,12 +114,21 @@ export const getModuleComplete = async (limit, page, tags) => {
   return snapshot.docs.map((doc) => doc.data());
 };
 
+export const moduleIdExists = async (id) => {
+  try {
+    const snapshot = await firestore.collection('modules').doc(id).get();
+    return snapshot.exists;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const getModuleRefById = (id) => {
   return firestore.collection('modules').doc(id);
 };
 
 export const getModuleById = (id) => {
-  console.log(id);
   return firestore
     .collection('modules')
     .doc(id)
@@ -134,12 +138,12 @@ export const getModuleById = (id) => {
         return doc.data();
       } else {
         // doc.data() will be undefined in this case
-        console.log('No such document!');
+        console.error('No such document!');
         return undefined;
       }
     })
     .catch((error) => {
-      console.log('Error getting document:', error);
+      console.error('Error getting document:', error);
       return undefined;
     });
 };
@@ -154,15 +158,12 @@ export const uploadImage = (rawImage) => {
   var storageRef = firebase.storage().ref();
   var imgRef = storageRef.child('/users/pictures/resized/mountains.jpg');
   return imgRef.put(rawImage).then(async (snapshot) => {
-    console.log('Uploaded a blob or file!');
     const url = await imgRef.getDownloadURL();
     return url;
   });
 };
 
 export const addmodule = async (username, module) => {
-  console.log(username);
-  console.log(module);
   const full_module_id = `${username}\\${module.module_id}`;
   const tags = module.tags;
   const new_module = { ...module, num_star: 0, author: username };
@@ -189,10 +190,7 @@ export const addmodule = async (username, module) => {
 };
 
 export const editModule = (username, module) => {
-  console.log(firebase.firestore.FieldValue.serverTimestamp());
-  console.log(module);
   const full_module_id = `${username}\\${module.module_id}`;
-  console.log(full_module_id);
   const new_module = { ...module };
   delete new_module.module_id;
   return firestore.collection('modules').doc(full_module_id).update(new_module);
