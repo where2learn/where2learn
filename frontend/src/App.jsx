@@ -135,9 +135,10 @@ const App = (props) => {
               component={ForgotPassword}
               auth={props.auth}
             />
-            <Route
+            <PrivateRoute
               path='/roadmap-vis/display/:username/:module_id'
               component={Roadmap}
+              auth={props.auth}
             />
             <Route path='/signup' component={Signup} />
             <Route path='/login' component={Login} />
