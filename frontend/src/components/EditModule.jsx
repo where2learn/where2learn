@@ -394,7 +394,7 @@ const EditModule = (props) => {
             )}
           </React.Fragment>
         ) : (
-          <RmTreeView />
+          <RmTreeView setRoadMap={setRoadMap} />
         )}
         <br />
         <FormControlLabel
