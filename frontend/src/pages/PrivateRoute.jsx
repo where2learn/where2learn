@@ -6,7 +6,6 @@ const PrivateRoute = ({ component: Component, auth, path, ...rest }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const whereToGo = (props_) => {
-    console.log(auth);
     if (auth && auth.user && auth.currentUser) {
       if (auth.currentUser.uid === auth.user.username || !auth.user.username) {
         if (path === '/set-username') {
