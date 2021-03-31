@@ -95,8 +95,7 @@ export default function RmTreeView() {
   const [child, setChild] = useState(null);
   const [parent, setParent] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  //dummy variable nee
-  const [totalItems, setTotalItems] = useState(13);
+
 
   //TODO: needs to be deleted
   const [roadmap, setRoadmap] = useState({
@@ -380,7 +379,7 @@ export default function RmTreeView() {
           setDeleteOpen={setDeleteOpen}
           setDeleteConfirm={setDeleteConfirm}
         />
-      ) : null}
+      ) : null} */}
     </div>
   );
 }
