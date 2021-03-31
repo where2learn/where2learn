@@ -120,7 +120,7 @@ const DisplayModule = (props) => {
 
   return (
     <React.Fragment>
-      {module && module.content ? (
+      {module && module ? (
         <React.Fragment>
           <Paper className={classes.paperBG} elevation={3}>
             {module && (
