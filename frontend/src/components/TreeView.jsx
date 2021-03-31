@@ -240,13 +240,13 @@ const RmTreeView = (props) => {
         setMode('edit');
         setAddEditOpen(true);
       } else if (
-        e.target.parentNode.parentNode.className === 'deletebutton' ||
+        e.target.parentNode.className === 'deletebutton' ||
         e.target.parentNode.parentNode.className === 'deletebutton'
       ) {
         setMode('delete');
         setDeleteOpen(true);
       } else if (
-        e.target.parentNode.parentNode.className === 'addbutton' ||
+        e.target.parentNode.className === 'addbutton' ||
         e.target.parentNode.parentNode.className === 'addbutton'
       ) {
         setMode('add');

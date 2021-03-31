@@ -99,25 +99,7 @@ const TreeViewDisplay = (props) => {
   const [child, setChild] = useState(null)
   const [parent, setParent] = useState(null)
   const [deleteConfirm, setDeleteConfirm] = useState(true)
-  //dummy variable nee
-  const [totalItems, setTotalItems] = useState(13)
-
-  //TODO: needs to be deleted
-//   const [roadmap, setRoadmap] = useState({
-//     1: {
-//       2: { 3: {}, 4: {} },
-//       5: {},
-//     },
-//     6: {},
-//     7: {
-//       8: {
-//         9: {},
-//         10: {
-//           11: { 12: {}, 13: {} },
-//         },
-//       },
-//     },
-//   });
+  
 
 const [roadmap, setRoadmap] = useState({});
 
