@@ -123,10 +123,10 @@ const [roadmap, setRoadmap] = useState({});
 
 useEffect(() => {
     let new_roadmap = props.roadmapVis;
-    console.log(new_roadmap)
+    
     setRoadmap(new_roadmap);
 
-}, []);
+}, [props.roadmapVis]);
 
   function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
