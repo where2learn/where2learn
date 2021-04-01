@@ -186,6 +186,7 @@ const Roadmap = (props) => {
       const module = await getModuleById(id);
       setModule(module);
       setRoadmapVis(module.roadmap);
+      await props.loadStarModules(props.auth.user.username);
       // setFullLevelVis(fullLevelView(roadmapVis, findlevel(roadmapVis))[1]);
       // console.log(module);
     })();
@@ -323,14 +324,14 @@ const Roadmap = (props) => {
                           <ListItemText
                             primary={
                               <Typography style={{ color: 'black' }}>
-                                {'Module Id: ' + item[0].split('\\')[1]}
+                                {'Module Id: ' + item[0].split('\\')[0]}
                               </Typography>
                             }
                             secondary={
                               <Typography
                                 style={{ color: 'black', fontSize: '0.8em' }}
                               >
-                                {'Author:  ' + item[0].split('\\')[0]}
+                                {'Author:  ' + item[0].split('\\')[1]}
                               </Typography>
                             }
                           />

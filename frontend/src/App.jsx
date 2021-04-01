@@ -15,6 +15,7 @@ import EditModulePage from './pages/EditModulePage';
 import DisplayModulePage from './pages/DisplayModulePage';
 import SetUsernamePage from './pages/SetUsernamePage';
 import Roadmap from './pages/Roadmap';
+import NotFoundPage from './pages/NotFoundPage';
 import { grey } from '@material-ui/core/colors';
 import { realtimeUpdateTheme } from './firebase';
 import { useSnackbar } from 'notistack';
@@ -135,13 +136,14 @@ const App = (props) => {
               component={ForgotPassword}
               auth={props.auth}
             />
-            <Route
+            <PrivateRoute
               path='/roadmap-vis/display/:username/:module_id'
               component={Roadmap}
+              auth={props.auth}
             />
             <Route path='/signup' component={Signup} />
             <Route path='/login' component={Login} />
-            {/* Everything Below is for developing and experimenting components instead of an actual page */}
+            <Route path='/*' component={NotFoundPage} />
           </Switch>
         </Paper>
       </ThemeProvider>
