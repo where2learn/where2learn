@@ -74,12 +74,16 @@ const RoadMapPopUp = (props) => {
     const children = e.target.parentNode.children;
     const module_id = children[0].innerText;
     const author = children[1].innerText;
+    console.log("module_id", module_id, "author",author)
 
     const new_module = matchModules.filter(
       (module) => module.module_id === module_id && module.author === author
-    )[0];
+    )[0]
 
-    setSelectedModule(new_module.author + '\\' + new_module.module_id);
+  
+  
+    setSelectedModule(new_module.author +  "\\" + new_module.module_id);
+
   };
 
   const submitSelectedModule = () => {
