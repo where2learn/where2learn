@@ -165,7 +165,7 @@ const Main = (props) => {
       return (
         <React.Fragment>
           <ModuleList modules={modules} />
-          <div>
+          {/* <div>
             <Pagination
               className={classes.paginationContainer}
               page={page}
@@ -176,14 +176,14 @@ const Main = (props) => {
               showFirstButton
               showLastButton
             />
-          </div>
+          </div> */}
         </React.Fragment>
       );
     } else if (pageType === 'roadmaps') {
       return (
         <React.Fragment>
           <ModuleList modules={roadMaps} />
-          <Pagination
+          {/* <Pagination
             page={page}
             onChangePage={(event, newPage) => {
               setPage(newPage);
@@ -191,7 +191,7 @@ const Main = (props) => {
             count={10}
             showFirstButton
             showLastButton
-          />
+          /> */}
         </React.Fragment>
       );
     } else {
@@ -275,7 +275,7 @@ const Main = (props) => {
                   </Fade>
                 )}
               </Popper>
-              <Paper className={classes.searchPaper}>
+              {/* <Paper className={classes.searchPaper}>
                 <TextField
                   fullWidth
                   id='keyword-search-box'
@@ -285,7 +285,7 @@ const Main = (props) => {
                   label='Search By Keywords'
                   variant='outlined'
                 />
-              </Paper>
+              </Paper> */}
               <Paper className={classes.menuPaper}>
                 <List component='nav'>
                   <ListItem
