@@ -116,7 +116,7 @@ const Roadmap = (props) => {
     }
     const identifier = Box.id;
     const [username, module_id] = identifier.split('\\');
-    // console.log(username);
+    console.log("box.id", Box.id);
     const url = `/module/display/${username}/${module_id}`;
     // console.log(url);
     history.push(url);
@@ -220,8 +220,8 @@ const Roadmap = (props) => {
     setFullLevelVis(newLevelView[1]);
 
 
-    console.log('fullLevelVis', fullLevelVis);
-    console.log('after click, RoadmapVis', roadmapVis);
+    // console.log('fullLevelVis', fullLevelVis);
+    // console.log('after click, RoadmapVis', roadmapVis);
   }, [roadmapVis]);
 
   function addClick(e) {
