@@ -115,7 +115,8 @@ const Roadmap = (props) => {
       Box = Box.parentNode;
     }
     const identifier = Box.id;
-    const [username, module_id] = identifier.split('\\');
+    const [module_id, username] = identifier.split('\\');
+    // console.log(username);
     const url = `/module/display/${username}/${module_id}`;
     // console.log(url);
     history.push(url);
