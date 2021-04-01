@@ -116,7 +116,7 @@ const Roadmap = (props) => {
     }
     const identifier = Box.id;
     const [username, module_id] = identifier.split('\\');
-    console.log(username);
+    // console.log(username);
     const url = `/module/display/${username}/${module_id}`;
     // console.log(url);
     history.push(url);
@@ -218,7 +218,10 @@ const Roadmap = (props) => {
     let level = findlevel(roadmapVis);
     let newLevelView = fullLevelView(roadmapVis, level);
     setFullLevelVis(newLevelView[1]);
-    console.log('fullLevelVis', roadmapVis);
+
+
+    console.log('fullLevelVis', fullLevelVis);
+    console.log('after click, RoadmapVis', roadmapVis);
   }, [roadmapVis]);
 
   function addClick(e) {
@@ -232,7 +235,7 @@ const Roadmap = (props) => {
     let newRoadmapVis = addChild(roadmapVis, clickTarget.id, totalItems);
     setRoadmapVis(newRoadmapVis);
 
-    // console.log('after click, RoadmapVis', roadmapVis);
+    
   }
 
   // Object.keys(levelVis).map((key, index) =>
@@ -291,7 +294,7 @@ const Roadmap = (props) => {
                 <Box key={key} className={classes.box_group}>
                   {fullLevelVis[key].map((item) => {
                     // console.log('number of child', key, fullLevelVis[key].length);
-                    // console.log("yoooooooooo", "starModule", starModule)
+                    // console.log("item[0]", item)
                     if (item[0] === null) {
                       return (
                         <Box
