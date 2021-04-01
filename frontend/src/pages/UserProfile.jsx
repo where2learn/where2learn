@@ -241,16 +241,6 @@ const UserProfile = (props) => {
               {props.auth.user ? props.auth.user.username : 'NULL'}
             </Box>
             <br />
-            <List className={classes.root}>
-              <ListItem button onClick={toggleState}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <Settings />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary='Setting' />
-              </ListItem>
-            </List>
             <br />
             <Box component='div'>
               <Box component='span' className={classes.info}>
@@ -281,26 +271,10 @@ const UserProfile = (props) => {
                 <ListItemText primary='Stars' />
               </ListItem>
               <Divider variant='inset' component='li' />
-              <ListItem button onClick={toggleState}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <BeachAccessIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary='Favorite' />
-              </ListItem>
             </List>
           </Paper>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={6}
-          lg={7}
-          xl={8}
-          style={{ border: 'solid' }}
-        >
+        <Grid item xs={12} sm={12} md={6} lg={7} xl={8}>
           {getCurrentState()}
         </Grid>
       </Grid>
