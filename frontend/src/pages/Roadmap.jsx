@@ -325,14 +325,14 @@ const Roadmap = (props) => {
                           <ListItemText
                             primary={
                               <Typography style={{ color: 'black' }}>
-                                {'Module Id: ' + item[0].split('\\')[0]}
+                                {'Module Id: ' + item[0].split('\\')[1]}
                               </Typography>
                             }
                             secondary={
                               <Typography
                                 style={{ color: 'black', fontSize: '0.8em' }}
                               >
-                                {'Author:  ' + item[0].split('\\')[1]}
+                                {'Author:  ' + item[0].split('\\')[0]}
                               </Typography>
                             }
                           />
