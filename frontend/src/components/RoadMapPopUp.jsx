@@ -75,12 +75,11 @@ const RoadMapPopUp = (props) => {
     const module_id = children[0].innerText;
     const author = children[1].innerText;
 
-    const new_module =  matchModules.filter(
+    const new_module = matchModules.filter(
       (module) => module.module_id === module_id && module.author === author
-    )[0]
-  
-    setSelectedModule(new_module.module_id +  "\\" + new_module.author);
+    )[0];
 
+    setSelectedModule(new_module.author + '\\' + new_module.module_id);
   };
 
   const submitSelectedModule = () => {
@@ -178,4 +177,3 @@ const RoadMapPopUp = (props) => {
 };
 
 export default RoadMapPopUp;
-
