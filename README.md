@@ -41,11 +41,12 @@ This project is based on Firebase and TinyMCE, we won't share our API keys as th
 4. Go to **Storage** in filebase console > **Get started**
    1. Select any storage location
    2. Create the bucket
-5. Go back to **frontend**
+5. Enable **firestore**
+6. Go back to **frontend**
    1. `npm install` to install all dependencies
    2. `npm start` to run the app locally
-6. `firebase deploy --only hosting:where2learn` within **frontend** if you want to deploy the app
-7. Get TinyMCE API Key
+7. `firebase deploy --only hosting:where2learn` within **frontend** if you want to deploy the app
+8. Get TinyMCE API Key
    1. Sign up/in at [https://www.tiny.cloud/](https://www.tiny.cloud/)
    2. Register the API Key for TinyMCE
    3. Paste the API key into `.env.local`
