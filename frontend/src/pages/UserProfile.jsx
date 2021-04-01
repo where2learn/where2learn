@@ -3,6 +3,7 @@ import NavDrawer from '../components/NavDrawer';
 import { Box, Avatar, Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { blueGrey, grey } from '@material-ui/core/colors';
+import Typography from '@material-ui/core/Typography';
 import {
   List,
   ListItem,
@@ -10,6 +11,9 @@ import {
   ListItemAvatar,
 } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import WorkIcon from '@material-ui/icons/Work';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import {
@@ -175,7 +179,7 @@ const UserProfile = (props) => {
           xl={2}
           style={{ marginRight: '100px' }}
         >
-          <Avatar
+          {/* <Avatar
             variant='square'
             className={[
               classes.blueGrey,
@@ -209,7 +213,7 @@ const UserProfile = (props) => {
             ) : (
               'JT'
             )}
-          </Avatar>
+          </Avatar> */}
           <Dialog open={open} aria-labelledby='form-dialog-title'>
             <DialogTitle id='form-dialog-title'>Change Your Avatar</DialogTitle>
             <DialogContent>
@@ -232,25 +236,23 @@ const UserProfile = (props) => {
           </Dialog>
           <br />
           <br />
-          <Paper rounded='true' elevation3='true' className={classes.paper}>
-            <Box
-              component='span'
-              display='block'
-              className={classes.centerText}
-            >
-              {props.auth.user ? props.auth.user.username : 'NULL'}
-            </Box>
-            <br />
-            <br />
-            <Box component='div'>
-              <Box component='span' className={classes.info}>
-                <StarHalf /> {numStars}
+
+          <Card className={classes.root}>
+            <CardContent>
+              <Box
+                component='span'
+                display='block'
+                className={classes.centerText}
+              >
+                {props.auth.user ? props.auth.user.username : 'NULL'}
               </Box>
-              <Box component='span' className={classes.info}>
-                <CreditCard /> {props.auth.user ? props.auth.user.credit : 0}
-              </Box>
-            </Box>
-          </Paper>
+            </CardContent>
+            <CardActions style={{ paddingLeft: 20, paddingBottom: 15 }}>
+              <StarHalf /> {numStars}
+            </CardActions>
+          </Card>
+          <br />
+
           <Paper rounded='true' elevation3='true' className={classes.paper}>
             <List className={classes.root}>
               <ListItem button onClick={toggleState}>
@@ -261,7 +263,6 @@ const UserProfile = (props) => {
                 </ListItemAvatar>
                 <ListItemText primary='Modules' />
               </ListItem>
-              <Divider variant='inset' component='li' />
               <ListItem button onClick={toggleState}>
                 <ListItemAvatar>
                   <Avatar>
@@ -270,7 +271,6 @@ const UserProfile = (props) => {
                 </ListItemAvatar>
                 <ListItemText primary='Stars' />
               </ListItem>
-              <Divider variant='inset' component='li' />
             </List>
           </Paper>
         </Grid>
