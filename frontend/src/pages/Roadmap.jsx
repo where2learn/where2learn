@@ -186,6 +186,7 @@ const Roadmap = (props) => {
       const module = await getModuleById(id);
       setModule(module);
       setRoadmapVis(module.roadmap);
+      await props.loadStarModules(props.auth.user.username);
       // setFullLevelVis(fullLevelView(roadmapVis, findlevel(roadmapVis))[1]);
       // console.log(module);
     })();
