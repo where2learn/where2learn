@@ -16,7 +16,11 @@ jobs:
           unzip -P ${{ secrets.ENV_CREDENTIAL_ZIP_PASSWORD }} .credentials.zip
           ls -a
           cp .credentials/frontend.dev.env ./frontend/.env.local
-      - run: cd frontend && npm install && npm run build
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '15.13.0'
+      - run: cd frontend && npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
