@@ -12,7 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          unzip .credentials.zip -P ${{ secrets.ENV_CREDENTIAL_ZIP_PASSWORD }}
+          ls
+          unzip -P ${{ secrets.ENV_CREDENTIAL_ZIP_PASSWORD }} .credentials.zip
           ls
           cp .credentials/frontend.dev.env ./frontend/.env.local
       - run: cd frontend && npm ci && npm run build
