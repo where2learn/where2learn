@@ -20,9 +20,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '15.13.0'
-      - run: cd frontend
-      - run: npm install
-      - run: npm run build
+      - run: cd frontend && npm install
+      - run: cd frontend && npm run build
       # - run: cd frontend && npm install && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
