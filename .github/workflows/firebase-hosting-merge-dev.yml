@@ -20,11 +20,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '15.13.0'
-      - run: |
-          # npx create-react-app test-frontend
-          cd frontend
-          npm install
-          npm run build
+      - run: cd frontend
+      - run: npm install
+      - run: npm run build
       # - run: cd frontend && npm install && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
