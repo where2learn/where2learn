@@ -3,5 +3,5 @@ dev/serviceAccountKey.json
 .vscode
 *.log
 .DS_Store
-
 *.cache
+.credentials
