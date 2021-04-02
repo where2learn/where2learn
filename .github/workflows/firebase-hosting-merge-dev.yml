@@ -12,10 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
+          ls -a
           unzip -P ${{ secrets.ENV_CREDENTIAL_ZIP_PASSWORD }} .credentials.zip
-          ls
+          ls -a
           cp .credentials/frontend.dev.env ./frontend/.env.local
-      - run: cd frontend && npm ci && npm run build
+      - run: cd frontend && npm install && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

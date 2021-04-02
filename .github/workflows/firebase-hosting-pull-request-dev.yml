@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
+          ls
           unzip -P ${{ secrets.ENV_CREDENTIAL_ZIP_PASSWORD }} .credentials.zip
           ls
           cp .credentials/frontend.dev.env ./frontend/.env.local
