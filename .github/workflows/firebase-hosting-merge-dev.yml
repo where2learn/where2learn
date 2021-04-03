@@ -11,22 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          ls -a
+      - name: setup credentials
+        run: |
           unzip -P ${{ secrets.ENV_CREDENTIAL_ZIP_PASSWORD }} .credentials.zip
-          ls -a
           cp .credentials/frontend.dev.env ./frontend/.env.local
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: '14.16.0'
-      - name: install frontend dependencies
-        run: cd frontend && npm install
       - name: build react app
-        run: cd frontend && npm run build
+        run: cd frontend && npm ci && npm install
         env:
           CI: false
-      # - run: cd frontend && npm install && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
