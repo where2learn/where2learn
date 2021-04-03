@@ -5,7 +5,7 @@ name: Deploy to Firebase Hosting on merge
 'on':
   push:
     branches:
-      - master
+      - cicd
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -15,14 +15,14 @@ jobs:
           ls -a
           unzip -P ${{ secrets.ENV_CREDENTIAL_ZIP_PASSWORD }} .credentials.zip
           ls -a
-          cp .credentials/frontend.dev.env ./frontend/.env.local
+          cp .credentials/frontend.dev.env ./cicd-frontend/.env.local
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '15.13.0'
-      - run: cd frontend && npm install
-      - run: cd frontend && npm run build
-      # - run: cd frontend && npm install && npm run build
+          node-version: '14.16.0'
+      - run: cd cicd-frontend && npm install
+      - run: cd cicd-frontend && npm run build
+      # - run: cd cicd-frontend && npm install && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
