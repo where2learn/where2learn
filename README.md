@@ -1,5 +1,7 @@
 # Where2Learn
 
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/where2learn/where2learn)
+
 ## Intro to the project
 
 This project is a web app intended to share knowledge.
