@@ -26,6 +26,7 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          entryPoint: './cicd-frontend'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WHERE2LEARN_DEV }}'
           channelId: live
           projectId: where2learn-dev
