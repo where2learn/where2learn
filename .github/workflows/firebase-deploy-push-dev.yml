@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '14.16.0'
       - name: build react app
-        run: cd frontend && npm ci && npm install
+        run: cd frontend && npm ci && npm run build
         env:
           CI: false
       - uses: FirebaseExtended/action-hosting-deploy@v0
